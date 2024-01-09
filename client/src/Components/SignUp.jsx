@@ -8,9 +8,9 @@ const SignUp = () => {
   const [registerId, setRegisterId] = useState("");
 
   return (
-    <section className="bg-gray-50 h-screen">
-      <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen ">
-        <a
+    <section className="bg-gray-50 h-screen flex-1 ">
+      <div className="flex flex-col items-center justify-center  px-6 py-8 mx-auto ">
+        {/* <a
           href="#"
           className="flex flex-col items-center mb-6 gap-2 text-2xl font-semibold text-gray-900 "
         >
@@ -19,11 +19,11 @@ const SignUp = () => {
             src="https://technosoft.antrorse.org/assets/img/logo.png"
             alt="Antrorse logo"
           />
-        </a>
+        </a> */}
         <div className="w-full bg-white rounded-lg shadow  sm:max-w-md ">
           <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
             <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl ">
-              Create your Free Account
+              Create your Account
             </h1>
 
             <form className="space-y-4 md:space-y-6" action="#">
@@ -32,7 +32,7 @@ const SignUp = () => {
                   htmlFor="text"
                   className=" text-sm font-medium text-gray-900 "
                 >
-                  Your Name
+                  Name
                 </label>
                 <input
                   type="text"
@@ -47,17 +47,36 @@ const SignUp = () => {
               </div>
               <div className="flex flex-col gap-1">
                 <label
-                  htmlFor="emailOrMobile"
+                  htmlFor="email"
                   className=" text-sm font-medium text-gray-900 "
                 >
-                  Email or Mobile Number
+                  Email ID
+                </label>
+                <input
+                  type="email"
+                  name="email"
+                  id="email"
+                  className="bg-gray-50 border text-gray-900 sm:text-sm rounded-md focus:ring-2 focus:outline-none focus:ring-slate-600 block w-full p-2.5  "
+                  placeholder="name@company.com "
+                  value={registerId}
+                  onChange={(e) => setRegisterId(e.target.value)}
+                  required
+                />
+              </div>
+
+              <div className="flex flex-col gap-1">
+                <label
+                  htmlFor="mobile"
+                  className=" text-sm font-medium text-gray-900 "
+                >
+                  Mobile Number
                 </label>
                 <input
                   type="text"
-                  name="emailOrMobile"
-                  id="emailOrMobile"
+                  name="mobile"
+                  id="mobile"
                   className="bg-gray-50 border text-gray-900 sm:text-sm rounded-md focus:ring-2 focus:outline-none focus:ring-slate-600 block w-full p-2.5  "
-                  placeholder="name@company.com or +911234567890"
+                  placeholder="+911234567890"
                   value={registerId}
                   onChange={(e) => setRegisterId(e.target.value)}
                   required
@@ -130,7 +149,7 @@ const SignUp = () => {
                 <div className="w-full border-t border-gray-300"></div>
               </div>
               <div className="relative flex justify-center text-sm">
-                <span className="px-2 bg-gray-100">Or continue with</span>
+                <span className="px-2 bg-gray-100">Or Register with</span>
               </div>
             </div>
 
@@ -161,12 +180,12 @@ const SignUp = () => {
               </div>
             </div>
 
-            <p className="text-sm  text-gray-500   font-medium">
+            {/* <p className="text-sm  text-gray-500   font-medium">
               Already have an account?{" "}
               <a href="#" className=" text-red-600 hover:underline ">
                 Login here
               </a>
-            </p>
+            </p> */}
           </div>
         </div>
       </div>
