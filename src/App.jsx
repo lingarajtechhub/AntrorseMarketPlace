@@ -1,3 +1,4 @@
+import Enquiry from "./pages/Enquiry";
 import OTP from "./pages/OTP";
 import SignUp from "./pages/SignUp";
 // import OTPBox from "./pages/OTPP";
@@ -5,9 +6,10 @@ import SignUp from "./pages/SignUp";
 function App() {
   return (
     <>
-      <SignUp />
+      {/* <SignUp /> */}
       {/* <OTP /> */}
       {/* <OTPBox /> */}
+      <Enquiry />
     </>
   );
 }
