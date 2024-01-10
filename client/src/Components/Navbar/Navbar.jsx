@@ -4,7 +4,7 @@ import React from "react";
 import { IoMdSearch } from "react-icons/io";
 import { FaCartShopping } from "react-icons/fa6";
 import { FaCaretDown } from "react-icons/fa";
-// import DarkMode from "./DarkMode";
+import DarkMode from "./DarkMode";
 
 const Menu = [
   {
@@ -91,7 +91,7 @@ const Navbar = ({ handleOrderPopup }) => {
 
             {/* Darkmode Switch */}
             <div>
-              {/* <DarkMode /> */}
+              <DarkMode />
             </div>
           </div>
         </div>

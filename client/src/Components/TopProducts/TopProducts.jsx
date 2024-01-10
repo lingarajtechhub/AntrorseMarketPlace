@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-unused-vars
 import React from "react";
 import Img1 from "../../assets/shirt/shirt.png";
 import Img2 from "../../assets/shirt/shirt2.png";
@@ -27,6 +28,7 @@ const ProductsData = [
       "lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
   },
 ];
+// eslint-disable-next-line react/prop-types
 const TopProducts = ({ handleOrderPopup }) => {
   return (
     <div>
@@ -46,8 +48,9 @@ const TopProducts = ({ handleOrderPopup }) => {
         </div>
         {/* Body section */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-20 md:gap-5 place-items-center">
-          {ProductsData.map((data,index) => (
-            <div key={index}
+          {ProductsData.map((data) => (
+            // eslint-disable-next-line react/jsx-key
+            <div
               data-aos="zoom-in"
               className="rounded-2xl bg-white dark:bg-gray-800 hover:bg-black/80 dark:hover:bg-red-600 hover:text-white relative shadow-xl duration-300 group max-w-[300px]"
             >

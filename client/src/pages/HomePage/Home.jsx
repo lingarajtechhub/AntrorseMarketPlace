@@ -1,15 +1,15 @@
-import React, { useEffect, useState } from "react";
-import Navbar from "../../Components/Navbar/Navbar";
-import Hero from "../../Components/Hero/Hero";
-import Products from "../../Components/Products/Products";
+import {useEffect,useState} from "react";
+import Navbar from "../../components/Navbar/Navbar";
+import Hero from "../../components/Hero/Hero";
+import Products from "../../components/Products/Products";
 import AOS from "aos";
 import "aos/dist/aos.css";
-import TopProducts from "../../Components/TopProducts/TopProducts";
-import Banner from "../../Components/Banner/Banner";
-import Subscribe from "../../Components/Subscribe/Subscribe";
-import Testimonials from "../../Components/Testimonials/Testimonials";
-import Footer from "../../Components/Footer/Footer";
-import Popup from "../../Components/Popup/Popup";
+import TopProducts from "../../components/TopProducts/TopProducts";
+import Banner from "../../components/Banner/Banner";
+import Subscribe from "../../components/Subscribe/Subscribe";
+import Testimonials from "../../components/Testimonials/Testimonials";
+import Footer from "../../components/Footer/Footer";
+import Popup from "../../components/Popup/Popup";
 
 const Home = () => {
   const [orderPopup, setOrderPopup] = useState(false);

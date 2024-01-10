@@ -1,12 +1,3 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-body{
-  /* background-color: #ED121D; */
-  /* min-height: 100vh; */
-}
-
-*{
-  /* outline: 1px dashed greenyellow; */
-}

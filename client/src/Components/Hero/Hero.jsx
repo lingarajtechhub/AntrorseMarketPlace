@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-unused-vars
 import React from "react";
 import Image1 from "../../assets/hero/women.png";
 import Image2 from "../../assets/hero/shopping.png";
@@ -28,6 +29,7 @@ const ImageList = [
   },
 ];
 
+// eslint-disable-next-line react/prop-types
 const Hero = ({ handleOrderPopup }) => {
   var settings = {
     dots: false,
@@ -49,8 +51,9 @@ const Hero = ({ handleOrderPopup }) => {
       {/* hero section */}
       <div className="container pb-8 sm:pb-0">
         <Slider {...settings}>
-          {ImageList.map((data,index) => (
-            <div key={index}>
+          {ImageList.map((data) => (
+            // eslint-disable-next-line react/jsx-key
+            <div>
               <div className="grid grid-cols-1 sm:grid-cols-2">
                 {/* text content section */}
                 <div className="flex flex-col justify-center gap-4 pt-12 sm:pt-0 text-center sm:text-left order-2 sm:order-1 relative z-10">
