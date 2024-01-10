@@ -1,7 +1,7 @@
 import React from "react";
-import Login from "../Components/Login";
+import Login from "./LoginPage/Login";
 import OTP from "../Components/OTP";
-import SignUp from "../Components/SignUp";
+import SignUp from "./SignUpPage/SignUp";
 
 const LoginRegistration = () => {
   return (
