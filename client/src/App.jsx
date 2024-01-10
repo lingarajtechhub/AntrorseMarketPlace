@@ -5,8 +5,9 @@ import SignUp from "./Components/SignUp";
 import Login from "./Components/Login";
 
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Home from "./home/Home";
+
 import LoginRegistration from "./pages/LoginRegistration";
+import Home from "./home/Home/Home";
 function App() {
   return (
     <Router>

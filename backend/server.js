@@ -1,18 +1,21 @@
-import express from "express";
-import mongoose from "mongoose";
-
-// const mongoose = require("mongoose");
-
-const app = express();
+const express= require("express")
+const route= require("./router/userRouter")
+const multer= require("multer")
+const cors= require("cors")
+const app= express()
+app.use(multer().any());
 app.use(express.json());
-mongoose
-  .connect(
-    "mongodb+srv://upendra:wvUNUF1FjJ02PCPH@cluster0.b8yrh4n.mongodb.net/AntrorseMarketPlace",
-    { useNewUrlParser: true }
-  )
-  .then(() => console.log("mongodb connected"))
-  .catch((error) => console.log(error.message));
+app.use(
+  cors({
+    allowedHeaders: ["Content-Type", "token", "authorization"],
+    exposedHeaders: ["token", "authorization"],
+    origin: "*",
+    methods: "GET, HEAD, PUT, PATCH, POST, DELETE",
+    preflightContinue: false,
+  })
+);
+require("./dbConnection/dbConnection")
 
-app.listen(3000, () => {
-  console.log("express app is connected at port:" + 3000);
-});
+app.listen(process.env.port||3000, function(){
+  console.log("server is running on port:",process.env.port||3000)
+})
