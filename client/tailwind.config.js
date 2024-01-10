@@ -18,6 +18,8 @@ export default {
       },
     },
   },
-  plugins: [require("daisyui")],
+   
+  // eslint-disable-next-line no-undef
+  plugins: [],
 };
  
