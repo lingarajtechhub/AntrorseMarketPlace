@@ -11,6 +11,8 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import LoginRegistration from "./pages/LoginRegistration";
 import ProductPage from "./pages/ProductPage/ProductPage";
+import ProfilePage from "./pages/ProfilePage/ProfilePage";
+import CartPage from "./pages/CartPage/CartPage";
 
 function App() {
   return (
@@ -22,6 +24,8 @@ function App() {
         <Route path="/Signup" element={<SignUp />} />
         <Route path="/otp" element={<OTP />} />
         <Route path="/productPage" element={<ProductPage />} />
+        <Route path="/ProfilePage" element={<ProfilePage />} />
+        <Route path="/CartPage" element={<CartPage />} />
         <Route />
       </Routes>
     </Router>

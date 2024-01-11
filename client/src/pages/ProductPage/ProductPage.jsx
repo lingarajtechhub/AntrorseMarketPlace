@@ -60,9 +60,9 @@ const ProductPage = () => {
           <div className="w-[30rem] mt-4 md:mt-0 md:ml-4">
             {/* Product Details */}
             <div className="flex flex-col gap-6">
-              <h1 className="text-3xl font-bold mb-2">
+              <p className="text-3xl font-bold mb-2">
                 Men greeen Solid Zippered full slim fit bomber jacket
-              </h1>
+              </p>
 
               <div className="flex items-center gap-2">
                 <StarRating rating={4} />
