@@ -1,11 +1,11 @@
 const mongoose = require("mongoose");
 
 const userSchema = new mongoose.Schema({
-    name: {
+    user_name: {
         type: String,
         required: [true, 'Name is required'], // Name is required
     },
-    email: {
+    email_id: {
         type: String,
         required: [true, 'Email is required'],
         unique: true, // Ensure email is unique
@@ -32,11 +32,11 @@ const userSchema = new mongoose.Schema({
     },
     password: {
         type: String,
-        required: [true, 'Password is required'],
+       
     },
-    OTP: {
-        type: Number,
-    },
+    user_image:{
+        type:mongoose.Schema.Types.Mixed
+    }
 }, {
     timestamps: true,
 });
