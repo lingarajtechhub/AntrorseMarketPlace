@@ -10,6 +10,7 @@ import Login from "./pages/LoginPage/Login";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import LoginRegistration from "./pages/LoginRegistration";
+import ProductPage from "./pages/ProductPage/ProductPage";
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/Signup" element={<SignUp />} />
         <Route path="/otp" element={<OTP />} />
+        <Route path="/productPage" element={<ProductPage />} />
         <Route />
       </Routes>
     </Router>
