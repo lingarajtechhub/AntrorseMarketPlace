@@ -2,11 +2,36 @@ import React, { useState } from "react";
 import { FaFacebook } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 import { FaXTwitter } from "react-icons/fa6";
+import * as Yup from "yup";
+import { useFormik } from "formik";
+import { Link } from "react-router-dom";
 
 const SignUp = () => {
-  const [name, setName] = useState("");
-  const [registerId, setRegisterId] = useState("");
+  const initialValues = {
+    name: "",
+    email: "",
+    mobile: "",
+  };
+  const signUpSchema = Yup.object({
+    name: Yup.string().min(3).required("please enter your username"),
+    email: Yup.string().email().required("please enter your email"),
+    mobile: Yup.number()
+      .typeError("That doesn't look like a phone number")
+      .negative("A phone number can't start with a minus")
+      .integer("A phone number can't include a decimal point")
+      .min(10)
+      .max(13)
+      .required("A phone number is required"),
+  });
 
+  const { values, errors, touched, handleBlur, handleChange, handleSubmit } =
+    useFormik({
+      initialValues: initialValues,
+      validationSchema: signUpSchema,
+      onSubmit: (values) => {
+        console.log(values);
+      },
+    });
   return (
     <section className="bg-gray-50 h-screen flex-1 ">
       <div className="flex flex-col items-center justify-center  px-6 py-8 mx-auto ">
@@ -26,7 +51,11 @@ const SignUp = () => {
               Create your Account
             </h1>
 
-            <form className="space-y-4 md:space-y-6" action="#">
+            <form
+              className="space-y-4 md:space-y-6"
+              action="#"
+              onSubmit={handleSubmit}
+            >
               <div className="flex flex-col gap-1">
                 <label
                   htmlFor="text"
@@ -36,14 +65,19 @@ const SignUp = () => {
                 </label>
                 <input
                   type="text"
-                  name="text"
+                  name="name"
                   id="text"
                   className="bg-gray-50 border text-gray-900 sm:text-sm rounded-md focus:ring-2 focus:outline-none focus:ring-slate-600 block w-full p-2.5  "
                   placeholder="John Doe"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  required
+                  value={values.name}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
                 />
+                {errors.name && touched.name ? (
+                  <p className="text-red-600 text-[0.75rem] capitalize">
+                    {errors.name}
+                  </p>
+                ) : null}
               </div>
               <div className="flex flex-col gap-1">
                 <label
@@ -58,10 +92,15 @@ const SignUp = () => {
                   id="email"
                   className="bg-gray-50 border text-gray-900 sm:text-sm rounded-md focus:ring-2 focus:outline-none focus:ring-slate-600 block w-full p-2.5  "
                   placeholder="name@company.com "
-                  value={registerId}
-                  onChange={(e) => setRegisterId(e.target.value)}
-                  required
+                  value={values.email}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
                 />
+                {errors.email && touched.email ? (
+                  <p className="text-red-600 text-[0.75rem] capitalize">
+                    {errors.email}
+                  </p>
+                ) : null}
               </div>
 
               <div className="flex flex-col gap-1">
@@ -77,10 +116,15 @@ const SignUp = () => {
                   id="mobile"
                   className="bg-gray-50 border text-gray-900 sm:text-sm rounded-md focus:ring-2 focus:outline-none focus:ring-slate-600 block w-full p-2.5  "
                   placeholder="+911234567890"
-                  value={registerId}
-                  onChange={(e) => setRegisterId(e.target.value)}
-                  required
+                  value={values.mobile}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
                 />
+                {errors.mobile && touched.mobile ? (
+                  <p className="text-red-600 text-[0.75rem] capitalize">
+                    {errors.mobile}
+                  </p>
+                ) : null}
               </div>
               {/* <div className="flex flex-col gap-1">
                 <label
@@ -180,12 +224,12 @@ const SignUp = () => {
               </div>
             </div>
 
-            {/* <p className="text-sm  text-gray-500   font-medium">
+            <p className="text-sm  text-gray-500   font-medium">
               Already have an account?{" "}
-              <a href="#" className=" text-red-600 hover:underline ">
+              <Link to="/login" className=" text-red-600 hover:underline ">
                 Login here
-              </a>
-            </p> */}
+              </Link>
+            </p>
           </div>
         </div>
       </div>
