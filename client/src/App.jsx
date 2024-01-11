@@ -7,6 +7,8 @@ import SignUp from "./pages/SignUpPage/SignUp";
 // import OTPBox from "./pages/OTPP";
 import Login from "./pages/LoginPage/Login";
 
+import ProductPrice from "./pages/Product_list_page_list_type/Productlist"
+
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import LoginRegistration from "./pages/LoginRegistration";
@@ -14,6 +16,7 @@ import ProductPage from "./pages/ProductPage/ProductPage";
 import ProfilePage from "./pages/ProfilePage/ProfilePage";
 import CartPage from "./pages/CartPage/CartPage";
 
+import ProductListPage from "./pages/ProductListPage/ProductListPage"
 function App() {
   return (
     <Router>
@@ -24,8 +27,9 @@ function App() {
         <Route path="/Signup" element={<SignUp />} />
         <Route path="/otp" element={<OTP />} />
         <Route path="/productPage" element={<ProductPage />} />
-        <Route path="/ProfilePage" element={<ProfilePage />} />
-        <Route path="/CartPage" element={<CartPage />} />
+
+        <Route path="/productlisttype" element={<ProductPrice />} />
+        <Route path="/productlistgrid" element={<ProductListPage />} />
         <Route />
       </Routes>
     </Router>
