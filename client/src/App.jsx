@@ -13,10 +13,8 @@ import Wishlist from "./pages/Wishlist/Wishlist";
 import Cart from "./pages/CartPage/CartPage";
 import Profile from "./pages/ProfilePage/ProfilePage";
 import ProductPage from "./pages/ProductPage/ProductPage";
-import ProductListPage from "./pages/ProductListPage/ProductListPage";
-import ProductList_Page from "./pages/Product_list_page_list_type/Productlist";
-
-
+import ProductListPage from "./pages/ProductListPage/ProductListPage"
+import ProductList_Page from "./pages/Product_list_page_list_type/Productlist"
 function App() {
   return (
    
@@ -37,7 +35,9 @@ function App() {
       
         <Route path="/login" element={<Login />} />
         <Route path="/Signup" element={<SignUp />} />
-        <Route path="/otp" element={<OTP />} />
+        <Route path="/otp" element={<OTP/>} />
+        <Route path="/productlist" element={<ProductListPage />} />
+
         <Route />
       </Routes>
       <Footer />

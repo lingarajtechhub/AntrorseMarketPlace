@@ -5,6 +5,8 @@ import { FaXTwitter } from "react-icons/fa6";
 import * as Yup from "yup";
 import { useFormik } from "formik";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+
 import TodayOfferProducts from "../../Components/TodayOfferProducts/TodayOfferProducts";
 
 const SignUp = () => {
@@ -33,6 +35,13 @@ const SignUp = () => {
         console.log(values);
       },
     });
+
+    const navigate = useNavigate();
+    const handleCancel = () => {
+      // Redirect to the home page
+      // window.location.href = '/';
+      navigate("/");
+    };
   return (
     <div className="flex flex-col">
       <section className="bg-gray-50 h-screen flex-1 ">
@@ -50,7 +59,7 @@ const SignUp = () => {
           <div className="w-full bg-white rounded-lg shadow  sm:max-w-md ">
             <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
               <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl ">
-                Create your Account
+                Create an account
               </h1>
 
               <form
@@ -81,30 +90,7 @@ const SignUp = () => {
                     </p>
                   ) : null}
                 </div>
-                <div className="flex flex-col gap-1">
-                  <label
-                    htmlFor="email"
-                    className=" text-sm font-medium text-gray-900 "
-                  >
-                    Email ID
-                  </label>
-                  <input
-                    type="email"
-                    name="email"
-                    id="email"
-                    className="bg-gray-50 border text-gray-900 sm:text-sm rounded-md focus:ring-2 focus:outline-none focus:ring-slate-600 block w-full p-2.5  "
-                    placeholder="name@company.com "
-                    value={values.email}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                  />
-                  {errors.email && touched.email ? (
-                    <p className="text-red-600 text-[0.75rem] capitalize">
-                      {errors.email}
-                    </p>
-                  ) : null}
-                </div>
-
+               
                 <div className="flex flex-col gap-1">
                   <label
                     htmlFor="mobile"
@@ -128,6 +114,33 @@ const SignUp = () => {
                     </p>
                   ) : null}
                 </div>
+
+                <div className="flex flex-col gap-1">
+                  <label
+                    htmlFor="email"
+                    className=" text-sm font-medium text-gray-900 "
+                  >
+                    Email ID(Optional)
+                  </label>
+                  <input
+                    type="email"
+                    name="email"
+                    id="email"
+                    className="bg-gray-50 border text-gray-900 sm:text-sm rounded-md focus:ring-2 focus:outline-none focus:ring-slate-600 block w-full p-2.5  "
+                    placeholder="name@company.com "
+                    value={values.email}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                  />
+                  {errors.email && touched.email ? (
+                    <p className="text-red-600 text-[0.75rem] capitalize">
+                      {errors.email}
+                    </p>
+                  ) : null}
+                </div>
+
+
+
                 {/* <div className="flex flex-col gap-1">
                 <label
                   htmlFor="password"
@@ -182,12 +195,33 @@ const SignUp = () => {
                     </label>
                   </div>
                 </div>
-                <button
-                  type="submit"
-                  className="w-full text-slate-200 bg-red-500 hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-md text-sm px-5 py-2.5 text-center"
-                >
-                  Create an account
-                </button>
+
+                 
+                <div className="flex flex-row space-x-3 items-center justify-center">
+  <div className="w-3/4 flex items-center justify-center">
+    <button
+      type="submit"
+      className="w-full text-slate-200 bg-red-500 hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-md text-sm px-5 py-2.5 text-center"
+    >
+      Create an account
+    </button>
+  </div>
+
+  <div className="w-1/4 flex items-center justify-center">
+    <button
+      type="submit"
+      className="w-full text-black bg-gray-200 focus:ring-3 focus:outline-none focus:ring-primary-300 font-medium rounded-md text-sm px-5 py-2.5"
+      onClick={handleCancel}
+    >
+      Cancel
+    </button>
+  </div>
+</div>
+
+
+
+
+
               </form>
 
               <div className="relative">
@@ -233,6 +267,8 @@ const SignUp = () => {
                 </Link>
               </p>
             </div>
+            
+
           </div>
         </div>
       </section>

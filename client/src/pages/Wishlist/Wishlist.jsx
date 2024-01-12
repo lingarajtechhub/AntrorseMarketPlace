@@ -69,7 +69,8 @@ const initialProducts = [
     type: "Men Black Slim Fit Solid Casual Shirt",
     price: 607,
     discount: 60,
-  }, {
+  },
+   {
     id: 9,
     image: Img1,
     brand: "Roadster",
