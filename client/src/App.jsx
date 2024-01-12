@@ -9,7 +9,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar/Navbar";
 import Footer from "./components/Footer/Footer";
 import Category from "./components/Catagories/Category";
-import Wishlist from "./components/Wishlist/Wishlist";
+import Wishlist from "./pages/Wishlist/Wishlist";
 function App() {
   return (
    
