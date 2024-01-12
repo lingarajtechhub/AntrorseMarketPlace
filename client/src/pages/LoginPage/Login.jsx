@@ -151,7 +151,7 @@ const Login = () => {
                       type="submit"
                       className="w-full text-slate-200 bg-red-500 hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-md text-sm px-5 py-2.5 text-center"
                     >
-                      Create an account
+                      Login
                     </button>
                   </div>
 
