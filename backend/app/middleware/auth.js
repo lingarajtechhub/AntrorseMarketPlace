@@ -3,9 +3,10 @@ const jwt = require("jsonwebtoken");
 const response = require("../helper/commonResponse");
 const { ErrorCode } = require("../helper/statusCode");
 const { ErrorMessage } = require("../helper/message");
+const { default: mongoose } = require("mongoose");
 
 module.exports = {
-  verifyToken: (req, res, next) => {
+  authorization: (req, res, next) => {
     try {
       jwt.verify(
         req.headers.token,
@@ -19,7 +20,7 @@ module.exports = {
               ErrorMessage.INTERNAL_ERROR
             );
           } else {
-            userModel.findOne({ _id: result._id }, (userErr, userResult) => {
+            userModel.findOne({ _id:mongoose.Types.ObjectId(result.user_id) }, (userErr, userResult) => {
               if (userErr) {
                 return response.commonErrorResponse(
                   res,
@@ -36,7 +37,7 @@ module.exports = {
                 );
               } else {
                 req.user_id = userResult._id;
-                console.log(userResult)
+                
                 next();
               }
             });
@@ -49,7 +50,7 @@ module.exports = {
         res,
         ErrorCode.INTERNAL_ERROR,
         {},
-        err
+        err.ErrorMessage
       );
     }
   },

@@ -1,7 +1,7 @@
 module.exports.ErrorMessage = Object.freeze({
   PHONE_EMPTY: "Valid mobile number is require",
   NAME_EMPTY: "name is mandatory for registration in string formate",
-  EMAIL_EMPTY: "emailId is mandatory for registration.",
+  INVALID_EMAIL: "please check your email_id invalid.",
   INVALID_TOKEN: "Unauthorized user.",
   INTERNAL_ERROR: "Internal Server Error.",
   INVALID_CREDENTIAL: "Invalid credentials.",
@@ -32,7 +32,7 @@ module.exports.SuccessMessage = Object.freeze({
   USER_CREATE: "User has been created successfully.",
   CUSTOMER_VERIFY: "Customer verified successfully",
   CUSTOMER_ALREADY_VERIFY: "Otp already verified.",
-  FORGET_SUCCESS: "A password link has been sent to your registered email ID.",
+ 
   RESET_SUCCESS: "Your password has been successfully changed.",
   PRODUCT_LIST_FETCH: "Successfully fetched product list.",
   UPLOAD_DOCUMENT: "Your document has been upload successfully.",
@@ -41,7 +41,7 @@ module.exports.SuccessMessage = Object.freeze({
   USER_LIST_FETCH: "Successfully fetched user list.",
   AUTHORIZATION: "This User is Authorized.",
   ACCOUNT_CREATION: "Your account has been created successfully.",
-  EMAIL_SEND: "OTP has been sent to your registered Email successfully.",
+ 
   OTP_SEND: "OTP sent successfully.",
   VERIFY_OTP: "OTP verified successfully.",
   PIN_SET: "Your Pin has been set successfully.",

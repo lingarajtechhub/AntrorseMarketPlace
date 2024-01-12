@@ -1,6 +1,6 @@
 const userModel = require("../models/userModel");
 const response = require("../helper/commonResponse");
-
+const jwt= require("jsonwebtoken")
 const { SuccessMessage, ErrorMessage } = require("../helper/message");
 const { ErrorCode, SuccessCode } = require("../helper/statusCode");
 const validation = require("../helper/validation");
@@ -19,7 +19,7 @@ module.exports = {
           ErrorMessage.NAME_EMPTY
         );
       }
-      if (!validation.isValidMobileNumber(data.mobile_number)) {
+      if (!data.mobile_number||!validation.isValidMobileNumber(data.mobile_number)) {
         return response.commonErrorResponse(
           res,
           ErrorCode.BAD_REQUEST,
@@ -28,23 +28,23 @@ module.exports = {
         );
       }
 
-      if (!data.email_id) {
+      if (data.email_id && !validation.isValidEmail(data.email_id)) {
         return response.commonErrorResponse(
           res,
           ErrorCode.BAD_REQUEST,
           {},
-          ErrorMessage.EMAIL_EMPTY
+          ErrorMessage.INVALID_EMAIL
         );
       }
-      let checkedEmailUnique = await userModel.findOne({
-        email_id: data.email_id,
+      let checkedMobileNumberUnique = await userModel.findOne({
+        mobile_number: data.mobile_number,
       });
-      if (checkedEmailUnique) {
+      if (checkedMobileNumberUnique) {
         return response.commonErrorResponse(
           res,
           ErrorCode.ALREADY_EXIST,
           {},
-          ErrorMessage.ALREADY_EXIST_EMAIL
+          ErrorMessage.MOBILE_EXIST
         );
       }
 
@@ -63,21 +63,15 @@ module.exports = {
         res,
         ErrorCode.INTERNAL_ERROR,
         {},
-        err
+        err.message
       );
     }
   },
   sendOtpForRegistration: async function (req, res) {
     try {
       let data = req.body;
-      if(!data.mobile_number){
-        return response.commonErrorResponse(
-          res,
-          ErrorCode.BAD_REQUEST,
-          {},
-          ErrorMessage.PHONE_EMPTY
-        )}
-        if (!validation.isValidMobileNumber(data.mobile_number)) {
+      
+        if ( !data.mobile_number||!validation.isValidMobileNumber(data.mobile_number)) {
           return response.commonErrorResponse(
             res,
             ErrorCode.BAD_REQUEST,
@@ -99,7 +93,7 @@ module.exports = {
       // this function for 6 digit otp create
       let otp = commonFunction.generateOTP();
       console.log(otp);
-      //  here function for send otp
+      //  here function for send otp on mobile number
       return response.commonResponse(
         res,
         SuccessCode.SUCCESSFULLY_CREATED,
@@ -118,12 +112,13 @@ module.exports = {
   login: async function (req, res) {
     try {
       let data = req.body;
-let userData;
+      let userData;
       if (data.email_id) {
-         userData = await userModel.fidOne({ email_id:email_id });
+
+         userData = await userModel.findOne({ email_id:data.email_id });
       }
       if (data.mobile_number) {
-         userData = await userModel.fidOne({ mobile_number });
+         userData = await userModel.findOne({ mobile_number:data.mobile_number });
       } else {
         console.log("================================")
         return response.commonErrorResponse(
@@ -142,7 +137,7 @@ let userData;
           ErrorMessage.USER_NOT_FOUND
         );
       }
-      const matchPass = await bcrypt.compare(password, userData.password);
+      const matchPass = await bcrypt.compare(data.password, userData.password);
 
       if (!matchPass) {
         return response.commonErrorResponse(
@@ -154,7 +149,7 @@ let userData;
       }
 
       let payLoad = {
-        user_id: data.userData._id.toString(),
+        user_id: userData._id.toString(),
       };
       let token = jwt.sign(payLoad, "Upendra_gupta", {
         expiresIn: "72h",
@@ -180,9 +175,8 @@ let userData;
     try {
       let data = req.body;
       let files = req.files;
-console.log(data)
-console.log(files)
-      if(data && !files){
+
+      if(!data && !files){
 
         return response.commonErrorResponse(res,ErrorCode.BAD_REQUEST ,"", "some data need for update")
       }
@@ -195,8 +189,8 @@ console.log(files)
       if ( files?.length > 0) {
         updateData.user_image = files[0].buffer;
       }
-      if (data.mobile_number) {
-        if (!validation.isValidMobileNumber(data.mobile_number)) {
+      
+        if ( data.mobile_number&& !validation.isValidMobileNumber(data.mobile_number)) {
           return response.commonErrorResponse(
             res,
             ErrorCode.BAD_REQUEST,
@@ -207,10 +201,10 @@ console.log(files)
          else {
           updateData.mobile_number = data.mobile_number;
         }
-      }
+      
       let updated = await userModel.findOneAndUpdate(
-        // { _id: data.user_id },
-        {mobile_number:data.mobile_number},
+        { _id: req.user_id },
+       
         { $set: updateData },
         { new: true }
       );
@@ -241,8 +235,17 @@ console.log(files)
   },
   createOTPForForgetPassword: async function (req, res) {
     try {
-      let email_id = req.body.email_id;
-      let userData = await userModel.findOne({ email_id });
+      let mobile_number = req.body.mobile_number;
+      if (!mobile_number||!validation.isValidMobileNumber(mobile_number)) {
+        return response.commonErrorResponse(
+          res,
+          ErrorCode.BAD_REQUEST,
+          {},
+          ErrorMessage.PHONE_EMPTY
+        );
+      }
+      
+      let userData = await userModel.findOne({ mobile_number:mobile_number });
       if (!userData) {
         return response.commonErrorResponse(
           res,
@@ -250,16 +253,17 @@ console.log(files)
           {},
           ErrorMessage.USER_NOT_FOUND
         );
-
+        }
         let OTP = commonFunction.generateOTP();
-
+        console.log(OTP)
+// here function for send  the otp on number
         return response.commonResponse(
           res,
           SuccessCode.SUCCESS,
           OTP,
           SuccessMessage.OTP_SEND
         );
-      }
+      
     } catch (err) {
       return response.commonErrorResponse(
         res,
@@ -269,18 +273,18 @@ console.log(files)
       );
     }
   },
-  updatePassword: async function (req, res) {
+  forgetPassword: async function (req, res) {
     try {
-      let data = req.body.email_id;
-      let password;
+      let data = req.body;
+      
       if (data.password) {
         const saltRounds = 10;
         const hash = await bcrypt.hash(data.password, saltRounds);
-        password = hash;
+        data.password = hash;
       }
       let updatePassword = await userModel.findOneAndUpdate(
-        { email_id: data.email_id },
-        { $set: { password: password } },
+        { mobile_number: data.mobile_number },
+        { $set: { password: data.password } },
         { new: true }
       );
       if (updatePassword) {
@@ -296,7 +300,7 @@ console.log(files)
         res,
         ErrorCode.INTERNAL_ERROR,
         {},
-        err
+        err.message
       );
     }
   },
