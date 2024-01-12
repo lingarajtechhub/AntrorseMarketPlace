@@ -16,9 +16,12 @@ export default {
           sm: "3rem",
         },
       },
+      backgroundImage: {
+        Hero: "url('./src/assets/Hero.png')",
+      },
     },
   },
-   
+  
   // eslint-disable-next-line no-undef
   plugins: [],
 };
