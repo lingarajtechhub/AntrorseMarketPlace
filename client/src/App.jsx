@@ -7,7 +7,7 @@ import SignUp from "./pages/SignUpPage/SignUp";
 // import OTPBox from "./pages/OTPP";
 import Login from "./pages/LoginPage/Login";
 
-import ProductPrice from "./pages/Product_list_page_list_type/Productlist"
+import ProductPrice from "./pages/Product_list_page_list_type/Productlist";
 
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
@@ -16,7 +16,9 @@ import ProductPage from "./pages/ProductPage/ProductPage";
 import ProfilePage from "./pages/ProfilePage/ProfilePage";
 import CartPage from "./pages/CartPage/CartPage";
 
-import ProductListPage from "./pages/ProductListPage/ProductListPage"
+import ProductListPage from "./pages/ProductListPage/ProductListPage";
+
+
 function App() {
   return (
     <Router>

@@ -86,7 +86,7 @@ const SignUp = () => {
                     htmlFor="email"
                     className=" text-sm font-medium text-gray-900 "
                   >
-                    Email ID
+                    Email ID (optional)
                   </label>
                   <input
                     type="email"
