@@ -5,6 +5,8 @@ import { FaXTwitter } from "react-icons/fa6";
 import * as Yup from "yup";
 import { useFormik } from "formik";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+
 import TodayOfferProducts from "../../Components/TodayOfferProducts/TodayOfferProducts";
 
 const SignUp = () => {
@@ -34,10 +36,11 @@ const SignUp = () => {
       },
     });
 
-
+    const navigate = useNavigate();
     const handleCancel = () => {
       // Redirect to the home page
-      window.location.href = '/';
+      // window.location.href = '/';
+      navigate("/");
     };
   return (
     <div className="flex flex-col">

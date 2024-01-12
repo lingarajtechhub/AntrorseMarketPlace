@@ -6,6 +6,7 @@ import { Link, NavLink } from "react-router-dom";
 // import { useNavigate } from 'react-router-dom';
 import * as Yup from "yup";
 import { useFormik } from "formik";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const initialValues = {
@@ -25,11 +26,12 @@ const Login = () => {
       },
     });
 
-  
+    const navigate = useNavigate();
 
   const handleCancel = () => {
     // Redirect to the home page
-    window.location.href = '/';
+    // window.location.href = '/';
+    navigate("/");
   };
   // const handleFormSubmit = async (e) => {
   //     e.preventDefault();
