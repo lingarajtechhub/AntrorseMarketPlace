@@ -1,6 +1,7 @@
-import React from 'react'
+
 
 const CategoryCard = (props) => {
+  // eslint-disable-next-line react/prop-types
   const{img,name}=props.data;
   return (
     
@@ -14,4 +15,4 @@ const CategoryCard = (props) => {
   )
 }
 
-export default CategoryCard
+export default CategoryCard;

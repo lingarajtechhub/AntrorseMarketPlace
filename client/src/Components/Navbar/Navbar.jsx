@@ -21,17 +21,17 @@ const Menu = [
   {
     id: 3,
     name: "Top Rated",
-    link: "/services",
+    link: "/productlistpage",
   },
   {
     id: 4,
     name: "Kids Wear",
-    link: "/",
+    link: "/productlistpage",
   },
   {
     id: 5,
     name: "Mens Wear",
-    link: "/",
+    link: "/productlistpage",
   },
   {
     id: 6,
@@ -89,10 +89,15 @@ const Navbar = () => {
             <button
               className="bg-gradient-to-r from-red-600 to-red-500 transition-all duration-200 text-white  py-1 px-4 rounded-full flex items-center gap-3 group"
             >
+            <Link to="/cart">
+            <div className="flex justify-center items-center gap-1">
               <span className="group-hover:block hidden transition-all duration-200">
-                cart 
+               cart 
               </span>
               <FaCartShopping className="text-xl text-white drop-shadow-sm cursor-pointer" />
+              </div>
+              </Link>
+              
             </button>
 
             <RxHamburgerMenu className="text-2xl text-white cursor-pointer drop-shadow-sm lg:hidden"/>
