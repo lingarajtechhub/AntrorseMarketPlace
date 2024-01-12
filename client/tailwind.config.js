@@ -20,6 +20,7 @@ export default {
         Hero: "url('./src/assets/Hero.png')",
       },
     },
+    
   },
   
   // eslint-disable-next-line no-undef

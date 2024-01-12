@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 
-mongoose.connect(`mongodb+srv://upendra:wvUNUF1FjJ02PCPH@cluster0.b8yrh4n.mongodb.net/Anrorse`, {
+mongoose.connect(`mongodb+srv://upendra:wvUNUF1FjJ02PCPH@cluster0.b8yrh4n.mongodb.net/AntrorseMarketPlace`, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
