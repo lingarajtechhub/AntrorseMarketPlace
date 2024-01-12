@@ -33,6 +33,12 @@ const SignUp = () => {
         console.log(values);
       },
     });
+
+
+    const handleCancel = () => {
+      // Redirect to the home page
+      window.location.href = '/';
+    };
   return (
     <div className="flex flex-col">
       <section className="bg-gray-50 h-screen flex-1 ">
@@ -233,6 +239,16 @@ const SignUp = () => {
                 </Link>
               </p>
             </div>
+            <div className=" flex justify-end mb-3 p-2">
+
+<button
+  type="submit"
+  className=" text-black bg-gray-200  focus:ring-3 focus:outline-none focus:ring-primary-300 font-medium rounded-md text-sm px-5 py-2.5 "
+  onClick={handleCancel}
+  >
+  cancel
+</button>
+  </div>
           </div>
         </div>
       </section>

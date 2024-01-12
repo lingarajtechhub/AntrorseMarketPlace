@@ -1,7 +1,9 @@
+import React from 'react'
 
-
+import shirt from '../../assets/shirt/shirt.png';
 import shirt2 from '../../assets/shirt/shirt2.png'; 
-
+import shirt3 from '../../assets/shirt/shirt3.png';
+import Navbar from '../../Components/Navbar/Navbar';
 import { FaRegHeart } from "react-icons/fa";
 // import StarRating from '../StartRating/StartRating';
 import image1 from "../../assets/women/women1.png";
@@ -86,6 +88,10 @@ export default function ProductListList() {
 
   return (
     <div>
+   
+
+
+
 <div className='m-4 flex flex-col sm:flex-row md:flex-col lg:flex-col flex-wrap gap-4 shadow-xl'>
   {products.map((product, index) => (
     <div

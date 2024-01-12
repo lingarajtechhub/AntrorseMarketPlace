@@ -10,6 +10,7 @@ import Navbar from "./components/Navbar/Navbar";
 import Footer from "./components/Footer/Footer";
 import Category from "./components/Catagories/Category";
 import Wishlist from "./pages/Wishlist/Wishlist";
+import ProductListPage from "./pages/ProductListPage/ProductListPage"
 function App() {
   return (
    
@@ -25,6 +26,8 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/Signup" element={<SignUp />} />
         <Route path="/otp" element={<OTP />} />
+        <Route path="/productlist" element={<ProductListPage />} />
+
         <Route />
       </Routes>
       <Footer />
