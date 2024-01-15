@@ -113,9 +113,13 @@ module.exports = {
     try {
       let data = req.body;
       let userData;
-      if (data.email_id) {
-
-         userData = await userModel.findOne({ email_id:data.email_id });
+      if (!data.mobile_number||!validation.isValidMobileNumber(data.mobile_number)) {
+        return response.commonErrorResponse(
+          res,
+          ErrorCode.BAD_REQUEST,
+          {},
+          ErrorMessage.PHONE_EMPTY
+        );
       }
       if (data.mobile_number) {
          userData = await userModel.findOne({ mobile_number:data.mobile_number });
@@ -276,7 +280,15 @@ module.exports = {
   forgetPassword: async function (req, res) {
     try {
       let data = req.body;
-      
+      console.log(data)
+      if (!data.mobile_number||!validation.isValidMobileNumber(data.mobile_number)) {
+        return response.commonErrorResponse(
+          res,
+          ErrorCode.BAD_REQUEST,
+          {},
+          ErrorMessage.PHONE_EMPTY
+        );
+      }
       if (data.password) {
         const saltRounds = 10;
         const hash = await bcrypt.hash(data.password, saltRounds);
@@ -295,6 +307,15 @@ module.exports = {
           SuccessMessage.UPDATE_SUCCESS
         );
       }
+      else {
+        return response.commonErrorResponse(
+          res,
+          ErrorCode.NOT_FOUND,
+          {},
+          ErrorMessage.USER_NOT_FOUND
+        );
+      }
+
     } catch (err) {
       return response.commonErrorResponse(
         res,
@@ -304,4 +325,20 @@ module.exports = {
       );
     }
   },
+  getUser:async function(req,res){
+    try{
+let user_id= req.user_id;
+
+let getData= await userModel.findById(user_id)
+    }
+    catch (err) {
+      return response.commonErrorResponse(
+        res,
+        ErrorCode.INTERNAL_ERROR,
+        {},
+        err.message
+      );
+    }
+
+  }
 };
