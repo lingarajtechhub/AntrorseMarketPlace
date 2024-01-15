@@ -5,6 +5,7 @@ import Img3 from "../../assets/women/women3.jpg";
 import Img4 from "../../assets/women/women4.jpg";
 import { FaStar } from "react-icons/fa6";
 
+
 const ProductsData = [
   {
     id: 1,
@@ -13,6 +14,7 @@ const ProductsData = [
     rating: 5.0,
     color: "white",
     aosDelay: "0",
+    link:"/productpage"
   },
   {
     id: 2,
@@ -67,6 +69,7 @@ const Products = () => {
         </div>
         {/* Body section */}
         <div>
+       
           <div className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 place-items-center gap-5">
             {/* card section */}
             {ProductsData.map((data) => (

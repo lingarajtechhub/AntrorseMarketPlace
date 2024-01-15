@@ -7,8 +7,8 @@ const userSchema = new mongoose.Schema({
     },
     email_id: {
         type: String,
-        required: [true, 'Email is required'],
-        unique: true, // Ensure email is unique
+        // required: [true, 'Email is required'],
+         // Ensure email is unique
         trim: true, // Remove leading/trailing whitespaces from email
         lowercase: true, // Convert email to lowercase
         validate: {
@@ -21,6 +21,7 @@ const userSchema = new mongoose.Schema({
     },
     mobile_number: {
         type: Number,
+        unique: true,
         required: [true, 'Mobile number is required'],
         validate: {
             validator: function (value) {

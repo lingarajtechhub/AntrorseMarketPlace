@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import  { useState } from 'react';
 const ProductFilter = () => {
   
 
@@ -32,7 +32,7 @@ const ProductFilter = () => {
       };
     
       return (
-        <div className="flex  flex-col space-x-4   p-4 m-6 rounded-sm  shadow-lg gap-3">
+        <div className="flex  flex-col space-x-4   p-4 m-6 rounded-sm  shadow-lg gap-3 ">
            
           <div>
             <label className="block  text-black text-2xl font-semibold  mb-2 text-center pb-4">Brands</label>

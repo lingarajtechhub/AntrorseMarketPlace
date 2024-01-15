@@ -29,39 +29,14 @@ const Login = () => {
     const navigate = useNavigate();
 
   const handleCancel = () => {
-    // Redirect to the home page
-    // window.location.href = '/';
+    
     navigate("/");
   };
-  // const handleFormSubmit = async (e) => {
-  //     e.preventDefault();
-  //     const response = await fetch('url/demo', {
-  //       method: 'POST',
-  //       mode: 'cors',
-  //       cache: 'no-cache',
-  //       credentials: 'same-origin',
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //       },
-  //       body: JSON.stringify({
-  //         email: userName,
-  //         password: password,
-  //       }),
-  //     });
-  //     const json = await response.json();
-  //     console.log(json);
 
-  //     if (json.sucess===true) {
-  //       localStorage.setItem('token', json.authtoken);
-  //       navigate('/'); // Use navigate for navigation
-  //     } else {
-  //       alert('Invalid credentials');
-  //     }
 
-  //   };
 
   return (
-    <div className="bg-gray-50 h-screen  flex-1 ">
+    <div className="bg-gray-50   flex-1 mb-14 ">
       
 
       <div className="flex flex-col items-center justify-center  px-6 py-8 mx-auto ">
@@ -99,43 +74,7 @@ const Login = () => {
                   </p>
                 ) : null}
               </div>
-              {/* <div className="flex flex-col gap-1">
-              <label
-                htmlFor="email"
-                className=" text-sm font-medium text-gray-900 "
-              >
-                Email Number
-              </label>
-              <input
-                type="email"
-                name="email"
-                id="email"
-                className="bg-gray-50 border text-gray-900 sm:text-sm rounded-md focus:ring-2 focus:outline-none focus:ring-slate-600 block w-full p-2.5  "
-                placeholder="name@company.com "
-                value={registerId}
-                onChange={(e) => setRegisterId(e.target.value)}
-                required
-              />
-            </div>
-
-            <div className="flex flex-col gap-1">
-              <label
-                htmlFor="mobile"
-                className=" text-sm font-medium text-gray-900 "
-              >
-                Mobile Number
-              </label>
-              <input
-                type="text"
-                name="mobile"
-                id="mobile"
-                className="bg-gray-50 border text-gray-900 sm:text-sm rounded-md focus:ring-2 focus:outline-none focus:ring-slate-600 block w-full p-2.5  "
-                placeholder="+911234567890"
-                value={registerId}
-                onChange={(e) => setRegisterId(e.target.value)}
-                required
-              />
-            </div> */}
+            
               <div className="flex flex-col gap-1">
                 <label
                   htmlFor="password"
@@ -159,34 +98,20 @@ const Login = () => {
                   </p>
                 ) : null}
               </div>
-              {/* <div className="flex flex-col gap-1">
-              <label
-                htmlFor="confirm-password"
-                className=" text-sm font-medium text-gray-900 "
-              >
-                Confirm password
-              </label>
-              <input
-                type="confirm-password"
-                name="confirm-password"
-                id="confirm-password"
-                placeholder="••••••••"
-                className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-md focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                required
-              />
-            </div> */}
+         
 
                      <div className=" flex justify-end space-x-1 ">
 
                 <div>
-                <Link to={'/forgetpassword'} className="text-blue-700 text-sm underline">forget password</Link>
+                <Link to={'/forgetpassword'} className="text-blue-700 text-sm underline">forgot password</Link>
                 </div>
                 <span> / </span>
                 <div>
-                <Link to={'/forgetpassword'} className="text-blue-700 text-sm underline">forget username</Link>
+                <Link to={'/forgetpassword'} className="text-blue-700 text-sm underline">forgot username</Link>
                 </div>
               </div>
-              <div className="flex items-start">
+
+              {/* <div className="flex items-start">
                 <div className="flex items-center h-5">
                   <input
                     id="terms"
@@ -207,13 +132,40 @@ const Login = () => {
                     </a>
                   </label>
                 </div>
-              </div>
-              <button
+              </div> */}
+
+              
+              {/* <button
                 type="submit"
                 className="w-full text-slate-200 bg-red-500 hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-md text-sm px-5 py-2.5 text-center"
               >
                 Login
-              </button>
+              </button> */}
+
+
+
+                        
+                <div className="flex flex-row space-x-3 items-center justify-center">
+                  <div className="w-3/4 flex items-center justify-center">
+                    <button
+                      type="submit"
+                      className="w-full text-slate-200 bg-red-500 hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-md text-sm px-5 py-2.5 text-center"
+                    >
+                      Login
+                    </button>
+                  </div>
+
+                  <div className="w-1/4 flex items-center justify-center">
+                    <button
+                      type="submit"
+                      className="w-full text-black bg-gray-200 focus:ring-3 focus:outline-none focus:ring-primary-300 font-medium rounded-md text-sm px-5 py-2.5"
+                      onClick={handleCancel}
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </div>
+
 
             
 
@@ -228,7 +180,7 @@ const Login = () => {
                 <div className="w-full border-t border-gray-300"></div>
               </div>
               <div className="relative flex justify-center text-sm">
-                <span className="px-2 bg-gray-100">Or Login with</span>
+                <span className="px-2 bg-gray-100">or Login with</span>
               </div>
             </div>
 
@@ -260,13 +212,13 @@ const Login = () => {
             </div>
 
             <p className="text-sm  text-gray-500   font-medium">
-              Dont have an account?{" "}
+              Don't have an account?{" "}
               <Link to="/signup" className=" text-red-600 hover:underline ">
                 Sign Up
               </Link>
             </p>
           </div>
-        <div className=" flex justify-end mb-3 p-2">
+        {/* <div className=" flex justify-end mb-3 p-2">
 
 <button
   type="submit"
@@ -275,7 +227,7 @@ const Login = () => {
   >
   cancel
 </button>
-  </div>
+  </div> */}
       </div>
    </div>
     </div>
