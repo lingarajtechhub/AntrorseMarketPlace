@@ -1,5 +1,5 @@
-// eslint-disable-next-line no-unused-vars
-import React, { useState } from "react";
+
+import  { useState } from "react";
 
 import { IoMdInformationCircle } from "react-icons/io";
 const numberOfDigits = 6;
@@ -17,7 +17,7 @@ const OTP = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const otpCode = otpValues.join("");
+   
   };
 
   return (
@@ -65,7 +65,7 @@ const OTP = () => {
               </div>
 
               <div className="flex flex-row items-center justify-center text-center text-sm font-medium space-x-1 text-gray-500">
-                <p>Didn't receive code?</p>
+                <p>Didnt receive code?</p>
               </div>
             </div>
           </div>
@@ -75,4 +75,5 @@ const OTP = () => {
   );
 };
 
+// eslint-disable-next-line react-refresh/only-export-components
 export default OTP;

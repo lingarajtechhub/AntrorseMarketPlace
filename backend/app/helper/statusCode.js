@@ -8,6 +8,7 @@ module.exports.ErrorCode= Object.freeze({
     'WENT_WRONG':501,
     'REQUEST_FAILED':402,
     'BAD_REQUEST':400
+    
 })
 module.exports.SuccessCode=Object.freeze({
     'SUCCESS':200,

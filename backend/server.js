@@ -15,6 +15,7 @@ app.use(
   })
 );
 require("./dbConnection/dbConnection")
+app.use("/app/user/",route)
 
 app.listen(process.env.port||3000, function(){
   console.log("server is running on port:",process.env.port||3000)

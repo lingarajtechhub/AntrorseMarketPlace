@@ -1,28 +1,47 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import ProductListList from "../../Components/ProductListList/ProductListList";
 import ProductFilter from "../../Components/ProductListList/ProductFilter";
 import Navbar from "../../Components/Navbar/Navbar";
 
-const ProductListPage = () => {
-  useEffect(() => {
-    console.log("here");
+// import Productlistgrid from '../Product_list_page_list_type/Productlistgrid';
+import ProductListgrid from "../../Components/productListGrid/Productlistgrid";
+import { useDispatch, useSelector } from "react-redux";
 
-    fetch("../../data/mockData.json")
-      .then((res) => res.json())
-      .then((data) => console.log(data))
-      .catch((error) => console.error("Error fetching data:", error));
-  }, []);
+const ProductListPage = () => {
+  const [list, setList] = useState(false);
+
+  const handleViewChange = () => {
+    setList(!list);
+  };
 
   return (
     <>
-      <Navbar />
-      <div className="flex flex-row">
-        <div className=" w-1/4">
-          <ProductFilter />
-        </div>
+      {/* <Navbar /> */}
+      {/* Assuming Navbar is supposed to be rendered */}
 
-        <div className="w-3/4">
-          <ProductListList />
+      <div className="flex flex-col lg:flex-row">
+        {" "}
+        {/* Use flex-col for mobile and lg:flex-row for larger screens */}
+        <div className="lg:w-1/4">
+          {" "}
+          {/* Use lg:w-1/4 for larger screens */}
+          <ProductFilter />
+          {/* Conditionally render based on showFilter */}
+        </div>
+        <div className="lg:w-3/4">
+          <div className="mb-4">
+            <label htmlFor="viewSelect">Select View:</label>
+            <select
+              id="viewSelect"
+              onChange={handleViewChange}
+              value={list ? "list" : "grid"}
+              className="ml-2 p-2 border rounded"
+            >
+              <option value="list">List View</option>
+              <option value="grid">Grid View</option>
+            </select>
+          </div>
+          {list ? <ProductListgrid /> : <ProductListList />}
         </div>
       </div>
     </>

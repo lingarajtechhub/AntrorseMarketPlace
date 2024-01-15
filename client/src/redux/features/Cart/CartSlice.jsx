@@ -22,13 +22,19 @@ export const CartSlice = createSlice({
       if (itemExist) {
         console.log("Item already exists in the cart");
       } else {
-        state.cartItems.push(product);
+        state.cartItems = [...state.cartItems, product];
+        console.log(state.cartItems, "item");
         console.log("Item added to the cart");
         localStorage.setItem("cart", JSON.stringify(state.cartItems));
       }
     },
     removeFromCart(state, action) {
       const product = action.payload;
+      const itemRemove = state.cartItems.filter(
+        (item) => item.id !== product.id
+      );
+      state.cartItems = itemRemove;
+      localStorage.setItem("cart", JSON.stringify(state.cartItems));
     },
   },
 });

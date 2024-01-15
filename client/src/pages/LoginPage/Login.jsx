@@ -6,6 +6,7 @@ import { Link, NavLink } from "react-router-dom";
 // import { useNavigate } from 'react-router-dom';
 import * as Yup from "yup";
 import { useFormik } from "formik";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const initialValues = {
@@ -24,6 +25,14 @@ const Login = () => {
         console.log(values);
       },
     });
+
+    const navigate = useNavigate();
+
+  const handleCancel = () => {
+    // Redirect to the home page
+    // window.location.href = '/';
+    navigate("/");
+  };
   // const handleFormSubmit = async (e) => {
   //     e.preventDefault();
   //     const response = await fetch('url/demo', {
@@ -53,88 +62,7 @@ const Login = () => {
 
   return (
     <div className="bg-gray-50 h-screen  flex-1 ">
-      {/* <div className="flex flex-col justify-center items-center bg-cover rounded-lg shadow-2xl w-full md:w-1/2 lg:w-1/3 xl:w-1/4 bg-white p-4">
-        <span className="text-2xl font-semibold mt-7 mb-3">Login</span>
-
-        <form
-          className="m-3 flex flex-col w-full p-5 px-"
-          onSubmit={handleSubmit}
-        >
-          <label className="text-md">Username / Mobile</label>
-          <input
-            className="p-2 bg-white outline-none border-b border-red-400 mb-2"
-            type="text"
-            value={userName}
-            onChange={(e) => setUserName(e.target.value)}
-            placeholder="Enter your username or mobile"
-          />
-          <label className="text-md mt-2">Password</label>
-          <input
-            className="p-2 bg-white border-b border-red-400 outline-none mb-2"
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            placeholder="Enter your password.."
-          />
-
-          {error && <p className="text-sm text-red-500 mb-2">{error}</p>}
-
-          <button
-            className="mt-4 mb-3 p-2 from-lightcoral via-lightcoral to-darkcoral border-none text-white rounded-full bg-red-600"
-            type="submit"
-          >
-            Login
-          </button>
-
-          <div className="mb-4">
-            <NavLink
-              to="/forgot-password"
-              className="text-sm text-gray-600 hover:underline"
-            >
-              Forgot Password?
-            </NavLink>
-          </div>
-        </form>
-
-        <h4> or Login with</h4>
-
-        <div className="mt-6 grid grid-cols-3 gap-3">
-          <div>
-            <a
-              href="#"
-              className="w-full flex items-center justify-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50"
-            >
-              <FaFacebook fill="blue" size={"1.5rem"} />
-            </a>
-          </div>
-          <div>
-            <a
-              href="#"
-              className="w-full flex items-center justify-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50"
-            >
-              <FaXTwitter size={"1.5rem"} />
-            </a>
-          </div>
-          <div>
-            <a
-              href="#"
-              className="w-full flex items-center justify-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50"
-            >
-              <FcGoogle size={"1.5rem"} />
-            </a>
-          </div>
-        </div>
-
-        <div className="mb-4">
-          <span>Create Account ? </span>
-          <NavLink
-            to="/forgot-password"
-            className="text-md text-red-600 hover:underline"
-          >
-            Sign up
-          </NavLink>
-        </div>
-      </div> */}
+      
 
       <div className="flex flex-col items-center justify-center  px-6 py-8 mx-auto ">
         <div className="w-full bg-white rounded-lg shadow  sm:max-w-md   ">
@@ -247,6 +175,17 @@ const Login = () => {
                 required
               />
             </div> */}
+
+                     <div className=" flex justify-end space-x-1 ">
+
+                <div>
+                <Link to={'/forgetpassword'} className="text-blue-700 text-sm underline">forget password</Link>
+                </div>
+                <span> / </span>
+                <div>
+                <Link to={'/forgetpassword'} className="text-blue-700 text-sm underline">forget username</Link>
+                </div>
+              </div>
               <div className="flex items-start">
                 <div className="flex items-center h-5">
                   <input
@@ -275,6 +214,13 @@ const Login = () => {
               >
                 Login
               </button>
+
+            
+
+              <div className="flex">
+                {/* <span> or </span> */}
+                <Link to={'/OTP'} className="text-blue-700 text-sm underline">Login with OTP</Link>
+              </div>
             </form>
 
             <div className="relative">
@@ -320,8 +266,18 @@ const Login = () => {
               </Link>
             </p>
           </div>
-        </div>
+        <div className=" flex justify-end mb-3 p-2">
+
+<button
+  type="submit"
+  className=" text-black bg-gray-200  focus:ring-3 focus:outline-none focus:ring-primary-300 font-medium rounded-md text-sm px-5 py-2.5 "
+  onClick={handleCancel}
+  >
+  cancel
+</button>
+  </div>
       </div>
+   </div>
     </div>
   );
 };

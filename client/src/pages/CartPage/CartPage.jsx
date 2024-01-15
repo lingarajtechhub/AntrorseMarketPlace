@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { MdOutlineCancel } from "react-icons/md";
 import { FaArrowLeftLong, FaCcVisa } from "react-icons/fa6";
 
@@ -6,56 +6,59 @@ import image2 from "../../assets/women/women2.jpg";
 import { IoMdInformationCircle } from "react-icons/io";
 
 const CartPage = () => {
-  const cartItems = [
-    {
-      image: image2,
-      title: "Men greeen Solid Zippered full slim fit bomber jacket",
-      color: "Blue",
-      size: "S",
-      quantity: 5,
-      price: 25000,
-    },
-    {
-      image: image2,
-      title: "Men greeen Solid Zippered full slim fit bomber jacket",
-      color: "Blue",
-      size: "S",
-      quantity: 10,
-      price: 25000,
-    },
-    {
-      image: image2,
-      title: "Men greeen Solid Zippered full slim fit bomber jacket",
-      color: "Blue",
-      size: "S",
-      quantity: 1,
-      price: 25000,
-    },
-    {
-      image: image2,
-      title: "Men greeen Solid Zippered full slim fit bomber jacket",
-      color: "Blue",
-      size: "S",
-      quantity: 5,
-      price: 25000,
-    },
-    {
-      image: image2,
-      title: "Men greeen Solid Zippered full slim fit bomber jacket",
-      color: "Blue",
-      size: "S",
-      quantity: 10,
-      price: 25000,
-    },
-    {
-      image: image2,
-      title: "Men greeen Solid Zippered full slim fit bomber jacket",
-      color: "Blue",
-      size: "S",
-      quantity: 1,
-      price: 25000,
-    },
-  ];
+  // const cartItems = [
+  //   {
+  //     image: image2,
+  //     title: "Men greeen Solid Zippered full slim fit bomber jacket",
+  //     color: "Blue",
+  //     size: "S",
+  //     quantity: 5,
+  //     price: 25000,
+  //   },
+  //   {
+  //     image: image2,
+  //     title: "Men greeen Solid Zippered full slim fit bomber jacket",
+  //     color: "Blue",
+  //     size: "S",
+  //     quantity: 10,
+  //     price: 25000,
+  //   },
+  //   {
+  //     image: image2,
+  //     title: "Men greeen Solid Zippered full slim fit bomber jacket",
+  //     color: "Blue",
+  //     size: "S",
+  //     quantity: 1,
+  //     price: 25000,
+  //   },
+  //   {
+  //     image: image2,
+  //     title: "Men greeen Solid Zippered full slim fit bomber jacket",
+  //     color: "Blue",
+  //     size: "S",
+  //     quantity: 5,
+  //     price: 25000,
+  //   },
+  //   {
+  //     image: image2,
+  //     title: "Men greeen Solid Zippered full slim fit bomber jacket",
+  //     color: "Blue",
+  //     size: "S",
+  //     quantity: 10,
+  //     price: 25000,
+  //   },
+  //   {
+  //     image: image2,
+  //     title: "Men greeen Solid Zippered full slim fit bomber jacket",
+  //     color: "Blue",
+  //     size: "S",
+  //     quantity: 1,
+  //     price: 25000,
+  //   },
+  // ];
+
+  const cartItems = JSON.parse(localStorage.getItem("cart")) ?? [];
+  console.log(cartItems, "cartItems");
 
   return (
     <div className="bg-gray-100 flex  items-center justify-center min-h-screen p-4">
@@ -84,7 +87,7 @@ const CartPage = () => {
                   <div className="flex flex-col max-w-[40rem] gap-1">
                     <p className=" font-bold text-lg">{item.title}</p>
                     <p className="text-md text-gray-500">
-                      {`Color: ${item.color.toLowerCase()} size: ${item.size.toLowerCase()}`}{" "}
+                      {`Color: ${item.specifications.color.toLowerCase()} size: ${item.size.toLowerCase()}`}{" "}
                     </p>
                     <p className="text-md text-gray-500">
                       Qty:
