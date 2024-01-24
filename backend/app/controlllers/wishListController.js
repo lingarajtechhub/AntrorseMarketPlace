@@ -61,7 +61,7 @@ creteWishList: async (req, res) => {
   try {
     const userId = req.params.userId;
     const { productId, quantity } = req.body;
-    const wishlist = await Wishlist.findOne({ user: userId });
+    const wishlist = await wishlistModel.findOne({ user: userId });
     if (!wishlist) {
       // Create a new wishlist if not exists
       const newWishlist = new Wishlist({ user: userId, items: [{ product: productId, quantity }] });

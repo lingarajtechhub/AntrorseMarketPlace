@@ -13,7 +13,7 @@ router.put("/forgetPassword",userController.forgetPassword)
 router.post("/createOTPForForgetPassword",userController.createOTPForForgetPassword)
 // ======================================================================
 // ================wishList=============
-router.post("/creteWishList", wishlistController.creteWishList)
+router.post("/creteWishList/:user_id", wishlistController.creteWishList)
 router.get("/getWishList",wishlistController.getWishList)
 // ==============
 module.exports=router
