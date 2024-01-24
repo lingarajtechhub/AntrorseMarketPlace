@@ -1,4 +1,3 @@
-
 import Home from "./pages/HomePage/Home";
 import OTP from "./Components/OTP";
 import SignUp from "./pages/SignUpPage/SignUp";
@@ -14,18 +13,19 @@ import Wishlist from "./pages/Wishlist/Wishlist";
 import Cart from "./pages/CartPage/CartPage";
 import Profile from "./pages/ProfilePage/ProfilePage";
 import ProductPage from "./pages/ProductPage/ProductPage";
-import ProductListPage from "./pages/ProductListPage/ProductListPage"
+import ProductListPage from "./pages/ProductListPage/ProductListPage";
+import CartPage from "./pages/CartPage/CartPage";
+import ProductPage from "./pages/ProductPage/ProductPage";
+import UpdatedProfilePage from "./pages/ProfilePage/UpdatedProfilePage";
 import ProductList_Page from "./pages/Product_list_page_list_type/Productlist"
 import MyProfile from "./Components/Myprofile/Myprofile";
 
 function App() {
   return (
-   
     <Router>
-    <Navbar />
+      <Navbar />
       {/* <Login/> */}
       <Routes>
-   
         <Route path="/" element={<Home />} />
         <Route path="/category" element={<Category />} />
         <Route path="/wishlist" element={<Wishlist />} />
@@ -36,18 +36,24 @@ function App() {
         <Route path="/productlist_page" element={<ProductList_Page/>} />
         
       
-      
+
         <Route path="/login" element={<Login />} />
         <Route path="/Signup" element={<SignUp />} />
         <Route path="/otp" element={<OTP/>} />
         <Route path="/productlist" element={<ProductListPage />} />
+<<<<<<< HEAD
         <Route path="/myprofile" element={<MyProfile/>} />
       
         
+=======
+        <Route path="/ProductPage" element={<ProductPage />} />
+        <Route path="/CartPage" element={<CartPage />} />
+        <Route path="/UpdatedProfilePage" element={<UpdatedProfilePage />} />
+>>>>>>> a00998bf93c0520f348c9d042ac870556cae4a2f
 
         <Route />
       </Routes>
-      <Footer />
+      {/* <Footer /> */}
     </Router>
   );
 }

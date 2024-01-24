@@ -1,6 +1,7 @@
 import { FaStar, FaRegStar } from "react-icons/fa";
 
 const StarRating = ({ rating }) => {
+  rating = rating.toFixed(0);
   const filledStars = Array(rating).fill(1);
   const emptyStars = Array(5 - rating).fill(1);
 

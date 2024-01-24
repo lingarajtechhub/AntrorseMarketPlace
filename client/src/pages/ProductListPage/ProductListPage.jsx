@@ -4,12 +4,11 @@ import ProductFilter from '../../Components/ProductListList/ProductFilter';
 import ProductListgrid from "../../components/productListGrid/Productlistgrid";
 const ProductListPage = () => {
   const [list, setList] = useState(false);
- 
 
   const handleViewChange = () => {
     setList(!list);
   };
- 
+
   return (
     <>
    
@@ -22,13 +21,13 @@ const ProductListPage = () => {
           <div className='mb-4'>
             <label htmlFor='viewSelect'>Select View:</label>
             <select
-              id='viewSelect'
+              id="viewSelect"
               onChange={handleViewChange}
-              value={list ? 'list' : 'grid'}
-              className='ml-2 p-2 border rounded'
+              value={list ? "list" : "grid"}
+              className="ml-2 p-2 border rounded"
             >
-              <option value='list'>List View</option>
-              <option value='grid'>Grid View</option>
+              <option value="list">List View</option>
+              <option value="grid">Grid View</option>
             </select>
           </div>
           {list ? <ProductListgrid /> : <ProductListList />}
@@ -39,4 +38,3 @@ const ProductListPage = () => {
 };
 
 export default ProductListPage;
-

@@ -90,6 +90,30 @@ const SignUp = () => {
                     </p>
                   ) : null}
                 </div>
+                <div className="flex flex-col gap-1">
+                  <label
+                    htmlFor="email"
+                    className=" text-sm font-medium text-gray-900 "
+                  >
+                    Email ID (optional)
+                  </label>
+                  <input
+                    type="email"
+                    name="email"
+                    id="email"
+                    className="bg-gray-50 border text-gray-900 sm:text-sm rounded-md focus:ring-2 focus:outline-none focus:ring-slate-600 block w-full p-2.5  "
+                    placeholder="name@company.com "
+                    value={values.email}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                  />
+                  {errors.email && touched.email ? (
+                    <p className="text-red-600 text-[0.75rem] capitalize">
+                      {errors.email}
+                    </p>
+                  ) : null}
+                </div>
+
                
                 <div className="flex flex-col gap-1">
                   <label

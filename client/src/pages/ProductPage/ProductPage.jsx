@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import image1 from "../../assets/women/women1.png";
 import image2 from "../../assets/women/women2.jpg";
@@ -16,6 +16,7 @@ const ProductPage = () => {
     setSelectedSize(size);
   };
 
+
   return (
     <div className="bg-gray-100 min-h-screen p-4">
       <div className="max-w-6xl shadow-md  p-4  mx-auto">
@@ -26,27 +27,27 @@ const ProductPage = () => {
               <img
                 src={image1}
                 alt="Product 1"
-                className="flex-1 w-24 bg-white object-cover shadow rounded-md cursor-pointer"
+                className="flex-1 w-24 bg-white object-cover shadow outline outline-blue-500   cursor-pointer"
               />
               <img
                 src={image2}
                 alt="Product 2"
-                className="flex-1 w-24 bg-white object-cover shadow rounded-md cursor-pointer"
+                className="flex-1 w-24 bg-white object-cover shadow    cursor-pointer"
               />
               <img
                 src={image3}
                 alt="Product 3"
-                className="flex-1 w-24 bg-white object-cover shadow rounded-md cursor-pointer"
+                className="flex-1 w-24 bg-white object-cover shadow    cursor-pointer"
               />
               <img
                 src={image4}
                 alt="Product 4"
-                className="flex-1 w-24 bg-white object-cover shadow rounded-md cursor-pointer"
+                className="flex-1 w-24 bg-white object-cover shadow    cursor-pointer"
               />
               <img
                 src={image4}
                 alt="Product 4"
-                className="flex-1 w-24 bg-white object-cover shadow rounded-md cursor-pointer"
+                className="flex-1 w-24 bg-white object-cover shadow    cursor-pointer"
               />
             </div>
 
@@ -126,7 +127,7 @@ const ProductPage = () => {
                     ))}
                   </div>
                 </div>
-              </div>    
+              </div>
             </div>
           </div>
         </div>
