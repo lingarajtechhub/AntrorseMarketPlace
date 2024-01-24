@@ -8,7 +8,7 @@ const userSchema = new mongoose.Schema({
     email_id: {
         type: String,
         // required: [true, 'Email is required'],
-         // Ensure email is unique
+        //  Ensure email is unique
         trim: true, // Remove leading/trailing whitespaces from email
         lowercase: true, // Convert email to lowercase
         validate: {

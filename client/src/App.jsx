@@ -5,6 +5,7 @@ import SignUp from "./pages/SignUpPage/SignUp";
 // import OTPBox from "./pages/OTPP";
 import Login from "./pages/LoginPage/Login";
 
+
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar/Navbar";
 import Footer from "./components/Footer/Footer";
@@ -15,6 +16,8 @@ import Profile from "./pages/ProfilePage/ProfilePage";
 import ProductPage from "./pages/ProductPage/ProductPage";
 import ProductListPage from "./pages/ProductListPage/ProductListPage"
 import ProductList_Page from "./pages/Product_list_page_list_type/Productlist"
+import MyProfile from "./Components/Myprofile/Myprofile";
+
 function App() {
   return (
    
@@ -31,12 +34,16 @@ function App() {
         <Route path="/productpage" element={<ProductPage/>} />
         <Route path="/productlistpage" element={<ProductListPage/>} />
         <Route path="/productlist_page" element={<ProductList_Page/>} />
+        
       
       
         <Route path="/login" element={<Login />} />
         <Route path="/Signup" element={<SignUp />} />
         <Route path="/otp" element={<OTP/>} />
         <Route path="/productlist" element={<ProductListPage />} />
+        <Route path="/myprofile" element={<MyProfile/>} />
+      
+        
 
         <Route />
       </Routes>
