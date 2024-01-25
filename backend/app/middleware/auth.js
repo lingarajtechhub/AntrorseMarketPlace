@@ -1,6 +1,6 @@
 require("dotenv").config()
 const userModel = require("../models/user/userModel");
-// const sellerModels= require("../models/")
+const sellerModels= require("../models/seller/sellerModels")
 const jwt = require("jsonwebtoken");
 const response = require("../helper/commonResponse");
 const { ErrorCode } = require("../helper/statusCode");
@@ -56,52 +56,52 @@ module.exports = {
       );
     }
   },
-  // sellerAuth: (req, res, next) => {
-  //   try {
-  //     jwt.verify(
-  //       req.headers.token,
-  //       process.env.SECRET_KEY,
-  //       (err, result) => {
-  //         if (err) {
-  //           return response.commonErrorResponse(
-  //             res,
-  //             ErrorCode.INTERNAL_ERROR,
-  //             err,
-  //             ErrorMessage.INTERNAL_ERROR
-  //           );
-  //         } else {
-  //           sellerModels.findOne({ _id:mongoose.Types.ObjectId(result.seller_id) }, (sellErr, sellerResult) => {
-  //             if (sellErr) {
-  //               return response.commonErrorResponse(
-  //                 res,
-  //                 ErrorCode.INTERNAL_ERROR,
-  //                 sellErr,
-  //                 ErrorMessage.INTERNAL_ERROR
-  //               );
-  //             } else if (!sellerResult) {
-  //               return response.commonErrorResponse(
-  //                 res,
-  //                 ErrorCode.NOT_FOUND,
-  //                 {},
-  //                 ErrorMessage.NOT_FOUND
-  //               );
-  //             } else {
-  //               req.seller_id = sellerResult._id;
+  sellerAuth: (req, res, next) => {
+    try {
+      jwt.verify(
+        req.headers.token,
+        process.env.SECRET_KEY,
+        (err, result) => {
+          if (err) {
+            return response.commonErrorResponse(
+              res,
+              ErrorCode.INTERNAL_ERROR,
+              err,
+              ErrorMessage.INTERNAL_ERROR
+            );
+          } else {
+            sellerModels.findOne({ _id:mongoose.Types.ObjectId(result.seller_id) }, (sellErr, sellerResult) => {
+              if (sellErr) {
+                return response.commonErrorResponse(
+                  res,
+                  ErrorCode.INTERNAL_ERROR,
+                  sellErr,
+                  ErrorMessage.INTERNAL_ERROR
+                );
+              } else if (!sellerResult) {
+                return response.commonErrorResponse(
+                  res,
+                  ErrorCode.NOT_FOUND,
+                  {},
+                  ErrorMessage.NOT_FOUND
+                );
+              } else {
+                req.seller_id = sellerResult._id;
                 
-  //               next();
-  //             }
-  //           });
-  //         }
-  //       }
-  //     );
-  //   } catch (error) {
-  //     console.log(error);
-  //     return response.commonErrorResponse(
-  //       res,
-  //       ErrorCode.INTERNAL_ERROR,
-  //       {},
-  //       err.ErrorMessage
-  //     );
-  //   }
-  // },
+                next();
+              }
+            });
+          }
+        }
+      );
+    } catch (error) {
+      console.log(error);
+      return response.commonErrorResponse(
+        res,
+        ErrorCode.INTERNAL_ERROR,
+        {},
+        err.ErrorMessage
+      );
+    }
+  },
 };

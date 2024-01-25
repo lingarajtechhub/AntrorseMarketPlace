@@ -1,4 +1,5 @@
 module.exports.ErrorMessage = Object.freeze({
+  INVALID_GST:"correct GST is mandatory for registration",
   PHONE_EMPTY: "Valid mobile number is require",
   NAME_EMPTY: "name is mandatory for registration in string formate",
   INVALID_EMAIL: "please check your email_id invalid.",

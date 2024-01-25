@@ -1,12 +1,14 @@
 const express= require("express")
 const route= express.Router()
+const auth=require("../app/middleware/auth")
+
 const productController= require("../app/controlllers/productController")
-route.post("/AddProduct",productController.AddProduct)
+route.post("/AddProduct",auth.sellerAuth,productController.AddProduct)
 route.get("/searchProducts",productController.searchProducts)
 route.get("/getProductById",productController.getProductById)
 route.get("/getAllProduct",productController.getAllProduct)
 route.get("/getProductBySubcategory",productController.getProductBySubcategory)
-route.put("/updateProduct",productController.AddProduct)
+route.put("/updateProduct",auth.sellerAuth,productController.AddProduct)
 // ===========productRating========
 
 

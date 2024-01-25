@@ -3,6 +3,7 @@ const express= require("express")
 const userRoute= require("./router/userRouter")
 const productRoute=require("./router/productRouter")
 const cartRouter=require("./router/cartRouter")
+const sellerRoute=require("./router/sellerRouter")
 const multer= require("multer")
 const cors= require("cors")
 const app= express()
@@ -18,9 +19,12 @@ app.use(
   })
 );
 require("./dbConnection/dbConnection")
+console.log("myname ")
 app.use("/app/user/",userRoute)
-app.use("/app/seller",productRoute)
-app.use("/app/cart",cartRouter)
+app.use("/app/product/",productRoute)
+app.use("/app/cart/",cartRouter)
+app.use("/app/seller",sellerRoute)  
+
 
 app.listen(process.env.PORT_NUMBER, function(){
   console.log("server is running on port:",process.env.PORT_NUMBER)

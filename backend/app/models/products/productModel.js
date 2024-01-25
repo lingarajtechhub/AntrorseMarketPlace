@@ -1,10 +1,11 @@
 const mongoose= require("mongoose")
+
 const ObjectId= mongoose.Schema.Types.ObjectId
 
 const productSchema= new mongoose.Schema({
     seller_id:{
         type:ObjectId,
-        // ref:seller
+        ref:"seller"
     },
     description:{
         type:String,
