@@ -1,4 +1,5 @@
 module.exports.ErrorMessage = Object.freeze({
+  INVALID_GST:"please provide correct PAN number",
   INVALID_GST:"correct GST is mandatory for registration",
   PHONE_EMPTY: "Valid mobile number is require",
   NAME_EMPTY: "name is mandatory for registration in string formate",
@@ -8,7 +9,7 @@ module.exports.ErrorMessage = Object.freeze({
   INVALID_CREDENTIAL: "Invalid credentials.",
   SOMETHING_WRONG: "Something went wrong!",
   ALREADY_EXIST_EMAIL: "Already exists this emailId.",
-  NO_TOKEN: "Please provide token.",
+  NO_TOKEN: "Please provide token in heder .",
   NOT_REGISTERED: "Provided mobileNumber is not registered.",
   RESET_PASSWORD_EXPIRED: "Your Token has expired.",
   INVALID_MOBILE: "This mobile number is not valid.",

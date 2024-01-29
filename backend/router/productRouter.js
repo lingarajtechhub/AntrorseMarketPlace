@@ -2,18 +2,19 @@ const express= require("express")
 const route= express.Router()
 const auth=require("../app/middleware/auth")
 
+
 const productController= require("../app/controlllers/productController")
 route.post("/AddProduct",auth.sellerAuth,productController.AddProduct)
 route.get("/searchProducts",productController.searchProducts)
-route.get("/getProductById",productController.getProductById)
+route.get("/getProductById/:product_id",productController.getProductById)
 route.get("/getAllProduct",productController.getAllProduct)
 route.get("/getProductBySubcategory",productController.getProductBySubcategory)
-route.put("/updateProduct",auth.sellerAuth,productController.AddProduct)
+route.put("/updateProduct/:product_id",auth.sellerAuth,productController.updateProduct)
 // ===========productRating========
 
 
 // Create a new review and rating
-route.post("/review-ratings", productController.addReviewRating);
+route.post("/review-ratings",auth.authorization, productController.addReviewRating);
 
 // Get all reviews and ratings
 route.get("/review-ratings", productController.getAllReviewRatings);

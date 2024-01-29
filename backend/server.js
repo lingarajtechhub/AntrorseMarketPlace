@@ -19,7 +19,7 @@ app.use(
   })
 );
 require("./dbConnection/dbConnection")
-console.log("myname ")
+
 app.use("/app/user/",userRoute)
 app.use("/app/product/",productRoute)
 app.use("/app/cart/",cartRouter)

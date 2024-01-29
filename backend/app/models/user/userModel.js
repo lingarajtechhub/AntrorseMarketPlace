@@ -5,19 +5,10 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: [true, 'Name is required'], // Name is required
     },
-    email_id: {
+    email:{
         type: String,
-        // required: [true, 'Email is required'],
-        //  Ensure email is unique
-        trim: true, // Remove leading/trailing whitespaces from email
-        lowercase: true, // Convert email to lowercase
-        validate: {
-            validator: function (value) {
-                // Use a regular expression to validate email format
-                return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
-            },
-            message: 'Invalid email format',
-        },
+      
+     
     },
     mobile_number: {
         type: Number,
@@ -37,6 +28,18 @@ const userSchema = new mongoose.Schema({
     },
     user_image:{
         type:mongoose.Schema.Types.Mixed
+    },
+    Security_questions: {
+        type: String,
+    },
+    Secret_answers: {
+        type: String,
+    },
+    DOB:{
+        type:String
+    },
+    GST:{
+        type:String
     }
 }, {
     timestamps: true,

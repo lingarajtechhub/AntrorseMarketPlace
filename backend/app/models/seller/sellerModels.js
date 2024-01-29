@@ -10,7 +10,7 @@ const sellerSchema = new mongoose.Schema({
         type: String,
         required: true,
         trim: true,
-        unquie: true
+        unique: true
     },
     email_id: {
         type: String,

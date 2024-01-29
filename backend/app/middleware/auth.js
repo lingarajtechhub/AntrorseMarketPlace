@@ -10,16 +10,28 @@ const { default: mongoose } = require("mongoose");
 module.exports = {
   authorization: (req, res, next) => {
     try {
+    let token=req.headers.token
+    if(!token){
+    return   response.commonErrorResponse(
+        res,
+        ErrorCode.NOT_FOUND,
+        {},
+        ErrorMessage.NO_TOKEN
+      );
+    }
+    
       jwt.verify(
-        req.headers.token,
+        token
+        ,
         process.env.SECRET_KEY,
-        (err, result) => {
-          if (err) {
+        (error, result) => {
+          
+          if (error) {
             return response.commonErrorResponse(
               res,
-              ErrorCode.INTERNAL_ERROR,
-              err,
-              ErrorMessage.INTERNAL_ERROR
+              ErrorCode.BAD_REQUEST,
+              error.message,
+              ErrorMessage.INVALID_TOKEN
             );
           } else {
             userModel.findOne({ _id:mongoose.Types.ObjectId(result.user_id) }, (userErr, userResult) => {
@@ -58,16 +70,28 @@ module.exports = {
   },
   sellerAuth: (req, res, next) => {
     try {
+      let token=req.headers.token
+      if(!token){
+      return   response.commonErrorResponse(
+          res,
+          ErrorCode.NOT_FOUND,
+          {},
+          ErrorMessage.NO_TOKEN
+        );
+      }
+
       jwt.verify(
-        req.headers.token,
+        token,
         process.env.SECRET_KEY,
-        (err, result) => {
-          if (err) {
+        (error, result) => {
+         
+          if (error) {
+           
             return response.commonErrorResponse(
               res,
-              ErrorCode.INTERNAL_ERROR,
-              err,
-              ErrorMessage.INTERNAL_ERROR
+              ErrorCode.BAD_REQUEST,
+              error.message,
+              ErrorMessage.INVALID_TOKEN
             );
           } else {
             sellerModels.findOne({ _id:mongoose.Types.ObjectId(result.seller_id) }, (sellErr, sellerResult) => {

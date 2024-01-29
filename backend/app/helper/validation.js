@@ -26,5 +26,13 @@ module.exports={
         const gstinRegex = /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/;
 
         return gstinRegex.test(number)
-      }
+      },
+      isValidPAN:function(panNumber) {
+        // Define the PAN number regex pattern
+        const panRegex = /^[A-Z]{5}[0-9]{4}[A-Z]$/;
+    
+        // Test if the provided PAN number matches the regex pattern
+        return panRegex.test(panNumber);
+    }
+    
 }

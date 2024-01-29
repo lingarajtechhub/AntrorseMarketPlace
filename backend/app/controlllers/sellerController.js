@@ -5,6 +5,7 @@ const { SuccessMessage, ErrorMessage } = require("../helper/message");
 const { ErrorCode, SuccessCode } = require("../helper/statusCode");
 const validation = require("../helper/validation");
 const commonFunction = require("../helper/commonFunction");
+const bcrypt= require("bcrypt")
 
 module.exports={
     
@@ -302,6 +303,15 @@ module.exports={
              else {
               updateData.mobile_number = data.mobile_number;
             }
+            if(data.company_pan_number|| !validation.isValidPAN(data.company_pan_number)){
+              return response.commonErrorResponse(
+                res,
+                ErrorCode.BAD_REQUEST,
+                {},
+                ErrorMessage.INVALID_GST
+              );
+            }
+            
           
           let updated = await sellerModel.findOneAndUpdate(
             { _id: req.seller_id },

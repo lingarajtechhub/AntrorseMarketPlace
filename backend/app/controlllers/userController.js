@@ -29,13 +29,24 @@ module.exports = {
         );
       }
 
-      if (data.email_id && !validation.isValidEmail(data.email_id)) {
+      if (data.email && !validation.isValidEmail(data.email)) {
         return response.commonErrorResponse(
           res,
           ErrorCode.BAD_REQUEST,
           {},
           ErrorMessage.INVALID_EMAIL
         );
+      }
+      if(data.email){
+        let checkEmailUnique= await userModel.findOne({email:data.email})
+        if(checkEmailUnique){
+          return response.commonErrorResponse(
+            res,
+            ErrorCode.ALREADY_EXIST,
+            {},
+            ErrorMessage.ALREADY_EXIST_EMAIL
+          );
+        }
       }
       let checkedMobileNumberUnique = await userModel.findOne({
         mobile_number: data.mobile_number,
@@ -49,7 +60,7 @@ module.exports = {
         );
       }
 
-      let registerData = await userModel.create(data);
+      let registerData = await userModel.create({user_name:data.user_name,mobile_number:data.mobile_number,email:data.email});
 
       if (registerData) {
         return response.commonResponse(
@@ -179,6 +190,7 @@ module.exports = {
   },
   updateProfile: async function (req, res) {
     try {
+      let user_id=req.user_id
       let data = req.body;
       let files = req.files;
 
@@ -193,20 +205,18 @@ module.exports = {
         updateData.password = hash;
       }
       if ( files?.length > 0) {
-        updateData.user_image = files[0].buffer;
+        console.log(files)
+        updateData.user_image = files[0].originalname;
       }
-      
-        if ( data.mobile_number&& !validation.isValidMobileNumber(data.mobile_number)) {
-          return response.commonErrorResponse(
-            res,
-            ErrorCode.BAD_REQUEST,
-            {},
-            ErrorMessage.PHONE_EMPTY
-          );
-        }
-         else {
-          updateData.mobile_number = data.mobile_number;
-        }
+      if(data.DOB){
+        updateData.DOB=data.DOB
+      }
+      if(data.Security_questions){
+        updateData.Security_questions=data.Security_questions
+      }
+      if(data.Secret_answers){
+        updateData.Secret_answers=data.Secret_answers
+      }
       
       let updated = await userModel.findOneAndUpdate(
         { _id: req.user_id },

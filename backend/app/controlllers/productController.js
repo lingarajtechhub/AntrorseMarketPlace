@@ -1,24 +1,21 @@
 const productModel = require("../models/products/productModel");
 
 // const reviewRatingModel = require("../models/reviews/reviewRatingModel");
+const reviewRatingModel=require("../models/products/productRatingModel")
 const response = require("../helper/commonResponse");
 
 const { SuccessMessage, ErrorMessage } = require("../helper/message");
 const { ErrorCode, SuccessCode } = require("../helper/statusCode");
 const validation = require("../helper/validation");
 const commonFunction = require("../helper/commonFunction");
+const { default: mongoose } = require("mongoose");
 
 module.exports = {
   AddProduct: async function (req, res) {
     try {
       let data = req.body;
       let files=req.files
-      // ========================= aws========
-      if (req.files.length > 0) {
-        console.log(req.files)
-       
-      }
-      // =====================
+     
 
       let seller_id = req.seller_id;
       data.seller_id = seller_id;
@@ -221,7 +218,7 @@ let updatedProduct= await productModel.findByIdAndUpdate(product_id,{$set:data},
     try {
       let data = req.body;
       let user_id = req.user_id; // Assuming user_id is obtained from authentication middleware
-      data.user_id = user_id;
+     
 
       let addedReviewRating = await reviewRatingModel.create(data);
       if (addedReviewRating) {
@@ -229,7 +226,7 @@ let updatedProduct= await productModel.findByIdAndUpdate(product_id,{$set:data},
           res,
           SuccessCode.SUCCESSFULLY_CREATED,
           addedReviewRating,
-          SuccessMessage.SUCCESSFULLY_CREATED
+          SuccessMessage.DATA_SAVED
         );
       }
     } catch (error) {

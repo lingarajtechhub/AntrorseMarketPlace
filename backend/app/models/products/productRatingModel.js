@@ -11,11 +11,11 @@ const productRatingSchema = new mongoose.Schema(
     },
     user_id: {
       type: ObjectId,
-      ref: user,
+      ref: "user",
     },
     product_id: {
       type: ObjectId,
-      ref: product,
+      ref: "product",
     },
   },
   { timestamps: true }
