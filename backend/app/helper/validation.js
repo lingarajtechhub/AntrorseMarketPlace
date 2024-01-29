@@ -33,6 +33,8 @@ module.exports={
     
         // Test if the provided PAN number matches the regex pattern
         return panRegex.test(panNumber);
-    }
+    },
+    isValidTAN :(tan) => /^[A-Z]{4}\d{5}[A-Z]$/.test(tan),
+  isValidAadharNumber :(aadhar) => /^\d{12}$/.test(aadhar)
     
 }

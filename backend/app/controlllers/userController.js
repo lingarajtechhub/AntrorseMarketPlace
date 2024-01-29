@@ -126,6 +126,13 @@ module.exports = {
     try {
       let data = req.body;
       let userData;
+      if(!data.password){
+        return response.commonErrorResponse(
+          res,
+          ErrorCode.BAD_REQUEST,
+          {},
+          ErrorMessage.PASSWORD_REQUIRED)
+      }
       if (!data.mobile_number||!validation.isValidMobileNumber(data.mobile_number)) {
         return response.commonErrorResponse(
           res,

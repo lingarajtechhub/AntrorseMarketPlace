@@ -1,8 +1,11 @@
 module.exports.ErrorMessage = Object.freeze({
-  INVALID_GST:"please provide correct PAN number",
-  INVALID_GST:"correct GST is mandatory for registration",
+  AADHAR_IMAGE_REQUIRE:"aadhar image is madotry",
+  INVALID_AADHAR:"correct aadhar number is mandatory ",
+  TAN:"correct TAN number is mandatory",
+  INVALID_PAN:"please provide correct PAN number",
+  INVALID_GST:"correct GST is mandatory in correct formate",
   PHONE_EMPTY: "Valid mobile number is require",
-  NAME_EMPTY: "name is mandatory for registration in string formate",
+  NAME_EMPTY: "name is mandatory in correct formate",
   INVALID_EMAIL: "please check your email_id invalid.",
   INVALID_TOKEN: "Unauthorized user.",
   INTERNAL_ERROR: "Internal Server Error.",
@@ -19,7 +22,7 @@ module.exports.ErrorMessage = Object.freeze({
   MOBILE_EXIST: "This mobile number already registered.",
   USERNAME_EXIST: "This user name already exists.",
   USER_ID: "A valid User Id is required.",
-  
+  PASSWORD_REQUIRED:"password is required",
   FIELD_REQUIRED: "Fields are required.",
   INCORRECT_JWT: "Invalid JWT token.",
   INVALID_OTP: "Invalid OTP",

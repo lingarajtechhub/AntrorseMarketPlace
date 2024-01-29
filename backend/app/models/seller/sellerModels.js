@@ -32,15 +32,31 @@ const sellerSchema = new mongoose.Schema({
     DOB: {
         type: String,
     },
-    Security_questions: {
+    security_questions: {
         type: String,
     },
-    Secret_answers: {
+    secret_answers: {
         type: String,
     },
-    Account_details: {
-        type: String,
+    account_details: {
+        account_Number:{type:Number},
+        account_holder_name:{type:Number},
+        IFC_code:{type:String}
+
     },
+    company_tan_number:{
+        type:String
+    },
+    aadhar_number:{
+        type:String
+    },
+    aadhar_image:{
+        type:String
+    },
+    sellerApproval:{
+        type:String,
+        enum:["PENDING","APPROVED","PROCESS"]
+    }
     
 },{timestamps: true,});
 module.exports = mongoose.model("seller", sellerSchema);
