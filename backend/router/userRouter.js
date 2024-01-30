@@ -12,6 +12,7 @@ router.put("/forgetPassword",userController.forgetPassword)
 // ===================== this use according to use=============
 router.post("/createOTPForForgetPassword",userController.createOTPForForgetPassword)
 // ======================================================================
+router.post("/createAddress",auth.authorization,userController.createAddress)
 // ================wishList=============
 router.post("/creteWishList/:user_id", wishlistController.creteWishList)
 router.get("/getWishList/:user_id",wishlistController.getWishList)

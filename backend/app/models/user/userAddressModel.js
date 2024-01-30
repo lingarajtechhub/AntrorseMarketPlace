@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const addressSchema = new mongoose.Schema({
     user_id:{
         type:mongoose.Schema.Types.ObjectId,
-        ref:user,
+        ref:"user",
         required:true
     },
   country: {
@@ -28,6 +28,16 @@ const addressSchema = new mongoose.Schema({
   house: {
     type: String,
   },
+  landMark:{
+    type:String
+  },
+  phone_number:{
+    type:String,
+require:true
+  },
+  alternate_phone_number:{
+    type:String
+  }
 },{timestamps:true});
 
 module.exports = mongoose.model('Address', addressSchema);

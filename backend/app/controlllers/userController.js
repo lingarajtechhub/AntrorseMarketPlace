@@ -1,5 +1,6 @@
 require("dotenv").config()
 const userModel = require("../models/user/userModel");
+const userAddressModel=require("../models/user/userAddressModel")
 const response = require("../helper/commonResponse");
 const jwt= require("jsonwebtoken")
 const { SuccessMessage, ErrorMessage } = require("../helper/message");
@@ -364,7 +365,21 @@ let getData= await userModel.findById(user_id)
   ,
   createAddress: async function(req,res){
     try{
-let 
+      
+let data= req.body
+data.user_id=req.user_id
+let createdData= await userAddressModel.create(data)
+if(createdData){
+  return response.commonResponse(res,SuccessCode.SUCCESSFULLY_CREATED,createdData,SuccessMessage.DATA_SAVED)
+}
+else{
+  return response.commonErrorResponse(
+    res,
+    ErrorCode.SOMETHING_WRONG,
+    {},
+    ErrorMessage.WENT_WRONG
+  );
+}
     }
     catch (err) {
       return response.commonErrorResponse(

@@ -269,11 +269,11 @@ let updatedProduct= await productModel.findByIdAndUpdate(product_id,{$set:data},
   },
 
   // Get a specific review and rating by ID
-  getReviewRatingById: async function (req, res) {
+  getReviewRatingByProductId: async function (req, res) {
     try {
-      let reviewRating_id = req.params.reviewRating_id;
-      let reviewRating = await reviewRatingModel.findById(reviewRating_id);
-      if (reviewRating) {
+      let product_id = req.params.product_id;
+      let reviewRating = await reviewRatingModel.find({product_id:product_id});
+      if (reviewRating.length>0) {
         return response.commonResponse(
           res,
           SuccessCode.SUCCESS,
@@ -360,7 +360,53 @@ let updatedProduct= await productModel.findByIdAndUpdate(product_id,{$set:data},
         ErrorCode.INTERNAL_ERROR,
         {},
         error.message
-      );
-    }
-  },
+      )}
+},
+getProductByIdWithRating: async function(req,res){
+  try{
+    let product_id=req.params.product_id
+   
+    let products = await productModel.aggregate([
+      {
+        $match: {
+          _id: mongoose.Types.ObjectId(product_id) // Assuming product_id is a variable
+        }
+      },
+     
+      {
+        $lookup: {
+          from: "productratings",
+          localField: "_id", // Use the correct field for the local join, assuming _id is the correct field in productModel
+          foreignField: "product_id", // Use the correct field for the foreign join in productRatings
+          as: "allRatingAndReview"
+        }
+      },
+      
+      {
+$addFields:{
+  ratingAVG:{$avg:"$allRatingAndReview.rating"}
+}
+      },
+      {
+        $group:{
+          _id:"$allRatingAndReview.rating",
+          productDetails:{$push:"$allRatingAndReview"}
+        }
+      }
+    ]);
+  
+    
+
+    return response.commonResponse(res,SuccessCode.SUCCESS,products,SuccessMessage.DATA_FOUND)
+
+  }catch (error) {
+      return response.commonErrorResponse(
+        res,
+        ErrorCode.INTERNAL_ERROR,
+        {},
+        error.message
+      )
+}
+}
+
 };
