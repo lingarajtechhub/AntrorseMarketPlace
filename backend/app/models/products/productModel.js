@@ -19,13 +19,41 @@ const productSchema= new mongoose.Schema({
         type:String,
         require:true
     },
-    sizes:{
-        type:String,
-        enum:["XS", "S", "M", "L", "XL"],
-        // require:true
-    },
+   
+    sizes: {
+        XS: {
+            type: Number
+        },
+        S: {
+            type: Number
+        },
+        M: {
+            type: Number
+        },
+        L: {
+            type: Number
+        },
+        XL: {
+            type: Number
+        }
+    }
+    ,
+
     material:{
         type:String
+    },
+    season: {
+        type: String
+    },
+    pattern: {
+        type: String
+    },
+    occasion: {
+        type: String
+    },
+    fit: {
+        type: String,
+        enum: ["Slim fit", "Regular fit", "Loose fit"]
     },
     style:{
         type:String
@@ -82,7 +110,33 @@ const productSchema= new mongoose.Schema({
             type: String,
             required: true
         
-    }
+    },
+    // this special for mobile
+    model: {
+        type: String,
+        required: true
+    },
+    RAM: {
+        type: Number,
+        required: true
+    },
+    ROM: {
+        type: Number,
+        required: true
+    },
+    screenSize: {
+        type: Number,
+        required: true
+    },
+    operatingSystem: {
+        type: String
+    },
+    cameraResolution: {
+        type: Number
+    },
+    batteryCapacity: {
+        type: Number
+    },
 
    
 }, {timestamps:true})

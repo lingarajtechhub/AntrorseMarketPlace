@@ -1,12 +1,12 @@
 require("dotenv").config()
 const userModel = require("../models/user/userModel");
 const userAddressModel=require("../models/user/userAddressModel")
-const response = require("../helper/commonResponse");
 const jwt= require("jsonwebtoken")
+const response = require("../helper/commonResponse");
 const { SuccessMessage, ErrorMessage } = require("../helper/message");
 const { ErrorCode, SuccessCode } = require("../helper/statusCode");
-const validation = require("../helper/validation");
 const commonFunction = require("../helper/commonFunction");
+const validation = require("../helper/validation");
 const bcrypt= require("bcrypt")
 
 module.exports = {
@@ -196,6 +196,64 @@ module.exports = {
       );
     }
   },
+  loginWithOTP:async function (req, res) {
+    try {
+      let data = req.body;
+      let userData;
+     
+      if (!data.mobile_number||!validation.isValidMobileNumber(data.mobile_number)) {
+        return response.commonErrorResponse(
+          res,
+          ErrorCode.BAD_REQUEST,
+          {},
+          ErrorMessage.PHONE_EMPTY
+        );
+      }
+      if (data.mobile_number) {
+         userData = await userModel.findOne({ mobile_number:data.mobile_number });
+      } else {
+      
+        return response.commonErrorResponse(
+          res,
+          ErrorCode.BAD_REQUEST,
+          {},
+          ErrorMessage.NOT_FOUND
+        );
+      }
+
+      if (!userData) {
+        return response.commonErrorResponse(
+          res,
+          ErrorCode.NOT_FOUND,
+          {},
+          ErrorMessage.USER_NOT_FOUND
+        );
+      }  
+
+      let payLoad = {
+        user_id: userData._id.toString(),
+      };
+      let token = jwt.sign(payLoad, process.env.SECRET_KEY, {
+        expiresIn: "72h",
+      });
+      if (token) {
+        return response.commonResponse(
+          res,
+          SuccessCode.SUCCESS,
+          token,
+          SuccessMessage.LOGIN_SUCCESS
+        );
+      }
+    } catch (err) {
+      return response.commonErrorResponse(
+        res,
+        ErrorCode.INTERNAL_ERROR,
+        {},
+        err.message
+      );
+    }
+  },
+  
   updateProfile: async function (req, res) {
     try {
       let user_id=req.user_id
@@ -350,6 +408,13 @@ module.exports = {
 let user_id= req.user_id;
 
 let getData= await userModel.findById(user_id)
+if(!getData){
+  getData= await userModel.findById(user_id)
+  if(!getData){
+    return response.commonErrorResponse(res,ErrorCode.NOT_FOUND,{},ErrorMessage.NOT_FOUND)
+  }
+}
+return response.commonResponse(res,SuccessCode.SUCCESS,getData,SuccessMessage.DATA_FOUND)
     }
     catch (err) {
       return response.commonErrorResponse(
@@ -361,6 +426,31 @@ let getData= await userModel.findById(user_id)
     }
 
   }
+  ,
+  userDeleteProfile: async function(req, res) {
+    try {
+      let user_id = req.user_id;
+  
+      // Check if the user with the given ID exists
+      const existingUser = await userModel.findById(user_id);
+  
+      if (!existingUser) {
+        return response.commonErrorResponse(res, ErrorCode.NOT_FOUND, {}, ErrorMessage.USER_NOT_FOUND);
+      }
+  
+      // User exists, proceed with deletion
+      let deletedUser = await userModel.findByIdAndDelete({user_id});
+  
+      if (deletedUser) {
+        return response.commonResponse(res, SuccessCode.SUCCESS, deletedUser, SuccessMessage.DELETE_SUCCESS);
+      } else {
+        return response.commonErrorResponse(res, ErrorCode.WENT_WRONG, {}, ErrorMessage.SOMETHING_WRONG);
+      }
+    } catch (err) {
+      return response.commonErrorResponse(res, ErrorCode.INTERNAL_ERROR, {}, err.message);
+    }
+  }
+  
   // ============= userDress=================
   ,
   createAddress: async function(req,res){
@@ -390,4 +480,5 @@ else{
       );
     }
   }
+
 };

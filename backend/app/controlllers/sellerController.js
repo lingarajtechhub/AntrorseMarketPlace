@@ -441,7 +441,7 @@ module.exports = {
 
       // here function for imageupload on cloud
       let checkSellerApproval = await sellerModel.findOne({ _id: seller_id });
-      if (checkSellerApproval.sellerApproval == "APPROVED") {
+      if (checkSellerApproval.status == "active") {
         return response.commonErrorResponse(
           res,
           ErrorCode.BAD_REQUEST,

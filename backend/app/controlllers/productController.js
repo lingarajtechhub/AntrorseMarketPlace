@@ -1,4 +1,5 @@
 const productModel = require("../models/products/productModel");
+const axios=require("axios")
 
 // const reviewRatingModel = require("../models/reviews/reviewRatingModel");
 const reviewRatingModel=require("../models/products/productRatingModel")
@@ -15,7 +16,16 @@ module.exports = {
     try {
       let data = req.body;
       let files=req.files
-     
+      console.log(files)
+    //  here function for upload image on cloud
+    // ===== this is tempery for image upload=========
+    const response = await axios.post('http://localhost:3000/upload', files, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    })
+    console.log(response)
+    // =============================
 
       let seller_id = req.seller_id;
       data.seller_id = seller_id;
@@ -28,6 +38,9 @@ module.exports = {
           addedProducts
         );
       }
+      else{
+        return response.commonErrorResponse(res,ErrorCode.WENT_WRONG,{},ErrorMessage.SOMETHING_WRONG)
+      }
     } catch (error) {
       return response.commonErrorResponse(
         res,
@@ -37,9 +50,11 @@ module.exports = {
       );
     }
   },
-  getAllProduct: async function (req, res) {
+  // this api for seller section
+  getAllProductBySellerId: async function (req, res) {
     try {
-      let allProducts = await productModel.find();
+      let seller_id=req.seller_id;
+      let allProducts = await productModel.find({seller_id:seller_id});
       if (allProducts?.length > 0) {
         return response.commonResponse(
           res,
@@ -95,6 +110,7 @@ module.exports = {
   searchProducts: async function (req, res) {
     try {
       let data = req.query;
+      
 
       const condition = {};
       // const sort = {};
@@ -113,6 +129,8 @@ module.exports = {
           
         ];
       }
+
+      
       const page = parseInt(req.query.page) || 1;
       const limit = parseInt(req.query.limit) || 12;
       const skip = (page - 1) * limit;
@@ -192,12 +210,17 @@ module.exports = {
       // here image validation pending
 
 let updatedProduct= await productModel.findByIdAndUpdate(product_id,{$set:data},{new:true,upsert: true})
+if(updatedProduct){
       return response.commonResponse(
         res,
         SuccessCode.SUCCESS,
         updatedProduct,
         SuccessMessage.DATA_FOUND
       );
+}
+else{
+  return response.commonErrorResponse(res,ErrorCode.WENT_WRONG,{},ErrorMessage.SOMETHING_WRONG)
+}
   }catch (error) {
       return response.commonErrorResponse(
         res,
@@ -390,14 +413,42 @@ $addFields:{
       {
         $group:{
           _id:"$allRatingAndReview.rating",
-          productDetails:{$push:"$allRatingAndReview"}
+          productDetails:{$push:{
+            rating:"$allRatingAndReview",
+            ratingAVG:"$ratingAVG",
+            description:"$description",
+            brand:"$brand",
+            color:"$color",
+            sizes:"$sizes",
+            material:"$material",
+            style:"$style",
+            price:"$price",
+            oldPrice:"$oldPrice",
+            currency:"$currency",
+            category:"$category",
+            subCategory:"$subCategory",
+           
+            product_name:"$product_name",
+            ratingAVG:"$ratingAVG",
+          }}
         }
       }
+
     ]);
   
-    
+    if(products.length){
+      return response.commonResponse(res,SuccessCode.SUCCESS,products,SuccessMessage.DATA_FOUND)
+    }
+    else{
+      return response.commonErrorResponse(
+        res,
+        ErrorCode.NOT_FOUND,
+        {},
+        ErrorMessage.NOT_FOUND
+      )
+    }
 
-    return response.commonResponse(res,SuccessCode.SUCCESS,products,SuccessMessage.DATA_FOUND)
+   
 
   }catch (error) {
       return response.commonErrorResponse(

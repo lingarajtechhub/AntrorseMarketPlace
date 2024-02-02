@@ -4,6 +4,9 @@ const userRoute= require("./router/userRouter")
 const productRoute=require("./router/productRouter")
 const cartRouter=require("./router/cartRouter")
 const sellerRoute=require("./router/sellerRouter")
+const adminRoute=require("./router/adminRouter")
+const orderRouter=require("./router/orderRouter")
+const imageRouter = require('./app/controlllers/images');
 const multer= require("multer")
 const cors= require("cors")
 const app= express()
@@ -23,7 +26,11 @@ require("./dbConnection/dbConnection")
 app.use("/app/user/",userRoute)
 app.use("/app/product/",productRoute)
 app.use("/app/cart/",cartRouter)
-app.use("/app/seller",sellerRoute)  
+app.use("/app/seller/",sellerRoute)
+app.use("/app/admin",adminRoute)
+app.use("/app/order",orderRouter)  
+// temperary=
+app.use('/', imageRouter);
 
 
 app.listen(process.env.PORT_NUMBER, function(){

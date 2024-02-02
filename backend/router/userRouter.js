@@ -7,8 +7,10 @@ const auth=require("../app/middleware/auth")
 router.post("/registration", userController.register)
 router.post("/sendOtpForRegistration",userController.sendOtpForRegistration)
 router.post("/login", userController.login)
+router.post("/loginWithOTP", userController.loginWithOTP)
 router.put("/updateProfile",auth.authorization, userController.updateProfile)
 router.put("/forgetPassword",userController.forgetPassword)
+router.delete("/userDeleteProfile",auth.authorization,userController.userDeleteProfile)
 // ===================== this use according to use=============
 router.post("/createOTPForForgetPassword",userController.createOTPForForgetPassword)
 // ======================================================================

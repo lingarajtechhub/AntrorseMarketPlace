@@ -53,9 +53,9 @@ const sellerSchema = new mongoose.Schema({
     aadhar_image:{
         type:String
     },
-    sellerApproval:{
+    status:{
         type:String,
-        enum:["PENDING","APPROVED","PROCESS"]
+        enum:["pending","active","rejected"]
     }
     
 },{timestamps: true,});
