@@ -127,6 +127,7 @@ module.exports = {
             category: new RegExp(data.search, "i"),
           },
           
+          
         ];
       }
 
@@ -143,6 +144,14 @@ module.exports = {
         },
         {
           $limit: limit,
+        },
+        {
+          $lookup: {
+            from: "productratings",
+            localField: "_id", // Use the correct field for the local join, assuming _id is the correct field in productModel
+            foreignField: "product_id", // Use the correct field for the foreign join in productRatings
+            as: "allRatingAndReview"
+          }
         },
       ]);
       return response.commonResponse(

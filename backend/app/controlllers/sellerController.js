@@ -369,14 +369,14 @@ module.exports = {
       let files = req.files;
       let seller_id = req.seller_id;
 
-      if (!files?.length == 0 || !files[0].fieldname == "aadhar_image") {
-        return response.commonErrorResponse(
-          res,
-          ErrorCode.BAD_REQUEST,
-          {},
-          ErrorMessage.AADHAR_IMAGE_REQUIRE
-        );
-      }
+      // if (!files?.length == 0 || !files[0].fieldname == "aadhar_image") {
+      //   return response.commonErrorResponse(
+      //     res,
+      //     ErrorCode.BAD_REQUEST,
+      //     {},
+      //     ErrorMessage.AADHAR_IMAGE_REQUIRE
+      //   );
+      // }
       if (
         !data.aadhar_number ||
         !validation.isValidAadharNumber(data.aadhar_number)
@@ -389,7 +389,7 @@ module.exports = {
         );
       }
 
-      if (data.userName) {
+      if (!data.fullName) {
         return response.commonErrorResponse(
           res,
           ErrorCode.BAD_REQUEST,
@@ -397,7 +397,7 @@ module.exports = {
           ErrorMessage.NAME_EMPTY
         );
       }
-      if (!data.GST || validation.GST(data.GST)) {
+      if (!data.GST || !validation.gstValidation(data.GST)) {
         return response.commonErrorResponse(
           res,
           ErrorCode.BAD_REQUEST,
@@ -407,7 +407,7 @@ module.exports = {
       }
       if (
         !data.mobile_number ||
-        validation.isValidMobileNumber(data.mobile_number)
+        !validation.isValidMobileNumber(data.mobile_number)
       ) {
         return response.commonErrorResponse(
           res,
@@ -441,7 +441,7 @@ module.exports = {
 
       // here function for imageupload on cloud
       let checkSellerApproval = await sellerModel.findOne({ _id: seller_id });
-      if (checkSellerApproval.status == "active") {
+      if (checkSellerApproval.sellerApproval == "APPROVED") {
         return response.commonErrorResponse(
           res,
           ErrorCode.BAD_REQUEST,
@@ -462,7 +462,8 @@ module.exports = {
           updatedKYC,
           SuccessMessage.PROFILE_DETAILS
         );
-      } else {
+      } 
+      else {
         return response.commonErrorResponse(
           res,
           ErrorCode.WENT_WRONG,
@@ -476,7 +477,7 @@ module.exports = {
         ErrorCode.INTERNAL_ERROR,
         {},
         err.message
-      );
-    }
-  },
+   );
+}
+},
 };
