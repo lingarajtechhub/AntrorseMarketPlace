@@ -21,13 +21,35 @@ const cartSchema = new mongoose.Schema ({
             type: Number,
             required: true,
             min: 1
-        }
+        },
+        sizes: {
+            XS: {
+                type: Number
+            },
+            S: {
+                type: Number
+            },
+            M: {
+                type: Number
+            },
+            L: {
+                type: Number
+            },
+            XL: {
+                type: Number
+            }
+        },
+        color:{
+            type:String
+        },
     }],
    
     totalItems: {
         type: Number,
         required: true,
     },
+   
+    
 
 },{ timestamps: true})
 

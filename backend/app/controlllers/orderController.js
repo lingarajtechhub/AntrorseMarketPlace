@@ -6,6 +6,7 @@ const addressModel = require("../models/user/userAddressModel");
 const response = require("../helper/commonResponse");
 const { ErrorCode, SuccessCode } = require("../helper/statusCode");
 const { SuccessMessage, ErrorMessage } = require("../helper/message");
+const orderModel = require("../models/order/orderModel");
 // const sendEmail = require("../helper/sendEmail");
 
 //  exports.newOrder= async (req, res) => {
@@ -68,7 +69,15 @@ exports.newOrder = async function (req, res) {
   try {
     let user_id = req.user_id;
     let data = req.body;
-    let { address_id, shippingInfo } = data;
+    let {
+      address_id,
+      shippingInfo,
+      quantity,
+      product_id,
+      paymentInfo,
+      deliveredAt,
+      shippedAt,
+    } = data;
     if (data.cart_id) {
       let cart_items = await cartModels.findById(data.cart_id);
 
@@ -120,26 +129,146 @@ exports.newOrder = async function (req, res) {
         address_id,
         orderItems,
         totalItems,
-        payment_id,
+        paymentInfo,
         deliveredAt,
         shippedAt,
       };
+      // this is for update count in seller product(stocks)
+      // ===============================================================
+      //  let sizeAndProduct_id=cart_items.items
+      //  let updateStocks=[]
+      //  cart_items.items.forEach((item,i)=>{
+      //   updateStocks.push({product_id:item.product_id,sizes:item?.sizes,color:item?.color})
+      //  })
 
-      let createdOrder= await Order.create(finalData)
-      if(!createdOrder){
-        createdOrder= await Order.create(finalData)
-      
-      
-    if(!createdOrder){
-      return response.commonErrorResponse(res,ErrorCode.WENT_WRONG,{},ErrorMessage.SOMETHING_WRONG)
-    }}
-    else{
-      return response.commonResponse(res,SuccessCode.SUCCESSFULLY_CREATED,createdOrder,SuccessMessage.DATA_SAVED)
+      // let sizesToUpdate = { ...sizes };
+
+      // const updateCount = {
+      //   $inc: {},
+      // };
+
+      // for (const size in sizesToUpdate) {
+      //   if (sizesToUpdate.hasOwnProperty(size)) {
+      //     updateCount.$inc[`sizes.${size}`] = -sizesToUpdate[size];
+      //   }
+      // }
+      // let updateProduct = await productModel.findByIdAndUpdate(
+      //   product_id,
+      //   updateCount,
+      //   { new: true }
+      // );
+
+      const updateStocks = cart_items.items.map((item) => ({
+        product_id: item.product_id,
+        sizes: item?.sizes,
+        color: item?.color,
+      }));
+
+      const updatedProducts = [];
+
+      for (const update of updateStocks) {
+        const { product_id, sizes, color } = update;
+
+        const updateCount = {
+          $inc: {},
+        };
+
+        for (const size in sizes) {
+          if (sizes.hasOwnProperty(size)) {
+            updateCount.$inc[`sizes.${size}`] = -sizes[size];
+          }
+        }
+
+        // Add color condition if color is present
+        const query = color ? { _id: product_id, color } : { _id: product_id };
+
+        const updatedProduct = await productModel.findOneAndUpdate(
+          query,
+          updateCount,
+          { new: true }
+        );
+
+        updatedProducts.push(updatedProduct);
+      }
+
+      console.log("Updated Products:", updatedProducts);
+
+      // ================================
+      let createdOrder = await Order.create(finalData);
+      if (!createdOrder) {
+        createdOrder = await Order.create(finalData);
+
+        if (!createdOrder) {
+          return response.commonErrorResponse(
+            res,
+            ErrorCode.WENT_WRONG,
+            {},
+            ErrorMessage.SOMETHING_WRONG
+          );
+        }
+      } else {
+        return response.commonResponse(
+          res,
+          SuccessCode.SUCCESSFULLY_CREATED,
+          createdOrder,
+          SuccessMessage.DATA_SAVED
+        );
+      }
     }
+    //  this is for user directly order without cart
+    let productData = await productModel.findById(product_id);
+    let finalData = {
+      totalQuantity: quantity,
+      totalPrice: productData.price * quantity,
+      user_id: user_id,
+      shippingInfo: shippingInfo,
+      address_id: address_id,
+      orderItems: 1,
+      totalItems: 1,
+      paymentInfo: paymentInfo,
+      deliveredAt: deliveredAt,
+      shippedAt: shippedAt,
+    };
+    // ============================
+    // this is for update count in seller product(stocks)
+    let sizesToUpdate = { ...sizes };
+
+    const updateCount = {
+      $inc: {},
+    };
+
+    for (const size in sizesToUpdate) {
+      if (sizesToUpdate.hasOwnProperty(size)) {
+        updateCount.$inc[`sizes.${size}`] = -sizesToUpdate[size];
+      }
     }
-    
+    let updateProduct = await productModel.findByIdAndUpdate(
+      product_id,
+      updateCount,
+      { new: true }
+    );
+    // ========================
 
+    let createdOrder = await Order.create(finalData);
+    if (!createdOrder) {
+      createdOrder = await Order.create(finalData);
 
+      if (!createdOrder) {
+        return response.commonErrorResponse(
+          res,
+          ErrorCode.WENT_WRONG,
+          {},
+          ErrorMessage.SOMETHING_WRONG
+        );
+      }
+    } else {
+      return response.commonResponse(
+        res,
+        SuccessCode.SUCCESSFULLY_CREATED,
+        createdOrder,
+        SuccessMessage.DATA_SAVED
+      );
+    }
   } catch (error) {
     console.log(error);
 
@@ -219,7 +348,7 @@ exports.newOrder = async function (req, res) {
   }),
   /* ======================ADMIN================== */
   // Get All Orders ---ADMIN
-  (exports.getAllOrders = async (req, res) => {
+  exports.getAllOrders = async (req, res) => {
     try {
       const orders = await Order.find();
 
@@ -252,7 +381,7 @@ exports.newOrder = async function (req, res) {
         error.message
       );
     }
-  });
+  };
 exports.updateOrder = async (req, res) => {
   try {
     const order = await Order.findById(req.params.id);
@@ -325,4 +454,57 @@ exports.deleteOrder = async (req, res) => {
   res.status(200).json({
     success: true,
   });
+};
+
+exports.getOrderBySellerId = async function (req, res) {
+  try {
+    let seller_id = req.seller_id;
+
+    let orderDetails = await orderModel.aggregate([
+      {
+        $lookup: {
+          from: "products",
+          localField: "",
+        },
+      },
+    ]);
+  } catch (error) {
+    console.log(error);
+
+    return response.commonErrorResponse(
+      res,
+      ErrorCode.INTERNAL_ERROR,
+      {},
+      error.message
+    );
+  }
+};
+
+exports.orderHistory = async function (req, res) {
+  try {
+    let user_id = req.user_id;
+    let allOrder = await orderModel.find({ user_id: user_id });
+    if (!allOrder?.length == 0) {
+      return response.commonErrorResponse(
+        res,
+        ErrorCode.BAD_REQUEST,
+        [],
+        ErrorMessage.NOT_FOUND
+      );
+    } else {
+      return response.commonResponse(
+        res,
+        SuccessCode.SUCCESS,
+        allOrder,
+        SuccessMessage.DATA_FOUND
+      );
+    }
+  } catch (error) {
+    return response.commonErrorResponse(
+      res,
+      ErrorCode.INTERNAL_ERROR,
+      {},
+      error.message
+    );
+  }
 };

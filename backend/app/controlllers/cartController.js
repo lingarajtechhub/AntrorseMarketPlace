@@ -8,7 +8,7 @@ module.exports = {
   createCart: async function (req, res) {
     try {
       const data = req.body;
-      let {product_id,quantity}=data
+      let {product_id,quantity,sizes,color}=data
     
 
       const user_id = req.user_id;
@@ -17,8 +17,9 @@ module.exports = {
       if (!cart) {
         let addCart = {
           user_id: user_id,
-          items: [{ product_id: product_id, quantity: quantity||1 }],
+          items: [{ product_id: product_id, quantity: quantity||1,sizes ,color}],
           totalItems: 1,
+          
         };
 
         const createdCart = await cartModel.create(addCart);
@@ -33,7 +34,9 @@ module.exports = {
       let arr = cart.items;
       for (let i = 0; i < arr.length; i++) {
         if (arr[i].product_id.toString() == product_id) {
-          arr[i].quantity = arr[i].quantity + quantity||1;
+          arr[i].quantity =  quantity||1;
+          arr[i].sizes=sizes
+          arr[i].color=color
 
           let updatedCart = await cartModel.findOneAndUpdate(
             { user_id: user_id },
@@ -54,7 +57,7 @@ module.exports = {
       }
 
       let newCart = {
-        $addToSet: { items: { product_id: product_id, quantity: quantity||1 } },
+        $addToSet: { items: { product_id: product_id, quantity: quantity||1,sizes,color } },
 
         totalItems: (cart.totalItems || 0) + 1,
       };

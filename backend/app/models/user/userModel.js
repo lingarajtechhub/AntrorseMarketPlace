@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const userSchema = new mongoose.Schema({
     user_name: {
         type: String,
-        required: [true, 'Name is required'], // Name is required
+        required:true, // Name is required
     },
     email:{
         type: String,
@@ -13,14 +13,8 @@ const userSchema = new mongoose.Schema({
     mobile_number: {
         type: Number,
         unique: true,
-        required: [true, 'Mobile number is required'],
-        validate: {
-            validator: function (value) {
-                // Use a regular expression to validate a 10-digit mobile number
-                return /^\d{10}$/.test(value);
-            },
-            message: 'Invalid mobile number format',
-        },
+        required: true
+        
     },
     password: {
         type: String,
@@ -29,7 +23,13 @@ const userSchema = new mongoose.Schema({
     user_image:{
         type:mongoose.Schema.Types.Mixed
     },
-    Security_questions: {
+    Security_questions_01: {
+        type: String,
+    },
+    Security_questions_02: {
+        type: String,
+    },
+    Security_questions_03: {
         type: String,
     },
     Secret_answers: {

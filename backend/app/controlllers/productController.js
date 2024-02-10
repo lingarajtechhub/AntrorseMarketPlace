@@ -10,21 +10,18 @@ const { ErrorCode, SuccessCode } = require("../helper/statusCode");
 const validation = require("../helper/validation");
 const commonFunction = require("../helper/commonFunction");
 const { default: mongoose } = require("mongoose");
+const img=require("./images")
 
 module.exports = {
   AddProduct: async function (req, res) {
     try {
       let data = req.body;
       let files=req.files
-      console.log(files)
+      // console.log(files)
     //  here function for upload image on cloud
     // ===== this is tempery for image upload=========
-    const response = await axios.post('http://localhost:3000/upload', files, {
-      headers: {
-        'Content-Type': 'multipart/form-data'
-      }
-    })
-    console.log(response)
+    let allImage= await img.extractImageUrls(files)
+    console.log(allImage)
     // =============================
 
       let seller_id = req.seller_id;
@@ -153,6 +150,11 @@ module.exports = {
             as: "allRatingAndReview"
           }
         },
+        {
+          $addFields:{
+            ratingAVG:{$avg:"$allRatingAndReview.rating"}
+          }
+                },
       ]);
       return response.commonResponse(
         res,

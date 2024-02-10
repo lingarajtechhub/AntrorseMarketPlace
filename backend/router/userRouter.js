@@ -11,6 +11,7 @@ router.post("/loginWithOTP", userController.loginWithOTP)
 router.put("/updateProfile",auth.authorization, userController.updateProfile)
 router.put("/forgetPassword",userController.forgetPassword)
 router.delete("/userDeleteProfile",auth.authorization,userController.userDeleteProfile)
+router.get("/getUser",auth.authorization, userController.getUser)
 // ===================== this use according to use=============
 router.post("/createOTPForForgetPassword",userController.createOTPForForgetPassword)
 // ======================================================================

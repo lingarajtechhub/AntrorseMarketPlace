@@ -32,6 +32,28 @@ const orderSchema = new mongoose.Schema(
           type: String,
           required: true,
         },
+          sizes: {
+            XS: {
+                type: Number
+            },
+            S: {
+                type: Number
+            },
+            M: {
+                type: Number
+            },
+            L: {
+                type: Number
+            },
+            XL: {
+                type: Number
+            }
+        
+        },
+        color:{
+          type:String
+      },
+
         product: {
           type: ObjectId,
           ref: "Product",
@@ -69,7 +91,7 @@ const orderSchema = new mongoose.Schema(
       default: Date.now,
     },
     deletedAt: { type: Date, default: null },
-    isDeleted: { type: Boolean, default: false },
+  
   },
  
   { timestamps: true }
