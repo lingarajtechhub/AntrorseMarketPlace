@@ -7,6 +7,8 @@ const sellerRoute=require("./router/sellerRouter")
 const adminRoute=require("./router/adminRouter")
 const orderRouter=require("./router/orderRouter")
 // const imageRouter = require('./app/controlllers/images');
+const phonepeRoute = require("./router/phonepeRouter");
+
 const multer= require("multer")
 const cors= require("cors")
 const app= express()
@@ -29,6 +31,7 @@ app.use("/app/cart/",cartRouter)
 app.use("/app/seller/",sellerRoute)
 app.use("/app/admin",adminRoute)
 app.use("/app/order",orderRouter)  
+app.use("/api", phonepeRoute);
 // temperary=
 // app.use('/', imageRouter);
 

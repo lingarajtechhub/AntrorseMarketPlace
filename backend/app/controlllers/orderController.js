@@ -1,4 +1,4 @@
-const Order = require("../models/order/orderModel");
+// const Order = require("../models/order/orderModel");
 const Product = require("../models/products/productModel");
 const cartModels = require("../models/cart/cartModels");
 const productModel = require("../models/products/productModel");
@@ -6,7 +6,8 @@ const addressModel = require("../models/user/userAddressModel");
 const response = require("../helper/commonResponse");
 const { ErrorCode, SuccessCode } = require("../helper/statusCode");
 const { SuccessMessage, ErrorMessage } = require("../helper/message");
-const orderModel = require("../models/order/orderModel");
+// const orderModel = require("../models/orders/orderModel");
+const orderModel=require("../models/orders/orderModels")
 // const sendEmail = require("../helper/sendEmail");
 
 //  exports.newOrder= async (req, res) => {
@@ -77,7 +78,9 @@ exports.newOrder = async function (req, res) {
       paymentInfo,
       deliveredAt,
       shippedAt,
+      
     } = data;
+    console.log("========================")
     if (data.cart_id) {
       let cart_items = await cartModels.findById(data.cart_id);
 
@@ -90,6 +93,7 @@ exports.newOrder = async function (req, res) {
         );
       }
       let productIdes = [];
+
       for (let i = 0; i < cart_items.items.length; i++) {
         productIdes.push(cart_items.items[i].product_id);
       }
@@ -100,16 +104,16 @@ exports.newOrder = async function (req, res) {
       let orderItems = [];
 
       for (let i = 0; i < products.length; i++) {
-        let orderItems = {
+        let orderItem = {
           product_name: products[i].product_name,
-          price: products[i].price,
+          price: products[i]?.price,
           quantity: cart_items.filter(
             (data) => data.product_id == products[i]._id
           ).quantity[0],
           product: products[i]._id,
         };
 
-        orderItems.push(orderItems);
+        orderItems.push(orderItem);
       }
 
       let totalQuantity = 0;
@@ -217,9 +221,10 @@ exports.newOrder = async function (req, res) {
     }
     //  this is for user directly order without cart
     let productData = await productModel.findById(product_id);
+
     let finalData = {
       totalQuantity: quantity,
-      totalPrice: productData.price * quantity,
+      totalPrice: productData?.price * quantity,
       user_id: user_id,
       shippingInfo: shippingInfo,
       address_id: address_id,
@@ -231,7 +236,7 @@ exports.newOrder = async function (req, res) {
     };
     // ============================
     // this is for update count in seller product(stocks)
-    let sizesToUpdate = { ...sizes };
+    let sizesToUpdate = { ...productData?.sizes };
 
     const updateCount = {
       $inc: {},
@@ -249,9 +254,9 @@ exports.newOrder = async function (req, res) {
     );
     // ========================
 
-    let createdOrder = await Order.create(finalData);
+    let createdOrder = await orderModel.create(finalData);
     if (!createdOrder) {
-      createdOrder = await Order.create(finalData);
+      createdOrder = await orderModel.create(finalData);
 
       if (!createdOrder) {
         return response.commonErrorResponse(
@@ -282,7 +287,7 @@ exports.newOrder = async function (req, res) {
 };
 // =========
 
-(exports.getSingleOrderDetails = async (req, res) => {
+exports.getSingleOrderDetails = async (req, res) => {
   try {
     const singleOrder = await Order.findById(req.params.id);
 
@@ -313,7 +318,7 @@ exports.newOrder = async function (req, res) {
       error.message
     );
   }
-}),
+},
   // get all order of the user
   (exports.myOrders = async (req, res) => {
     try {

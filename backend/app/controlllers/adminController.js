@@ -74,7 +74,7 @@ module.exports={
             );
           }
     },
-    // Today sales worth
+    // Total sales worth
     totalSalesWorth: async function(req,res){
         try{
             const totalSalesWorth = await orderModel.aggregate([
@@ -106,6 +106,31 @@ module.exports={
               err.message
             );
           }
-    }
+    },
+    //   this Api for seller
+    totalProductOfSingleSeller: async function(req,res){
+      try{
+        let seller_id= req.seller_id
+
+          let totalProduct= await productModel.find({seller_id})
+          if(totalProduct.length==0){
+              totalProduct= await productModel.find({seller_id})
+              if(totalProduct.length==0){
+                  return response.commonErrorResponse(res,ErrorCode.NOT_FOUND,[],ErrorMessage.NOT_FOUND)
+              }
+          }
+          else{
+              return response.commonResponse(res,SuccessCode.SUCCESS,totalProduct,SuccessMessage.DATA_FOUND)
+          }
+      }
+      catch (err) {
+          return response.commonErrorResponse(
+            res,
+            ErrorCode.INTERNAL_ERROR,
+            {},
+            err.message
+          );
+        }
+  },
 
 }
