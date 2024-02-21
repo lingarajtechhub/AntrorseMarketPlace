@@ -72,12 +72,12 @@ const productSchema= new mongoose.Schema({
     },
     category:{
         type:String,
-        enum:["Male","Female","Kids","Shoes"]
+        enum:["Male","Female","Kids","Footwear","electronics","mobile","laptop"]
     },
     subCategory:{
         type:String
-    
     }
+
     ,
     stocks:{
         type:Number,
@@ -114,19 +114,19 @@ const productSchema= new mongoose.Schema({
     // this special for mobile
     model: {
         type: String,
-        required: true
+     
     },
     RAM: {
         type: Number,
-        required: true
+      
     },
     ROM: {
         type: Number,
-        required: true
+    
     },
     screenSize: {
         type: Number,
-        required: true
+       
     },
     operatingSystem: {
         type: String
@@ -137,6 +137,18 @@ const productSchema= new mongoose.Schema({
     batteryCapacity: {
         type: Number
     },
+    height:{
+        type:Number
+    },
+    width:{
+        type:Number
+    },
+    length:{
+        type:Number
+    },
+    weight:{
+        type:Number
+    }
 
    
 }, {timestamps:true})

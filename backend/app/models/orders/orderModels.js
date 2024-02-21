@@ -28,10 +28,10 @@ const orderSchema = new mongoose.Schema(
           type: Number,
           required: true,
         },
-        image: {
-          type: String,
-          required: true,
-        },
+        // image: {
+        //   type: String,
+        //   // required: true,
+        // },
           sizes: {
             XS: {
                 type: Number
@@ -54,7 +54,7 @@ const orderSchema = new mongoose.Schema(
           type:String
       },
 
-        product: {
+        product_id: {
           type: ObjectId,
           ref: "Product",
           required: true,
@@ -65,18 +65,42 @@ const orderSchema = new mongoose.Schema(
     totalItems: { type: Number, required: true },
     totalQuantity: { type: Number, required: true },
     paymentInfo: {
-      payment_id: {
+      transaction_id: {
         type: String,
-        required: true,
+        required: true
       },
-      status: {
+      payment_amount: {
+        type: Number,
+        // required: true
+      },
+      transaction_status: {
         type: String,
-        required: true,
+        enum: ["paid", "unpaid", "pending"],
+        default: "unpaid",
+        required: true
       },
-    },
+      payment_details: {
+        UPI_id: {
+          type: String
+        },
+        card_number: {
+          type: String
+        },
+        card_expiration: {
+          type: String
+        }
+      },
+      payment_mode: {
+        type: String,
+        enum: ["COD", "creditCard", "debitCard", "UPI"],
+        default:"cash",
+        required: true
+      }
+    }
+,    
     paidAt: {
       type: Date,
-      required: true,
+      
     },
 
     orderStatus: {
@@ -91,9 +115,44 @@ const orderSchema = new mongoose.Schema(
       default: Date.now,
     },
     deletedAt: { type: Date, default: null },
+    orderId:{
+      type:String
+    },
+    order_processing:{
+      type:Boolean,
+      default:false
+    },
+    shipped:{
+      type:Boolean,
+      default:false
+    },
+    inTransit:{
+      type:Boolean,
+      default:false
+    },
+    outForDelivery:{
+      type:Boolean,
+      default:false
+    },
+    delivered:{
+      type:Boolean,
+      default:false
+
+    },
+    refunded:{
+      type:Boolean,
+      default:false
+    },
+    channel_id:{
+      type:String
+    },
+    
+    pickup_location:{
+      type:String,
+      require:true
+    }
   
   },
- 
   { timestamps: true }
 );
 

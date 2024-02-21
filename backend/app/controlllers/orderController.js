@@ -7,7 +7,7 @@ const response = require("../helper/commonResponse");
 const { ErrorCode, SuccessCode } = require("../helper/statusCode");
 const { SuccessMessage, ErrorMessage } = require("../helper/message");
 // const orderModel = require("../models/orders/orderModel");
-const orderModel=require("../models/orders/orderModels")
+const orderModel = require("../models/orders/orderModels");
 // const sendEmail = require("../helper/sendEmail");
 
 //  exports.newOrder= async (req, res) => {
@@ -78,9 +78,10 @@ exports.newOrder = async function (req, res) {
       paymentInfo,
       deliveredAt,
       shippedAt,
-      
+      sizes
     } = data;
-    console.log("========================")
+
+    paymentInfo = JSON.parse(paymentInfo);
     if (data.cart_id) {
       let cart_items = await cartModels.findById(data.cart_id);
 
@@ -220,15 +221,27 @@ exports.newOrder = async function (req, res) {
       }
     }
     //  this is for user directly order without cart
+    console.log("=======================================================1");
     let productData = await productModel.findById(product_id);
-
+    console.log("=======================================================2");
     let finalData = {
       totalQuantity: quantity,
       totalPrice: productData?.price * quantity,
       user_id: user_id,
       shippingInfo: shippingInfo,
       address_id: address_id,
-      orderItems: 1,
+      orderItems: [
+        {
+          "product_name": productData.product_name,
+          "price": productData.price,
+          "sizes": productData.sizes,
+          "color": productData.color,
+          "product_id": productData._id,
+          "quantity":quantity,
+          
+          
+        },
+      ],
       totalItems: 1,
       paymentInfo: paymentInfo,
       deliveredAt: deliveredAt,
@@ -236,24 +249,43 @@ exports.newOrder = async function (req, res) {
     };
     // ============================
     // this is for update count in seller product(stocks)
-    let sizesToUpdate = { ...productData?.sizes };
+    console.log("=======================================================3");
+    // let sizesToUpdate = { ...productData?.sizes };
+    // console.log("=======================================================1");
+    // const updateCount = {
+    
+    // };
+    // console.log("=======================================================12");
+    // for (let size in sizesToUpdate) {
+    //   if (sizesToUpdate.hasOwnProperty(size)) {
+    //     updateCount.$inc[`sizes.${size}`] = sizesToUpdate?.size;
+    //   }
+    // }
+    // ========================
+// sizes
+// productData
+let updateCount={ }
 
-    const updateCount = {
-      $inc: {},
-    };
+ let size= JSON.parse(sizes)
+ sizes={}
+ for (let sizeNumber in size) {
+  console.log(size, sizeNumber, size[sizeNumber], "+++++++++++++");
+  console.log(productData.sizes[sizeNumber])
+  
+ 
+  updateCount["sizes." + sizeNumber] =s.sizeNumber -quantity;
+}
 
-    for (const size in sizesToUpdate) {
-      if (sizesToUpdate.hasOwnProperty(size)) {
-        updateCount.$inc[`sizes.${size}`] = -sizesToUpdate[size];
-      }
-    }
+    console.log("=======================================================13");
+    console.log(updateCount)
     let updateProduct = await productModel.findByIdAndUpdate(
       product_id,
       updateCount,
       { new: true }
     );
     // ========================
-
+    console.log("=======================================================14");
+    console.log(finalData);
     let createdOrder = await orderModel.create(finalData);
     if (!createdOrder) {
       createdOrder = await orderModel.create(finalData);
@@ -287,7 +319,7 @@ exports.newOrder = async function (req, res) {
 };
 // =========
 
-exports.getSingleOrderDetails = async (req, res) => {
+(exports.getSingleOrderDetails = async (req, res) => {
   try {
     const singleOrder = await Order.findById(req.params.id);
 
@@ -318,7 +350,7 @@ exports.getSingleOrderDetails = async (req, res) => {
       error.message
     );
   }
-},
+}),
   // get all order of the user
   (exports.myOrders = async (req, res) => {
     try {
@@ -353,7 +385,7 @@ exports.getSingleOrderDetails = async (req, res) => {
   }),
   /* ======================ADMIN================== */
   // Get All Orders ---ADMIN
-  exports.getAllOrders = async (req, res) => {
+  (exports.getAllOrders = async (req, res) => {
     try {
       const orders = await Order.find();
 
@@ -386,7 +418,7 @@ exports.getSingleOrderDetails = async (req, res) => {
         error.message
       );
     }
-  };
+  });
 exports.updateOrder = async (req, res) => {
   try {
     const order = await Order.findById(req.params.id);
