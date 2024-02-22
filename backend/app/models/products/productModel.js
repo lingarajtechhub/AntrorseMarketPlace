@@ -89,28 +89,7 @@ const productSchema= new mongoose.Schema({
         require:true,
         trim:true
     },   
-    img1: {
-            type: String,
-            required: true
-        },
-        img2: {
-            type: String,
-            required: true
-        },
-        img3: {
-            type: String,
-            required: true
-        },
-        img4: {
-            type: String,
-            required: true
-        }
-        ,
-        img5: {
-            type: String,
-            required: true
-        
-    },
+    image: [],
     // this special for mobile
     model: {
         type: String,
