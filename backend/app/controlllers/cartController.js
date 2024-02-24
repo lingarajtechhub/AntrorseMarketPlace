@@ -116,14 +116,7 @@ module.exports = {
             }
             
           }
-          ,{
-            $lookup:{
-              from:"productratings",
-              localField:"items.product_id",
-              foreignField:"product_id",
-              as:"productRatings"
-            }
-          }
+         
            
         ]) 
         return response.commonResponse(res,SuccessCode.SUCCESS, cartData,SuccessMessage.DATA_FOUND)

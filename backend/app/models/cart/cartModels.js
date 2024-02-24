@@ -22,26 +22,8 @@ const cartSchema = new mongoose.Schema ({
             required: true,
             min: 1
         },
-        sizes: {
-            XS: {
-                type: Number
-            },
-            S: {
-                type: Number
-            },
-            M: {
-                type: Number
-            },
-            L: {
-                type: Number
-            },
-            XL: {
-                type: Number
-            }
-        },
-        color:{
-            type:String
-        },
+        sizes: [{}],
+        color:[],
     }],
    
     totalItems: {

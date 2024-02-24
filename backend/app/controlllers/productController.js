@@ -1,8 +1,8 @@
 const productModel = require("../models/products/productModel");
-const axios=require("axios")
+// const axios=require("axios")
 
-// const reviewRatingModel = require("../models/reviews/reviewRatingModel");
-const reviewRatingModel=require("../models/products/productRatingModel")
+// const productReview = require("../models/reviews/productReview");
+const productReview=require("../models/products/productReview")
 const response = require("../helper/commonResponse");
 
 const { SuccessMessage, ErrorMessage } = require("../helper/message");
@@ -144,7 +144,7 @@ module.exports = {
         },
         {
           $lookup: {
-            from: "productratings",
+            from: "productReviews",
             localField: "_id", // Use the correct field for the local join, assuming _id is the correct field in productModel
             foreignField: "product_id", // Use the correct field for the foreign join in productRatings
             as: "allRatingAndReview"
@@ -254,7 +254,7 @@ else{
       let user_id = req.user_id; // Assuming user_id is obtained from authentication middleware
      
 
-      let addedReviewRating = await reviewRatingModel.create(data);
+      let addedReviewRating = await productReview.create(data);
       if (addedReviewRating) {
         return response.commonResponse(
           res,
@@ -276,7 +276,7 @@ else{
   // Get all reviews and ratings
   getAllReviewRatings: async function (req, res) {
     try {
-      let allReviewRatings = await reviewRatingModel.find();
+      let allReviewRatings = await productReview.find();
       if (allReviewRatings?.length > 0) {
         return response.commonResponse(
           res,
@@ -306,7 +306,7 @@ else{
   getReviewRatingByProductId: async function (req, res) {
     try {
       let product_id = req.params.product_id;
-      let reviewRating = await reviewRatingModel.find({product_id:product_id});
+      let reviewRating = await productReview.find({product_id:product_id});
       if (reviewRating.length>0) {
         return response.commonResponse(
           res,
@@ -336,7 +336,7 @@ else{
   updateReviewRatingById: async function (req, res) {
     try {
       let reviewRating_id = req.params.reviewRating_id;
-      let updatedReviewRating = await reviewRatingModel.findByIdAndUpdate(
+      let updatedReviewRating = await productReview.findByIdAndUpdate(
         reviewRating_id,
         req.body,
         { new: true }
@@ -370,7 +370,7 @@ else{
   deleteReviewRatingById: async function (req, res) {
     try {
       let reviewRating_id = req.params.reviewRating_id;
-      let deletedReviewRating = await reviewRatingModel.findByIdAndDelete(
+      let deletedReviewRating = await productReview.findByIdAndDelete(
         reviewRating_id
       );
       if (deletedReviewRating) {
@@ -409,7 +409,7 @@ getProductByIdWithRating: async function(req,res){
      
       {
         $lookup: {
-          from: "productratings",
+          from: "productreviews",
           localField: "_id", // Use the correct field for the local join, assuming _id is the correct field in productModel
           foreignField: "product_id", // Use the correct field for the foreign join in productRatings
           as: "allRatingAndReview"
@@ -434,13 +434,17 @@ $addFields:{
             material:"$material",
             style:"$style",
             price:"$price",
-            oldPrice:"$oldPrice",
+            discount:"$discount",
             currency:"$currency",
             category:"$category",
             subCategory:"$subCategory",
            
-            product_name:"$product_name",
+            name:"$name",
             ratingAVG:"$ratingAVG",
+            tags:"$tags",
+            dimensions:"$dimensions",
+            images:"$images",
+            variations:"$variations"
           }}
         }
       }
