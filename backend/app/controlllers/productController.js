@@ -422,11 +422,18 @@ $addFields:{
 }
       },
       {
+        $addFields:{
+          count:{$size:"$allRatingAndReview"}
+        }
+              },
+
+      {
         $group:{
           _id:"$allRatingAndReview.rating",
           productDetails:{$push:{
             rating:"$allRatingAndReview",
             ratingAVG:"$ratingAVG",
+            count:"$count",
             description:"$description",
             brand:"$brand",
             color:"$color",
