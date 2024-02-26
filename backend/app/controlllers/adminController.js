@@ -205,4 +205,34 @@ $unwind:"$orderItems"
       );
     }
   },
+  totalOrder: async function (req, res) {
+    try {
+      let totalOrder = await orderModels.find();
+      if (totalOrder.length == 0) {
+        totalOrder = await userModel.find();
+        if (totalOrder.length == 0) {
+          return response.commonErrorResponse(
+            res,
+            ErrorCode.NOT_FOUND,
+            [],
+            ErrorMessage.NOT_FOUND
+          );
+        }
+      } else {
+        return response.commonResponse(
+          res,
+          SuccessCode.SUCCESS,
+          totalOrder,
+          SuccessMessage.DATA_FOUND
+        );
+      }
+    } catch (err) {
+      return response.commonErrorResponse(
+        res,
+        ErrorCode.INTERNAL_ERROR,
+        {},
+        err.message
+      );
+    }
+  },
 };
