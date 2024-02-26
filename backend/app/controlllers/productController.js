@@ -1,28 +1,30 @@
 const productModel = require("../models/products/productModel");
-// const axios=require("axios")
-
-// const productReview = require("../models/reviews/productReview");
 const productReview=require("../models/products/productReview")
 const response = require("../helper/commonResponse");
-
 const { SuccessMessage, ErrorMessage } = require("../helper/message");
 const { ErrorCode, SuccessCode } = require("../helper/statusCode");
 const validation = require("../helper/validation");
 const commonFunction = require("../helper/commonFunction");
-const { default: mongoose } = require("mongoose");
-const img=require("./images")
+const  mongoose = require("mongoose");
+const {uploadFile}=require('../middleware/AWS')
+
 
 module.exports = {
   AddProduct: async function (req, res) {
     try {
       let data = req.body;
       let files=req.files
-      // console.log(files)
-    //  here function for upload image on cloud
-    // ===== this is tempery for image upload=========
-    let allImage= await img.extractImageUrls(files)
-    console.log(allImage)
-    // =============================
+      console.log(files)
+     let arr=[]
+     if(files?.length>0){
+      files.map( async (item)=>{
+        let img= await uploadFile(item)
+        arr.push(img)
+
+      })
+     }
+     console.log(arr)
+     return arr
 
       let seller_id = req.seller_id;
       data.seller_id = seller_id;
