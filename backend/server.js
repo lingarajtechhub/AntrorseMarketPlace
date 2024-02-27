@@ -36,6 +36,6 @@ app.use("/api", phonepeRoute);
 // app.use('/', imageRouter);
 
 
-app.listen(process.env.PORT_NUMBER, function(){
-  console.log("server is running on port:",process.env.PORT_NUMBER)
+app.listen(process.env.PORT_NUMBER||3687, function(){
+  console.log("server is running on port:",process.env.PORT_NUMBER||3687)
 })

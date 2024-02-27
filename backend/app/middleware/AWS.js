@@ -11,16 +11,14 @@ let uploadFile = async (file) => {
     let uploadParam = {
       ACL: "public-read",
       Bucket: "antrorse-market-place",
-      Key:file.originalname,
+      Key: file.originalname,
       Body: file.buffer,
     };
     s3.upload(uploadParam, function (err, data) {
       if (err) {
-       
         return reject(err);
       }
       if (data) {
-        console.log(data.Location)
         return resolve(data.Location);
       }
     });
