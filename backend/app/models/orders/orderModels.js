@@ -5,15 +5,15 @@ const orderSchema = new mongoose.Schema(
   {
     user_id: { type: ObjectId, ref: "user", required: true },
     shippingInfo: {
-        type: String,
-        enum: ["home", "work"],
-        required: true,
+      type: String,
+      enum: ["home", "work"],
+      required: true,
     },
     address_id: {
-        type: ObjectId,
-        ref: "Address",
-        required: true,
-      },
+      type: ObjectId,
+      ref: "Address",
+      required: true,
+    },
     orderItems: [
       {
         product_name: {
@@ -28,31 +28,9 @@ const orderSchema = new mongoose.Schema(
           type: Number,
           required: true,
         },
-        // image: {
-        //   type: String,
-        //   // required: true,
-        // },
-          sizes: {
-            XS: {
-                type: Number
-            },
-            S: {
-                type: Number
-            },
-            M: {
-                type: Number
-            },
-            L: {
-                type: Number
-            },
-            XL: {
-                type: Number
-            }
-        
-        },
-        color:{
-          type:String
-      },
+        sizes: [
+          {}
+        ],
 
         product_id: {
           type: ObjectId,
@@ -67,7 +45,7 @@ const orderSchema = new mongoose.Schema(
     paymentInfo: {
       transaction_id: {
         type: String,
-        required: true
+        required: true,
       },
       payment_amount: {
         type: Number,
@@ -77,30 +55,28 @@ const orderSchema = new mongoose.Schema(
         type: String,
         enum: ["paid", "unpaid", "pending"],
         default: "unpaid",
-        required: true
+        required: true,
       },
       payment_details: {
         UPI_id: {
-          type: String
+          type: String,
         },
         card_number: {
-          type: String
+          type: String,
         },
         card_expiration: {
-          type: String
-        }
+          type: String,
+        },
       },
       payment_mode: {
         type: String,
         enum: ["COD", "creditCard", "debitCard", "UPI"],
-        default:"cash",
-        required: true
-      }
-    }
-,    
+        default: "cash",
+        required: true,
+      },
+    },
     paidAt: {
       type: Date,
-      
     },
 
     orderStatus: {
@@ -115,45 +91,43 @@ const orderSchema = new mongoose.Schema(
       default: Date.now,
     },
     deletedAt: { type: Date, default: null },
-    orderId:{
-      type:String
+    orderId: {
+      type: String,
     },
-    order_processing:{
-      type:Boolean,
-      default:false
+    order_processing: {
+      type: Boolean,
+      default: false,
     },
-    shipped:{
-      type:Boolean,
-      default:false
+    shipped: {
+      type: Boolean,
+      default: false,
     },
-    inTransit:{
-      type:Boolean,
-      default:false
+    inTransit: {
+      type: Boolean,
+      default: false,
     },
-    outForDelivery:{
-      type:Boolean,
-      default:false
+    outForDelivery: {
+      type: Boolean,
+      default: false,
     },
-    delivered:{
-      type:Boolean,
-      default:false
+    delivered: {
+      type: Boolean,
+      default: false,
+    },
+    refunded: {
+      type: Boolean,
+      default: false,
+    },
+    channel_id: {
+      type: String,
+    },
 
+    pickup_location: {
+      type: String,
+      require: true,
     },
-    refunded:{
-      type:Boolean,
-      default:false
-    },
-    channel_id:{
-      type:String
-    },
-    
-    pickup_location:{
-      type:String,
-      require:true
-    }
-  
   },
   { timestamps: true }
 );
 
-module.exports = mongoose.model("Order",orderSchema);
+module.exports = mongoose.model("Order", orderSchema);

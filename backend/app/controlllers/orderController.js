@@ -223,6 +223,10 @@ exports.newOrder = async function (req, res) {
     //  this is for user directly order without cart
     console.log("=======================================================1");
     let productData = await productModel.findById(product_id);
+    if(!productData){
+      return response.commonErrorResponse(res,ErrorCode.BAD_REQUEST,{},ErrorMessage.NOT_FOUND)
+    }
+    console.log("++++++++++",productData)
     console.log("=======================================================2");
     let finalData = {
       totalQuantity: quantity,
@@ -232,10 +236,10 @@ exports.newOrder = async function (req, res) {
       address_id: address_id,
       orderItems: [
         {
-          "product_name": productData.product_name,
+          "product_name": productData.name,
           "price": productData.price,
-          "sizes": productData.sizes,
-          "color": productData.color,
+          "sizes": JSON.parse(sizes),
+          "color": productData.variations.color,
           "product_id": productData._id,
           "quantity":quantity,
           
@@ -250,30 +254,20 @@ exports.newOrder = async function (req, res) {
     // ============================
     // this is for update count in seller product(stocks)
     console.log("=======================================================3");
-    // let sizesToUpdate = { ...productData?.sizes };
-    // console.log("=======================================================1");
-    // const updateCount = {
     
-    // };
-    // console.log("=======================================================12");
-    // for (let size in sizesToUpdate) {
-    //   if (sizesToUpdate.hasOwnProperty(size)) {
-    //     updateCount.$inc[`sizes.${size}`] = sizesToUpdate?.size;
-    //   }
-    // }
-    // ========================
-// sizes
-// productData
+    
 let updateCount={ }
 
  let size= JSON.parse(sizes)
  sizes={}
  for (let sizeNumber in size) {
   console.log(size, sizeNumber, size[sizeNumber], "+++++++++++++");
-  console.log(productData.sizes[sizeNumber])
+  let ss=JSON.parse(JSON.stringify(productData?.variations.sizes))
+  let mm=JSON.parse(JSON.stringify(ss[0]))
+  console.log(mm[sizeNumber],"===============")
   
  
-  updateCount["sizes." + sizeNumber] =s.sizeNumber -quantity;
+ 
 }
 
     console.log("=======================================================13");

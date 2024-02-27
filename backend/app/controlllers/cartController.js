@@ -31,7 +31,7 @@ module.exports = {
         );
       }
 
-      let arr = cart.items;
+      let arr = cart?.items;
       for (let i = 0; i < arr.length; i++) {
         if (arr[i].product_id.toString() == product_id) {
           arr[i].quantity =  quantity||1;
@@ -129,5 +129,64 @@ module.exports = {
             error.message
           );
     }
+  },
+  removeItemsToCart: async function(req,res){
+    try{
+      let cart_id=req.params.cart_id
+    let user_id=req.user_id
+    let product_id=req.params.product_id
+  
+    let cartItem= await cartModel.findOne({_id:cart_id,user_id:user_id})
+    if(!cartItem){
+      return response.commonErrorResponse(res,ErrorCode.NOT_FOUND, {},ErrorMessage.NOT_FOUND)
+
+    }
+
+    
+   let arr= cartItem.items.filter((product,i)=>{ 
+    return product.product_id!=product_id
+   })
+
+   cartItem.items=arr
+   let cartData= await cartModel.findOneAndUpdate({_id:cart_id,user_id:user_id},{$set:cartItem},{new:true})
+if(!cartData){
+  return response.commonErrorResponse(res,ErrorCode.NOT_FOUND, {},ErrorMessage.NOT_FOUND)
+
+}
+else{
+  return response.commonResponse(res,SuccessCode.SUCCESS, cartData,SuccessMessage.UPDATE_SUCCESS)
+
+}
+
+    }catch(error){
+        return response.commonErrorResponse(
+            res,
+            ErrorCode.INTERNAL_ERROR,
+            {},
+            error.message
+          );
+    }
+
+  },
+  removeCart: async function(req,res){
+    try{
+    let cart_id=req.params.cart_id
+    let user_id=req.user_id
+    let cartDelete= await cartModel.findOneAndDelete({_id:cart_id,user_id:user_id})
+    if(cartDelete){
+      return response.commonResponse(res,SuccessCode.SUCCESS, {},SuccessMessage.DELETE_SUCCESS)
+    }
+    else{
+       return response.commonErrorResponse(res,ErrorCode.NOT_FOUND, {},ErrorMessage.NOT_FOUND)
+    }
+  } catch(error){
+    return response.commonErrorResponse(
+        res,
+        ErrorCode.INTERNAL_ERROR,
+        {},
+        error.message
+      );
+}
   }
+
 };

@@ -1,8 +1,8 @@
 const aws = require("aws-sdk");
 
 aws.config.update({
-  accessKeyId: " AKIAW3MED2I4CF7L744I",
-  secretAccessKey: "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",
+  accessKeyId: " AKIA4YO6L5LO3JBQIXVW",
+  secretAccessKey: "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",
   region: "ap-south-1",
 });
 let uploadFile = async (file) => {
@@ -10,16 +10,17 @@ let uploadFile = async (file) => {
     let s3 = new aws.S3({ apiVersion: "2006-03-01" });
     let uploadParam = {
       ACL: "public-read",
-      Bucket: "antrose-dev-bucket",
+      Bucket: "antrorse-market-place",
       Key:file.originalname,
       Body: file.buffer,
     };
     s3.upload(uploadParam, function (err, data) {
       if (err) {
-        console.log(err.message,"=========================================")
+       
         return reject(err);
       }
       if (data) {
+        console.log(data.Location)
         return resolve(data.Location);
       }
     });
