@@ -6,7 +6,7 @@ const { ErrorCode, SuccessCode } = require("../helper/statusCode");
 const validation = require("../helper/validation");
 const commonFunction = require("../helper/commonFunction");
 const bcrypt = require("bcrypt");
-
+const { uploadFile } = require("../middleware/AWS");
 module.exports = {
   sellerRegistration: async function (req, res) {
     try {
@@ -368,15 +368,15 @@ module.exports = {
       let data = req.body;
       let files = req.files;
       let seller_id = req.seller_id;
+      if (files?.length > 0) {
+        
+          let img = await uploadFile(files[0]);
+          data.aadhar_image=img
+        }
+      
 
-      // if (!files?.length == 0 || !files[0].fieldname == "aadhar_image") {
-      //   return response.commonErrorResponse(
-      //     res,
-      //     ErrorCode.BAD_REQUEST,
-      //     {},
-      //     ErrorMessage.AADHAR_IMAGE_REQUIRE
-      //   );
-      // }
+
+      
       if (
         !data.aadhar_number ||
         !validation.isValidAadharNumber(data.aadhar_number)
