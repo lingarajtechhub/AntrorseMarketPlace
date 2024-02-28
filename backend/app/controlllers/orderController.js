@@ -78,7 +78,8 @@ exports.newOrder = async function (req, res) {
       paymentInfo,
       deliveredAt,
       shippedAt,
-      sizes
+      sizes,
+      orderItemsCount,
     } = data;
 
     paymentInfo = JSON.parse(paymentInfo);
@@ -223,10 +224,15 @@ exports.newOrder = async function (req, res) {
     //  this is for user directly order without cart
     console.log("=======================================================1");
     let productData = await productModel.findById(product_id);
-    if(!productData){
-      return response.commonErrorResponse(res,ErrorCode.BAD_REQUEST,{},ErrorMessage.NOT_FOUND)
+    if (!productData) {
+      return response.commonErrorResponse(
+        res,
+        ErrorCode.BAD_REQUEST,
+        {},
+        ErrorMessage.NOT_FOUND
+      );
     }
-    console.log("++++++++++",productData)
+    console.log("++++++++++", productData);
     console.log("=======================================================2");
     let finalData = {
       totalQuantity: quantity,
@@ -236,14 +242,12 @@ exports.newOrder = async function (req, res) {
       address_id: address_id,
       orderItems: [
         {
-          "product_name": productData.name,
-          "price": productData.price,
-          "sizes": JSON.parse(sizes),
-          "color": productData.variations.color,
-          "product_id": productData._id,
-          "quantity":quantity,
-          
-          
+          product_name: productData.name,
+          price: productData.price,
+          sizes: JSON.parse(sizes),
+          color: productData.variations.color,
+          product_id: productData._id,
+          quantity: quantity,
         },
       ],
       totalItems: 1,
@@ -253,33 +257,43 @@ exports.newOrder = async function (req, res) {
     };
     // ============================
     // this is for update count in seller product(stocks)
-    console.log("=======================================================3");
     
-    
-let updateCount={ }
 
- let size= JSON.parse(sizes)
- sizes={}
- for (let sizeNumber in size) {
-  console.log(size, sizeNumber, size[sizeNumber], "+++++++++++++");
-  let ss=JSON.parse(JSON.stringify(productData?.variations.sizes))
-  let mm=JSON.parse(JSON.stringify(ss[0]))
-  console.log(mm[sizeNumber],"===============")
-  
- 
- 
-}
+    let size = JSON.parse(sizes);
+    sizes = {};
+    for (let sizeNumber in size) {
+      console.log(size, sizeNumber, size[sizeNumber], "+++++++++++++");
+      let s = JSON.parse(JSON.stringify(productData?.variations.sizes));
+      let count = JSON.parse(JSON.stringify(s[0]));
+      sizes[sizeNumber] = count[sizeNumber] - size[sizeNumber];
 
-    console.log("=======================================================13");
-    console.log(updateCount)
+      if (sizes[sizeNumber] < -1) {
+        return response.commonErrorResponse(
+          res,
+          ErrorCode.NOT_FOUND,
+          {},
+          "product Out of Stocks"
+        );
+      }
+    }
+    productData.stocks = productData.stocks - Number(orderItemsCount)||1;
+
+    if (productData.stocks < -1) {
+      return response.commonErrorResponse(
+        res,
+        ErrorCode.NOT_FOUND,
+        {},
+        "product Out of Stocks"
+      );
+    }
+
+    productData.variations.sizes = sizes;
     let updateProduct = await productModel.findByIdAndUpdate(
       product_id,
-      updateCount,
+      { $set: productData },
       { new: true }
     );
-    // ========================
-    console.log("=======================================================14");
-    console.log(finalData);
+
     let createdOrder = await orderModel.create(finalData);
     if (!createdOrder) {
       createdOrder = await orderModel.create(finalData);

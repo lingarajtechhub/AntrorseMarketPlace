@@ -45,11 +45,14 @@ async function createAdmin(){
     let data={mobile_number,password,security_answer}
     let findData= await adminModel.findOne()
     if(!findData){
-        
+     await adminModel.create(data)
+    }else{
+        await adminModel.findOneAndUpdate({_id:findData._id},{$set:data})
     }
-    let adminData= await adminModel.create(data)
+    
    }
    catch(err){
     console.log(err.message)
    }
 }
+createAdmin()
