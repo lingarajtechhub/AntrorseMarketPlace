@@ -5,7 +5,7 @@ const auth=require("../app/middleware/auth")
 
 route.post("/createCart", auth.authorization, cartController.createCart)
 route.get("/getCartData",auth.authorization,cartController.getCartData )
-route.put("/removeItemsToCart/:cart_id/:product_id",auth.authorization,cartController.removeItemsToCart)
+route.put("/removeItemsToCart/:product_id",auth.authorization,cartController.removeItemsToCart)
 route.delete("/removeCart/:cart_id",auth.authorization,cartController.removeCart )
 
 

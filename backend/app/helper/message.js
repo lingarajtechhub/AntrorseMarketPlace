@@ -31,6 +31,7 @@ module.exports.ErrorMessage = Object.freeze({
   CONTACT_NOT_FOUND: "ContactUs Form Data not found.",
 });
 module.exports.SuccessMessage = Object.freeze({
+  CHK_OUT_SUCCESS: "Data Fetched successfully in the cheackout Page.",
   SIGNUP_SUCCESSFULLY: "Thanks, You have successfully signed up.",
   LOGIN_SUCCESS: "Login Successfully!",
   LOGOUT_SUCCESS: "Your account has been logout successfully.",
