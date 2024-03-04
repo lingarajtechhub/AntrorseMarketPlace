@@ -37,6 +37,7 @@ const orderSchema = new mongoose.Schema(
           ref: "Product",
           required: true,
         },
+        color:mongoose.Schema.Types.Mixed
       },
     ],
     totalPrice: { type: Number, required: true, default: 0 },

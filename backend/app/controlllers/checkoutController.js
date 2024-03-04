@@ -234,7 +234,7 @@ exports.checkout = async (req, res) => {
           totalPriceArray.push(totalPrice);
 
           const size = item.sizes
-            ? Object.keys(item.sizes)[0].toUpperCase()
+            ? Object.keys(item.sizes)[0]
             : "";
 
           const orderItem = {

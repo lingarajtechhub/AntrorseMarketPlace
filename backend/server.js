@@ -6,8 +6,10 @@ const cartRouter=require("./router/cartRouter")
 const sellerRoute=require("./router/sellerRouter")
 const adminRoute=require("./router/adminRouter")
 const orderRouter=require("./router/orderRouter")
-// const imageRouter = require('./app/controlllers/images');
+const checkoutRouter=require("./router/checkoutRouter")
+
 const phonepeRoute = require("./router/phonepeRouter");
+const invoiceRouter = require("./router/invoiceRouter")
 
 const multer= require("multer")
 const cors= require("cors")
@@ -30,8 +32,10 @@ app.use("/app/product/",productRoute)
 app.use("/app/cart/",cartRouter)
 app.use("/app/seller/",sellerRoute)
 app.use("/app/admin",adminRoute)
-app.use("/app/order",orderRouter)  
+app.use("/app/order",orderRouter)
+app.use("/app/checkout/",checkoutRouter)  
 app.use("/api", phonepeRoute);
+app.use("/app/invoice/",invoiceRouter)
 // temperary=
 // app.use('/', imageRouter);
 

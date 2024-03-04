@@ -16,6 +16,7 @@ router.get("/getUser",auth.authorization, userController.getUser)
 router.post("/createOTPForForgetPassword",userController.createOTPForForgetPassword)
 // ======================================================================
 router.post("/createAddress",auth.authorization,userController.createAddress)
+router.get("/getAddress",auth.authorization,userController.getAddress)
 // ================wishList=============
 router.post("/creteWishList/:user_id", wishlistController.creteWishList)
 router.get("/getWishList/:user_id",wishlistController.getWishList)

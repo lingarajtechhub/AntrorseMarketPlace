@@ -79,9 +79,41 @@ exports.newOrder = async function (req, res) {
       deliveredAt,
       shippedAt,
       sizes,
-      orderItemsCount,
     } = data;
 
+    //  this function for update stokes and count of all product
+    async function update(sizes, quantity, productData) {
+    let  size=JSON.parse(sizes)
+      sizes = {};
+      
+      for (let sizeNumber in size) {
+        let s = JSON.parse(JSON.stringify(productData?.variations.sizes));
+        
+        let count = JSON.parse(JSON.stringify(s[0]));
+
+        console.log(s,"======================",count[sizeNumber],"=================================",size[sizeNumber])
+        sizes[sizeNumber] = count[sizeNumber] - size[sizeNumber];
+
+        if (sizes[sizeNumber] <0) {
+          return true
+        }
+      }
+    
+      productData.stocks = productData.stocks - Number(quantity) || 1;
+
+      if (productData.stocks <0) {
+        return true
+      }
+
+      productData.variations.sizes = sizes;
+      let updateProduct = await productModel.findByIdAndUpdate(
+        productData._id,
+        { $set: productData },
+        { new: true }
+      );
+      return false
+    }
+    // ===========================
     paymentInfo = JSON.parse(paymentInfo);
     if (data.cart_id) {
       let cart_items = await cartModels.findById(data.cart_id);
@@ -100,19 +132,30 @@ exports.newOrder = async function (req, res) {
         productIdes.push(cart_items.items[i].product_id);
       }
 
-      let products = await productModel
-        .find({ _id: { $in: productIdes } })
-        .toArray();
+      let products = await productModel.find({ _id: { $in: productIdes } });
+      // .toArray();
       let orderItems = [];
 
       for (let i = 0; i < products.length; i++) {
         let orderItem = {
-          product_name: products[i].product_name,
-          price: products[i]?.price,
-          quantity: cart_items.filter(
-            (data) => data.product_id == products[i]._id
-          ).quantity[0],
-          product: products[i]._id,
+          product_name: products[i].name,
+          price:
+            products[i]?.price *
+              cart_items.items.filter(
+                (data) =>
+                  data.product_id.toString() == products[i]._id.toString()
+              )[0]["quantity"] || 1,
+
+          product_id: products[i]._id.toString(),
+          quantity: cart_items.items.filter(
+            (data) => data.product_id.toString() == products[i]._id.toString()
+          )[0]["quantity"],
+          color: cart_items.items.filter(
+            (data) => data.product_id.toString() == products[i]._id.toString()
+          )[0]["color"],
+          sizes: cart_items.items.filter(
+            (data) => data.product_id.toString() == products[i]._id.toString()
+          )[0]["sizes"],
         };
 
         orderItems.push(orderItem);
@@ -128,79 +171,40 @@ exports.newOrder = async function (req, res) {
       let totalItems = orderItems.length;
 
       let finalData = {
-        totalQuantity,
-        totalPrice,
-        user_id,
-        shippingInfo,
-        address_id,
-        orderItems,
-        totalItems,
-        paymentInfo,
-        deliveredAt,
-        shippedAt,
+        totalQuantity: orderItems.reduce((accumulator, currentProduct) => {
+          return accumulator + (currentProduct?.quantity || 0);
+        }, 0),
+        totalPrice: orderItems.reduce((accumulator, currentProduct) => {
+          return accumulator + (currentProduct.price || 0);
+        }, 0),
+        user_id, // ok
+        shippingInfo, //ok
+        address_id, //ok
+        orderItems: orderItems, //ok
+        totalItems: orderItems?.length, //ok
+        paymentInfo, // ok
+        deliveredAt, //ok
+        shippedAt, //ok
       };
-      // this is for update count in seller product(stocks)
-      // ===============================================================
-      //  let sizeAndProduct_id=cart_items.items
-      //  let updateStocks=[]
-      //  cart_items.items.forEach((item,i)=>{
-      //   updateStocks.push({product_id:item.product_id,sizes:item?.sizes,color:item?.color})
-      //  })
-
-      // let sizesToUpdate = { ...sizes };
-
-      // const updateCount = {
-      //   $inc: {},
-      // };
-
-      // for (const size in sizesToUpdate) {
-      //   if (sizesToUpdate.hasOwnProperty(size)) {
-      //     updateCount.$inc[`sizes.${size}`] = -sizesToUpdate[size];
-      //   }
-      // }
-      // let updateProduct = await productModel.findByIdAndUpdate(
-      //   product_id,
-      //   updateCount,
-      //   { new: true }
-      // );
-
-      const updateStocks = cart_items.items.map((item) => ({
-        product_id: item.product_id,
-        sizes: item?.sizes,
-        color: item?.color,
-      }));
-
-      const updatedProducts = [];
-
-      for (const update of updateStocks) {
-        const { product_id, sizes, color } = update;
-
-        const updateCount = {
-          $inc: {},
-        };
-
-        for (const size in sizes) {
-          if (sizes.hasOwnProperty(size)) {
-            updateCount.$inc[`sizes.${size}`] = -sizes[size];
-          }
+      products.map( async (product) =>{
+        let sizes= cart_items.items.filter(
+          (data) => data.product_id.toString() == product._id.toString()
+        )[0]["sizes"]
+        let  quantity= cart_items.items.filter(
+          (data) => data.product_id.toString() == product._id.toString()
+        )[0]["quantity"]
+        let updateD=await update(sizes ,quantity,product )
+        if(updateD){
+          return response.commonErrorResponse(
+            res,
+            ErrorCode.NOT_FOUND,
+            {},
+            "product Out of Stocks"
+          );
         }
+      })
 
-        // Add color condition if color is present
-        const query = color ? { _id: product_id, color } : { _id: product_id };
-
-        const updatedProduct = await productModel.findOneAndUpdate(
-          query,
-          updateCount,
-          { new: true }
-        );
-
-        updatedProducts.push(updatedProduct);
-      }
-
-      console.log("Updated Products:", updatedProducts);
-
-      // ================================
-      let createdOrder = await Order.create(finalData);
+      let createdOrder = await orderModel.create(finalData);
       if (!createdOrder) {
         createdOrder = await Order.create(finalData);
 
@@ -220,103 +224,78 @@ exports.newOrder = async function (req, res) {
           SuccessMessage.DATA_SAVED
         );
       }
-    }
-    //  this is for user directly order without cart
-    console.log("=======================================================1");
-    let productData = await productModel.findById(product_id);
-    if (!productData) {
-      return response.commonErrorResponse(
-        res,
-        ErrorCode.BAD_REQUEST,
-        {},
-        ErrorMessage.NOT_FOUND
-      );
-    }
-    console.log("++++++++++", productData);
-    console.log("=======================================================2");
-    let finalData = {
-      totalQuantity: quantity,
-      totalPrice: productData?.price * quantity,
-      user_id: user_id,
-      shippingInfo: shippingInfo,
-      address_id: address_id,
-      orderItems: [
-        {
-          product_name: productData.name,
-          price: productData.price,
-          sizes: JSON.parse(sizes),
-          color: productData.variations.color,
-          product_id: productData._id,
-          quantity: quantity,
-        },
-      ],
-      totalItems: 1,
-      paymentInfo: paymentInfo,
-      deliveredAt: deliveredAt,
-      shippedAt: shippedAt,
-    };
-    // ============================
-    // this is for update count in seller product(stocks)
-    
-
-    let size = JSON.parse(sizes);
-    sizes = {};
-    for (let sizeNumber in size) {
-      console.log(size, sizeNumber, size[sizeNumber], "+++++++++++++");
-      let s = JSON.parse(JSON.stringify(productData?.variations.sizes));
-      let count = JSON.parse(JSON.stringify(s[0]));
-      sizes[sizeNumber] = count[sizeNumber] - size[sizeNumber];
-
-      if (sizes[sizeNumber] < -1) {
-        return response.commonErrorResponse(
-          res,
-          ErrorCode.NOT_FOUND,
-          {},
-          "product Out of Stocks"
-        );
-      }
-    }
-    productData.stocks = productData.stocks - Number(orderItemsCount)||1;
-
-    if (productData.stocks < -1) {
-      return response.commonErrorResponse(
-        res,
-        ErrorCode.NOT_FOUND,
-        {},
-        "product Out of Stocks"
-      );
-    }
-
-    productData.variations.sizes = sizes;
-    let updateProduct = await productModel.findByIdAndUpdate(
-      product_id,
-      { $set: productData },
-      { new: true }
-    );
-
-    let createdOrder = await orderModel.create(finalData);
-    if (!createdOrder) {
-      createdOrder = await orderModel.create(finalData);
-
-      if (!createdOrder) {
-        return response.commonErrorResponse(
-          res,
-          ErrorCode.WENT_WRONG,
-          {},
-          ErrorMessage.SOMETHING_WRONG
-        );
-      }
     } else {
-      return response.commonResponse(
-        res,
-        SuccessCode.SUCCESSFULLY_CREATED,
-        createdOrder,
-        SuccessMessage.DATA_SAVED
-      );
+      let productData = await productModel.findById(product_id);
+      if (!productData) {
+        return response.commonErrorResponse(
+          res,
+          ErrorCode.BAD_REQUEST,
+          {},
+          ErrorMessage.NOT_FOUND
+        );
+      }
+
+      let finalData = {
+        totalQuantity: quantity,
+        totalPrice: productData?.price * quantity,
+        user_id: user_id,
+        shippingInfo: shippingInfo,
+        address_id: address_id,
+        orderItems: [
+          {
+            product_name: productData.name,
+            price: productData.price,
+            sizes: JSON.parse(sizes),
+            color:
+              data.color?.length > 0
+                ? data.color
+                : productData?.variations?.color,
+            product_id: productData._id,
+            quantity: quantity,
+          },
+        ],
+        totalItems: 1,
+        paymentInfo: paymentInfo,
+        deliveredAt: deliveredAt,
+        shippedAt: shippedAt,
+      };
+
+      //   this function calling  for update the product stokes
+      // if(typeof sizes != "object"){
+      //   sizes= JSON.parse(sizes)
+      // }
+      let updateResult=await update(sizes, quantity, productData);
+      if(updateResult){
+return response.commonErrorResponse(
+  res,
+  ErrorCode.NOT_FOUND,
+  {},
+  "product Out of Stocks"
+);
+      }
+
+      let createdOrder = await orderModel.create(finalData);
+      if (!createdOrder) {
+        createdOrder = await orderModel.create(finalData);
+
+        if (!createdOrder) {
+          return response.commonErrorResponse(
+            res,
+            ErrorCode.WENT_WRONG,
+            {},
+            ErrorMessage.SOMETHING_WRONG
+          );
+        }
+      } else {
+        return response.commonResponse(
+          res,
+          SuccessCode.SUCCESSFULLY_CREATED,
+          createdOrder,
+          SuccessMessage.DATA_SAVED
+        );
+      }
     }
   } catch (error) {
-    console.log(error);
-
     return response.commonErrorResponse(
       res,
       ErrorCode.INTERNAL_ERROR,

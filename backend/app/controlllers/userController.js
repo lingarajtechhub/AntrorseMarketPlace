@@ -479,6 +479,45 @@ else{
         err.message
       );
     }
+  },
+//================getUserAdress======================
+
+getAddress: async function(req, res) {
+  try {
+    // Ensure user is authenticated
+    if (!req.user_id) {
+      return response.commonErrorResponse(
+        res,
+        ErrorCode.INVALID_CREDENTIAL,
+        {},
+        ErrorMessage.INVALID_CREDENTIAL
+      );
+    }
+    let data = await userAddressModel.find({ user_id: req.user_id });
+    if (data.length>0) {
+      return response.commonResponse(
+        res,
+        SuccessCode.SUCCESSFULLY_FETCHED,
+        data,
+        SuccessMessage.DATA_FETCHED
+      );
+    } else {
+      return response.commonErrorResponse(
+        res,
+        ErrorCode.SOMETHING_WRONG,
+        {},
+        ErrorMessage.WENT_WRONG
+      );
+    }
+  } catch (err) {
+    return response.commonErrorResponse(
+      res,
+      ErrorCode.INTERNAL_ERROR,
+      {},
+      err.message
+    );
   }
+}
+
 
 };

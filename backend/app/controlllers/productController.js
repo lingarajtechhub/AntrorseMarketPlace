@@ -12,6 +12,8 @@ module.exports = {
   AddProduct: async function (req, res) {
     try {
       let data = req.body;
+      data.variations=JSON.parse(data.variations)
+      console.log(data.variations,"=======================")
       let files = req.files;
       console.log(files);
       let arr = [];
