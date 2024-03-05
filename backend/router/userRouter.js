@@ -18,7 +18,7 @@ router.post("/createOTPForForgetPassword",userController.createOTPForForgetPassw
 router.post("/createAddress",auth.authorization,userController.createAddress)
 router.get("/getAddress",auth.authorization,userController.getAddress)
 // ================wishList=============
-router.post("/creteWishList/:user_id", wishlistController.creteWishList)
-router.get("/getWishList/:user_id",wishlistController.getWishList)
+router.post("/creteWishList",auth.authorization, wishlistController.createWishList)
+router.get("/getWishList",auth.authorization,wishlistController.getWishList)
 // ==============
 module.exports=router

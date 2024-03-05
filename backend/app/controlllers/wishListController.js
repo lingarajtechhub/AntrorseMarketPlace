@@ -8,7 +8,7 @@ const mongoose = require("mongoose");
 module.exports = {
   getWishList: async (req, res) => {
     try {
-      const user_id = req.params.user_id;
+      const user_id = req.user_id;
       const wishlist = await wishlistModel.aggregate([
         {
           $match: { user_id: mongoose.Types.ObjectId(user_id) },
@@ -56,6 +56,7 @@ module.exports = {
                         sizes: "$$product.sizes",
                         material: "$$product.material",
                         style: "$$product.style",
+                        images:"$$product.images",
                         price: "$$product.price",
                         oldPrice: "$$product.oldPrice",
                         currency: "$$product.currency",
@@ -95,21 +96,18 @@ module.exports = {
         error.message
       );
     }
-  },
+  }, 
   // POST Add Item to Wishlist
-  creteWishList: async (req, res) => {
+  createWishList : async (req, res) => {
     try {
-      const user_id = req.params.user_id;
-    
-      const { product_id, quantity } = req.body;
-     
+      const user_id = req.user_id;
+      const { product_id } = req.body;
       const wishlist = await wishlistModel.findOne({ user_id: user_id });
-     
       if (!wishlist) {
         // Create a new wishlist if it doesn't exist
         const newWishlist = await wishlistModel.create({
           user_id: user_id,
-          items: [{ product: product_id, quantity }],
+          items: [{ product: product_id }],
         });
         console.log(newWishlist);
         return response.commonResponse(
@@ -123,15 +121,11 @@ module.exports = {
       const existingItem = wishlist.items.find(
         (item) => item.product.toString() === product_id
       );
-      if (existingItem) {
-        // If it exists, update the quantity
-        existingItem.quantity += quantity;
-      } else {
+      if (!existingItem) {
         // If not, add a new item to the wishlist
-        wishlist.items.push({ product: product_id, quantity });
+        wishlist.items.push({ product: product_id });
+        await wishlist.save();
       }
-      await wishlist.save();
-      //console.log("wishlist:", wishlist);
       return response.commonResponse(
         res,
         SuccessCode.SUCCESSFULLY_CREATED,
@@ -139,8 +133,6 @@ module.exports = {
         SuccessMessage.DATA_SAVED
       );
     } catch (error) {
-      //console.error(error);
-      //res.status(500).json({ msg: error.message });
       return response.commonErrorResponse(
         res,
         ErrorCode.INTERNAL_ERROR,
@@ -148,5 +140,6 @@ module.exports = {
         error.message
       );
     }
-  },
+  }
+
 };
