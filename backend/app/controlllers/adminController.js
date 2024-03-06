@@ -6,8 +6,87 @@ const { SuccessMessage, ErrorMessage } = require("../helper/message");
 const { ErrorCode, SuccessCode } = require("../helper/statusCode");
 const commonFunction = require("../helper/commonFunction");
 const orderModels = require("../models/orders/orderModels");
+const adminModel=require("../models/admin/admin")
+const jwt= require("jsonwebtoken")
+const bcrypt=require("bcrypt")
 
 module.exports = {
+
+  login: async function (req, res) {
+    try {
+      let data = req.body;
+      let adminData;
+      if(!data.password){
+        return response.commonErrorResponse(
+          res,
+          ErrorCode.BAD_REQUEST,
+          {},
+          ErrorMessage.PASSWORD_REQUIRED)
+      }
+      if (!data.mobile_number||!validation.isValidMobileNumber(data.mobile_number)) {
+        return response.commonErrorResponse(
+          res,
+          ErrorCode.BAD_REQUEST,
+          {},
+          ErrorMessage.PHONE_EMPTY
+        );
+      }
+      if (data.mobile_number) {
+         adminData = await userModel.findOne({mobile_number:data.mobile_number});
+      } else {
+      
+        return response.commonErrorResponse(
+          res,
+          ErrorCode.BAD_REQUEST,
+          {},
+          ErrorMessage.NOT_FOUND
+        );
+      }
+
+      if (!adminData) {
+        return response.commonErrorResponse(
+          res,
+          ErrorCode.NOT_FOUND,
+          {},
+          ErrorMessage.USER_NOT_FOUND
+        );
+      }
+
+      const matchPass = await bcrypt.compare(data.password, adminData.password);
+
+      if (!matchPass) {
+        return response.commonErrorResponse(
+          res,
+          ErrorCode.INVALID_CREDENTIAL,
+          {},
+          ErrorMessage.INVALID_CREDENTIAL
+        );
+      }
+
+      let payLoad = {
+        admin_id: adminData._id.toString(),
+      };
+      let token = jwt.sign(payLoad, process.env.SECRET_KEY, {
+        expiresIn: "72h",
+      });
+      if (token) {
+        return response.commonResponse(
+          res,
+          SuccessCode.SUCCESS,
+          token,
+          SuccessMessage.LOGIN_SUCCESS
+        );
+      }
+    } catch (err) {
+      return response.commonErrorResponse(
+        res,
+        ErrorCode.INTERNAL_ERROR,
+        {},
+        err.message
+      );
+    }
+  },
+
   totalUser: async function (req, res) {
     try {
       let totalUser = await userModel.find();

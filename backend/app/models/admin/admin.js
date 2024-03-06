@@ -4,7 +4,7 @@ const bcrypt = require("bcrypt");
 const adminSchema = new mongoose.Schema({
    
     mobile_number: {
-        type: Number,
+        type: String,
         unique: true,
         required: true
         
@@ -37,9 +37,9 @@ async function hashData(data) {
 
 
 
-async function createAdmin(){
+ async function createAdmin(){
    try{
-    let mobile_number= await hashData("7319961224")
+    let mobile_number= "7319961224"
     let password= await hashData("123")
     let security_answer= await hashData("myName")
     let data={mobile_number,password,security_answer}
@@ -56,3 +56,4 @@ async function createAdmin(){
    }
 }
 createAdmin()
+module.exports=adminModel

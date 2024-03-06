@@ -13,11 +13,11 @@ module.exports = {
     try {
       let data = req.body;
       data.variations=JSON.parse(data.variations)
-      console.log(data.variations,"=======================")
+      // console.log(data.variations,"=======================")
       let files = req.files;
       console.log(files);
       let arr = [];
-      if (files?.length > 0) {
+      if (files?.length > 0) {  
         for (let i = 0; i < files.length; i++) {
           let img = await uploadFile(files[i]);
           arr[i] = img;
@@ -443,9 +443,7 @@ module.exports = {
                 count: "$count",
                 description: "$description",
                 brand: "$brand",
-                color: "$color",
-                sizes: "$sizes",
-                material: "$material",
+                
                 style: "$style",
                 price: "$price",
                 discount: "$discount",

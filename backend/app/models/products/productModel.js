@@ -73,7 +73,7 @@ const productSchema = new Schema({
     brand_name: {
       type: String,
     },
-    mater: {
+    material: {      // this is replace with 
       type: [String],
       default: [],
     },
@@ -84,6 +84,11 @@ const productSchema = new Schema({
       type: [String],
       default: [],
     },
+    // ============
+    camera_pixel:String,
+    screen_size:String,
+    model_number:String,
+    warranty:String,
   },
 });
 
