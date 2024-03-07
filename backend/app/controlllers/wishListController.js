@@ -24,12 +24,12 @@ module.exports = {
         {
           $project: {
             user: 1,
+            user_id: "$user_id",
             items: {
               $map: {
                 input: "$items",
                 as: "item",
                 in: {
-                  user_id: "$user_id",
                   product_details: {
                     $let: {
                       vars: {
@@ -98,7 +98,7 @@ module.exports = {
     }
   }, 
   // POST Add Item to Wishlist
-  createWishList : async (req, res) => {
+  createWishList: async (req, res) => {
     try {
       const user_id = req.user_id;
       const { product_id } = req.body;
@@ -113,7 +113,7 @@ module.exports = {
         return response.commonResponse(
           res,
           SuccessCode.SUCCESSFULLY_CREATED,
-          wishlist,
+          newWishlist, // Change wishlist to newWishlist
           SuccessMessage.newWishlist
         );
       }
