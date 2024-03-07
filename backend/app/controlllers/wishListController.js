@@ -96,7 +96,7 @@ module.exports = {
         error.message
       );
     }
-  }, 
+  },
   // POST Add Item to Wishlist
   createWishList: async (req, res) => {
     try {
