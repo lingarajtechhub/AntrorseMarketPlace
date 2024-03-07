@@ -6,8 +6,99 @@ const { ErrorMessage, SuccessMessage } = require("../helper/message");
 const mongoose = require("mongoose");
 //  GET Wishlist with Product Details
 module.exports = {
-  getWishList: async (req, res) => {
-    try {
+  // getWishList: async (req, res) => {
+  //   try {
+  //     const user_id = req.user_id;
+  //     const wishlist = await wishlistModel.aggregate([
+  //       {
+  //         $match: { user_id: mongoose.Types.ObjectId(user_id) },
+  //       },
+  //       {
+  //         $lookup: {
+  //           from: "products", // Assuming your product collection is named 'products'
+  //           localField: "items.product",
+  //           foreignField: "_id",
+  //           as: "itemDetails",
+  //         },
+  //       },
+  //       {
+  //         $project: {
+  //           user: 1,
+  //           user_id: "$user_id",
+  //           items: {
+  //             $map: {
+  //               input: "$items",
+  //               as: "item",
+  //               in: {
+  //                 product_details: {
+  //                   $let: {
+  //                     vars: {
+  //                       product: {
+  //                         $arrayElemAt: [
+  //                           {
+  //                             $filter: {
+  //                               input: "$itemDetails",
+  //                               as: "detail",
+  //                               cond: {
+  //                                 $eq: ["$$detail._id", "$$item.product"],
+  //                               },
+  //                             },
+  //                           },
+  //                           0,
+  //                         ],
+  //                       },
+  //                     },
+  //                     in: {
+  //                       _id: "$$product._id",
+  //                       description: "$$product.description",
+  //                       brand: "$$product.brand",
+  //                       color: "$$product.color",
+  //                       sizes: "$$product.sizes",
+  //                       material: "$$product.material",
+  //                       style: "$$product.style",
+  //                       images:"$$product.images",
+  //                       price: "$$product.price",
+  //                       oldPrice: "$$product.oldPrice",
+  //                       currency: "$$product.currency",
+  //                       category: "$$product.category",
+  //                       subCategory: "$$product.subCategory",
+  //                       product_name: "$$product.product_name",
+  //                       updatedAt: "$$product.updatedAt",
+  //                     },
+  //                   },
+  //                 },
+  //               },
+  //             },
+  //           },
+  //           created_at: 1,
+  //         },
+  //       },
+  //     ]);
+  //     if (!wishlist || wishlist.length === 0) {
+  //       return response.commonErrorResponse(
+  //         res,
+  //         ErrorCode.NOT_FOUND,
+  //         {},
+  //         ErrorMessage.NOT_FOUND
+  //       );
+  //     }
+  //     return response.commonResponse(
+  //       res,
+  //       SuccessCode.SUCCESS,
+  //       wishlist,
+  //       SuccessMessage.DATA_FOUND
+  //     );
+  //   } catch (error) {
+  //     return response.commonErrorResponse(
+  //       res,
+  //       ErrorCode.INTERNAL_ERROR,
+  //       {},
+  //       error.message
+  //     );
+  //   }
+  // }
+  getWishList: async function(req,res){
+    try{
       const user_id = req.user_id;
       const wishlist = await wishlistModel.aggregate([
         {
@@ -15,88 +106,50 @@ module.exports = {
         },
         {
           $lookup: {
-            from: "products", // Assuming your product collection is named 'products'
+            from: "products",
             localField: "items.product",
             foreignField: "_id",
-            as: "itemDetails",
+            as: "productDetails",
           },
         },
         {
-          $project: {
-            user: 1,
-            user_id: "$user_id",
-            items: {
-              $map: {
-                input: "$items",
-                as: "item",
-                in: {
-                  product_details: {
-                    $let: {
-                      vars: {
-                        product: {
-                          $arrayElemAt: [
-                            {
-                              $filter: {
-                                input: "$itemDetails",
-                                as: "detail",
-                                cond: {
-                                  $eq: ["$$detail._id", "$$item.product"],
-                                },
-                              },
-                            },
-                            0,
-                          ],
-                        },
-                      },
-                      in: {
-                        _id: "$$product._id",
-                        description: "$$product.description",
-                        brand: "$$product.brand",
-                        color: "$$product.color",
-                        sizes: "$$product.sizes",
-                        material: "$$product.material",
-                        style: "$$product.style",
-                        images:"$$product.images",
-                        price: "$$product.price",
-                        oldPrice: "$$product.oldPrice",
-                        currency: "$$product.currency",
-                        category: "$$product.category",
-                        subCategory: "$$product.subCategory",
-                        product_name: "$$product.product_name",
-                        updatedAt: "$$product.updatedAt",
-                      },
-                    },
-                  },
-                },
-              },
-            },
-            created_at: 1,
-          },
-        },
+          $project:{
+            items:0
+          }
+        }
       ]);
-      if (!wishlist || wishlist.length === 0) {
-        return response.commonErrorResponse(
-          res,
-          ErrorCode.NOT_FOUND,
-          {},
-          ErrorMessage.NOT_FOUND
-        );
-      }
-      return response.commonResponse(
-        res,
-        SuccessCode.SUCCESS,
-        wishlist,
-        SuccessMessage.DATA_FOUND
-      );
-    } catch (error) {
-      return response.commonErrorResponse(
-        res,
-        ErrorCode.INTERNAL_ERROR,
-        {},
-        error.message
-      );
+      
+            if (wishlist.length === 0) {
+                    return response.commonErrorResponse(
+                      res,
+                      ErrorCode.NOT_FOUND,
+                      {},
+                      ErrorMessage.NOT_FOUND
+                    );
+                  }
+
+            return response.commonResponse(
+                    res,
+                    SuccessCode.SUCCESS,
+                    wishlist,
+                    SuccessMessage.DATA_FOUND
+                  );
     }
-  },
+    catch (error) {
+          return response.commonErrorResponse(
+            res,
+            ErrorCode.INTERNAL_ERROR,
+            {},
+            error.message
+          );
+        }
+  }
+  ,
+
+
+
+
+
   // POST Add Item to Wishlist
   createWishList: async (req, res) => {
     try {
