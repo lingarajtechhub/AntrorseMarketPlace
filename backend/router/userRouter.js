@@ -20,5 +20,7 @@ router.get("/getAddress",auth.authorization,userController.getAddress)
 // ================wishList=============
 router.post("/createWishList", auth.authorization, wishlistController.createWishList)
 router.get("/getWishList",auth.authorization,wishlistController.getWishList )
+router.put("/removeFromWishlist/:product_id",auth.authorization,wishlistController.removeFromWishlist)
+
 // ==============
 module.exports=router

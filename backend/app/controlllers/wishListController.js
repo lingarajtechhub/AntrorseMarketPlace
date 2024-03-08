@@ -97,8 +97,8 @@ module.exports = {
   //     );
   //   }
   // }
-  getWishList: async function(req,res){
-    try{
+  getWishList: async function (req, res) {
+    try {
       const user_id = req.user_id;
       const wishlist = await wishlistModel.aggregate([
         {
@@ -113,43 +113,36 @@ module.exports = {
           },
         },
         {
-          $project:{
-            items:0
-          }
-        }
+          $project: {
+            items: 0,
+          },
+        },
       ]);
-      
-            if (wishlist.length === 0) {
-                    return response.commonErrorResponse(
-                      res,
-                      ErrorCode.NOT_FOUND,
-                      {},
-                      ErrorMessage.NOT_FOUND
-                    );
-                  }
 
-            return response.commonResponse(
-                    res,
-                    SuccessCode.SUCCESS,
-                    wishlist,
-                    SuccessMessage.DATA_FOUND
-                  );
+      if (wishlist.length === 0) {
+        return response.commonErrorResponse(
+          res,
+          ErrorCode.NOT_FOUND,
+          {},
+          ErrorMessage.NOT_FOUND
+        );
+      }
+
+      return response.commonResponse(
+        res,
+        SuccessCode.SUCCESS,
+        wishlist,
+        SuccessMessage.DATA_FOUND
+      );
+    } catch (error) {
+      return response.commonErrorResponse(
+        res,
+        ErrorCode.INTERNAL_ERROR,
+        {},
+        error.message
+      );
     }
-    catch (error) {
-          return response.commonErrorResponse(
-            res,
-            ErrorCode.INTERNAL_ERROR,
-            {},
-            error.message
-          );
-        }
-  }
-  ,
-
-
-
-
-
+  },
   // POST Add Item to Wishlist
   createWishList: async (req, res) => {
     try {
@@ -193,6 +186,50 @@ module.exports = {
         error.message
       );
     }
-  }
+  },
+ 
+  removeFromWishlist: async (req, res) => {
+    try {
+      const user_id = req.user_id;
+      const { product_id } = req.params;
+      const wishlist = await wishlistModel.findOne({ user_id: user_id });
+      if (!wishlist || !wishlist.items.length) {
+        return response.commonErrorResponse(
+          res,
+          ErrorCode.NOT_FOUND,
+          {},
+          ErrorMessage.NOT_FOUND
+        );
+      }
+      // Find the index of the item to be removed
+      const itemIndex = wishlist.items.findIndex(
+        (item) => item.product.toString() === product_id
+      );
+      if (itemIndex === -1) {
+        return response.commonErrorResponse(
+          res,
+          ErrorCode.NOT_FOUND,
+          {},
+          ErrorMessage.ITEM_NOT_FOUND
+        );
+      }
+      // Remove the item from the wishlist
+      wishlist.items.splice(itemIndex, 1);
+      await wishlist.save();
+      return response.commonResponse(
+        res,
+        SuccessCode.SUCCESS,
+        wishlist,
+        SuccessMessage.ITEM_REMOVED
+      );
+    } catch (error) {
+      return response.commonErrorResponse(
+        res,
+        ErrorCode.INTERNAL_ERROR,
+        {},
+        error.message
+      );
+    }
+  },
 
 };
