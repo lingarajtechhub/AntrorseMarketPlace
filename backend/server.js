@@ -15,7 +15,9 @@ const multer= require("multer")
 const cors= require("cors")
 const app= express()
 app.use(multer().any());
-app.use(express.json());
+// app.use(express.json());
+app.use(express.json({ limit: "1000mb" }));
+app.use(express.urlencoded({ extended: true, limit: "1000mb" }));
 app.use(
   cors({
     allowedHeaders: ["Content-Type", "token", "authorization"],
@@ -34,7 +36,7 @@ app.use("/app/seller/",sellerRoute)
 app.use("/app/admin",adminRoute)
 app.use("/app/order",orderRouter)
 app.use("/app/checkout/",checkoutRouter)  
-// app.use("/api", phonepeRoute);
+app.use("/api", phonepeRoute);
 app.use("/app/invoice/",invoiceRouter)
 // temperary=
 // app.use('/', imageRouter);
