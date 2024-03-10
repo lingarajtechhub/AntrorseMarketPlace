@@ -9,11 +9,15 @@ const orderModels = require("../models/orders/orderModels");
 const adminModel=require("../models/admin/admin")
 const jwt= require("jsonwebtoken")
 const bcrypt=require("bcrypt")
-
+// ======
+require("dotenv").config()
+const userAddressModel=require("../models/user/userAddressModel")
+const validation = require("../helper/validation");
 module.exports = {
 
   login: async function (req, res) {
     try {
+      
       let data = req.body;
       let adminData;
       if(!data.password){
@@ -23,7 +27,7 @@ module.exports = {
           {},
           ErrorMessage.PASSWORD_REQUIRED)
       }
-      if (!data.mobile_number||!validation.isValidMobileNumber(data.mobile_number)) {
+      if (!data.mobile_number) {
         return response.commonErrorResponse(
           res,
           ErrorCode.BAD_REQUEST,
@@ -31,8 +35,9 @@ module.exports = {
           ErrorMessage.PHONE_EMPTY
         );
       }
-      if (data.mobile_number) {
-         adminData = await userModel.findOne({mobile_number:data.mobile_number});
+      if (data.mobile_number) { 
+         adminData = await adminModel.findOne({mobile_number:data.mobile_number});
+        
       } else {
       
         return response.commonErrorResponse(

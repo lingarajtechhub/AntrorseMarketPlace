@@ -684,7 +684,6 @@ for (let i = 0; i < products.length; i++) {
     let sizes = cartItem.sizes[0];
     let quantity = cartItem.quantity;
 
-    console.log(sizes, "===============================", quantity, "==========================", product);
 
     let updateD = await updateProductDetails(sizes, quantity, product);
 
