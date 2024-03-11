@@ -12,21 +12,52 @@ module.exports = {
   AddProduct: async function (req, res) {
     try {
       let data = req.body;
-      data.variations=JSON.parse(data.variations)
-      // console.log(data.variations,"=======================")
+      // Validate required fields
+      if (
+        !data.name ||
+        !data.description ||
+        !data.price ||
+        !data.stocks ||
+        !data.category
+      ) {
+        return response.commonErrorResponse(
+          res,
+          ErrorCode.MISSING_FIELDS,
+          {},
+          "Required fields are missing."
+        );
+      }
+      // Convert string numbers to number type
+      data.price = parseFloat(data.price);
+      data.stocks = parseInt(data.stocks);
+      if(data.tags && typeof data.tags=="string"){
+      data.tags=JSON.parse(data.tags)
+
+      }
+      // Handle edge cases for numeric fields
+      if (isNaN(data.price) || isNaN(data.stocks)) {
+        return response.commonErrorResponse(
+          res,
+          ErrorCode.INVALID_DATA,
+          {},
+          "Price and stocks must be numeric."
+        );
+      }
+      // Parse variations if provided
+      if (data.variations && typeof data.variations === "string") {
+        data.variations = JSON.parse(data.variations);
+      }
       let files = req.files;
-      console.log(files);
       let arr = [];
-      if (files?.length > 0) {  
+      if (files?.length > 0) {
         for (let i = 0; i < files.length; i++) {
           let img = await uploadFile(files[i]);
-          arr[i] = img;
+          arr.push(img);
         }
       }
       data.images = arr;
       let seller_id = req.seller_id;
       data.seller_id = seller_id;
-
       let addedProducts = await productModel.create(data);
       if (addedProducts) {
         return response.commonResponse(
@@ -111,24 +142,23 @@ module.exports = {
   searchProducts: async function (req, res) {
     try {
       let data = req.query;
-
       const condition = {};
-      // const sort = {};
       if (data.search && data.search != "") {
-        data.search = data.search.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+        const keywords = data.search.trim().split(/\s+/); // Split the search query into keywords
+        const regexKeywords = keywords.map(
+          (keyword) => new RegExp(keyword, "i")
+        );
+        // Construct condition for each keyword
         condition.$or = [
-          {
-            product_name: new RegExp(data.search, "i"),
-          },
-          {
-            brand: new RegExp(data.search, "i"),
-          },
-          {
-            category: new RegExp(data.search, "i"),
-          },
+          { name: { $in: regexKeywords } },
+          { description: { $in: regexKeywords } },
+          { category: { $in: regexKeywords } },
+          { subCategory: { $in: regexKeywords } },
+          { "variations.brand_name": { $in: regexKeywords } },
+          { "variations.mater": { $in: regexKeywords } },
+          { "variations.color": { $in: regexKeywords } },
         ];
       }
-
       const page = parseInt(req.query.page) || 1;
       const limit = parseInt(req.query.limit) || 12;
       const skip = (page - 1) * limit;
@@ -145,8 +175,8 @@ module.exports = {
         {
           $lookup: {
             from: "productReviews",
-            localField: "_id", // Use the correct field for the local join, assuming _id is the correct field in productModel
-            foreignField: "product_id", // Use the correct field for the foreign join in productRatings
+            localField: "_id",
+            foreignField: "product_id",
             as: "allRatingAndReview",
           },
         },
