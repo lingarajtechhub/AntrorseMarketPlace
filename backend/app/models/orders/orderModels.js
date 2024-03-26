@@ -44,37 +44,19 @@ const orderSchema = new mongoose.Schema(
     totalItems: { type: Number, required: true },
     totalQuantity: { type: Number, required: true },
     paymentInfo: {
-      transaction_id: {
-        type: String,
-        required: true,
-      },
-      payment_amount: {
-        type: Number,
-        // required: true
-      },
-      transaction_status: {
-        type: String,
-        enum: ["paid", "unpaid", "pending"],
-        default: "unpaid",
-        required: true,
-      },
-      payment_details: {
-        UPI_id: {
-          type: String,
-        },
-        card_number: {
-          type: String,
-        },
-        card_expiration: {
-          type: String,
-        },
-      },
-      payment_mode: {
-        type: String,
-        enum: ["COD", "creditCard", "debitCard", "UPI"],
-        default: "cash",
-        required: true,
-      },
+      merchantId: String,
+  merchantTransactionId: String,
+  transactionId: String,
+  amount: Number,
+  responseCode: String,
+ 
+  paymentInstrument: {
+    type: String,
+    cardType: String,
+    pgTransactionId: String,
+    arn: String,
+    brn: String
+  }
     },
     paidAt: {
       type: Date,

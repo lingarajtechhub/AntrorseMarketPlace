@@ -9,7 +9,6 @@ const { SuccessMessage, ErrorMessage } = require("../helper/message");
 // const orderModel = require("../models/orders/orderModel");
 const orderModel = require("../models/orders/orderModels");
 
-// ========
 // exports.newOrder = async function (req, res) {
 //   try {
 //     let user_id = req.user_id;
@@ -26,247 +25,61 @@ const orderModel = require("../models/orders/orderModels");
 //     } = data;
 
 //     //  this function for update stokes and count of all product
-//     async function update(sizes, quantity, productData) {
-//     let  size=JSON.parse(sizes)
-//       sizes = {};
 
-//       for (let sizeNumber in size) {
+// async function updateProductDetails(size,quantity,productData){
+
+//   sizes = {};
+//   for (let sizeNumber in size) {
+//     for (let i = 0; i < productData?.variations?.sizes?.length; i++) {
+
+//       if (productData?.variations.sizes[i].hasOwnProperty(sizeNumber)) {
+
 //         let s = JSON.parse(JSON.stringify(productData?.variations.sizes));
-
 //         let count = JSON.parse(JSON.stringify(s[0]));
-
-//         console.log(s,"======================",count[sizeNumber],"=================================",size[sizeNumber])
 //         sizes[sizeNumber] = count[sizeNumber] - size[sizeNumber];
 
-//         if (sizes[sizeNumber] <0) {
-//           return true
-//         }
-//       }
+//         if (sizes[sizeNumber] < -1) {
 
-//       productData.stocks = productData.stocks - Number(quantity) || 1;
-
-//       if (productData.stocks <0) {
 //         return true
-//       }
-
-//       productData.variations.sizes = sizes;
-//       let updateProduct = await productModel.findByIdAndUpdate(
-//         productData._id,
-//         { $set: productData },
-//         { new: true }
-//       );
-//       return false
-//     }
-//     // ===========================
-//     paymentInfo = JSON.parse(paymentInfo);
-//     if (data.cart_id) {
-//       let cart_items = await cartModels.findById(data.cart_id);
-
-//       if (!cart_items) {
-//         return response.commonResponse(
-//           res,
-//           ErrorCode.NOT_FOUND,
-//           {},
-//           ErrorMessage.NOT_FOUND
-//         );
-//       }
-//       let productIdes = [];
-
-//       for (let i = 0; i < cart_items.items.length; i++) {
-//         productIdes.push(cart_items.items[i].product_id);
-//       }
-
-//       let products = await productModel.find({ _id: { $in: productIdes } });
-//       // .toArray();
-//       let orderItems = [];
-
-//       for (let i = 0; i < products.length; i++) {
-//         let orderItem = {
-//           product_name: products[i].name,
-//           price:
-//             products[i]?.price *
-//               cart_items.items.filter(
-//                 (data) =>
-//                   data.product_id.toString() == products[i]._id.toString()
-//               )[0]["quantity"] || 1,
-
-//           product_id: products[i]._id.toString(),
-//           quantity: cart_items.items.filter(
-//             (data) => data.product_id.toString() == products[i]._id.toString()
-//           )[0]["quantity"],
-//           color: cart_items.items.filter(
-//             (data) => data.product_id.toString() == products[i]._id.toString()
-//           )[0]["color"],
-//           sizes: cart_items.items.filter(
-//             (data) => data.product_id.toString() == products[i]._id.toString()
-//           )[0]["sizes"],
-//         };
-
-//         orderItems.push(orderItem);
-//       }
-
-//       let totalQuantity = 0;
-//       let totalPrice = 0;
-
-//       orderItems.forEach((item) => {
-//         totalQuantity += item.quantity;
-//         totalPrice += item.price * item.quantity;
-//       });
-//       let totalItems = orderItems.length;
-
-//       let finalData = {
-//         totalQuantity: orderItems.reduce((accumulator, currentProduct) => {
-//           return accumulator + (currentProduct?.quantity || 0);
-//         }, 0),
-//         totalPrice: orderItems.reduce((accumulator, currentProduct) => {
-//           return accumulator + (currentProduct.price || 0);
-//         }, 0),
-//         user_id, // ok
-//         shippingInfo, //ok
-//         address_id, //ok
-//         orderItems: orderItems, //ok
-//         totalItems: orderItems?.length, //ok
-//         paymentInfo, // ok
-//         deliveredAt, //ok
-//         shippedAt, //ok
-//       };
-//       // products.map( async (product) =>{
-//       //   let sizes= cart_items.items.filter(
-//       //     (data) => data.product_id.toString() == product._id.toString()
-//       //   )[0]["sizes"]
-//       //   let  quantity= cart_items.items.filter(
-//       //     (data) => data.product_id.toString() == product._id.toString()
-//       //   )[0]["quantity"]
-//       //   let updateD=await update(sizes ,quantity,product )
-//       //   if(updateD){
-//       //     return response.commonErrorResponse(
-//       //       res,
-//       //       ErrorCode.NOT_FOUND,
-//       //       {},
-//       //       "product Out of Stocks"
-//       //     );
-//       //   }
-//       // })
-
-//       let createdOrder = await orderModel.create(finalData);
-//       if (!createdOrder) {
-//         createdOrder = await Order.create(finalData);
-
-//         if (!createdOrder) {
-//           return response.commonErrorResponse(
-//             res,
-//             ErrorCode.WENT_WRONG,
-//             {},
-//             ErrorMessage.SOMETHING_WRONG
-//           );
+//         //  response.commonErrorResponse(
+//         //     res,
+//         //     ErrorCode.NOT_FOUND,
+//         //     {},
+//         //     "product Out of Stocks"
+//         //   );
 //         }
+//         productData.variations.sizes = sizes;
 //       } else {
-//         return response.commonResponse(
-//           res,
-//           SuccessCode.SUCCESSFULLY_CREATED,
-//           createdOrder,
-//           SuccessMessage.DATA_SAVED
-//         );
-//       }
-//     } else {
-//       let productData = await productModel.findById(product_id);
-//       if (!productData) {
-//         return response.commonErrorResponse(
-//           res,
-//           ErrorCode.BAD_REQUEST,
-//           {},
-//           ErrorMessage.NOT_FOUND
-//         );
-//       }
-
-//       let finalData = {
-//         totalQuantity: quantity,
-//         totalPrice: productData?.price * quantity,
-//         user_id: user_id,
-//         shippingInfo: shippingInfo,
-//         address_id: address_id,
-//         orderItems: [
-//           {
-//             product_name: productData.name,
-//             price: productData.price,
-//             sizes: JSON.parse(sizes),
-//             color:
-//               data.color?.length > 0
-//                 ? data.color
-//                 : productData?.variations?.color,
-//             product_id: productData._id,
-//             quantity: quantity,
-//           },
-//         ],
-//         totalItems: 1,
-//         paymentInfo: paymentInfo,
-//         deliveredAt: deliveredAt,
-//         shippedAt: shippedAt,
-//       };
-
-//       //   this function calling  for update the product stokes
-//       // if(typeof sizes != "object"){
-//       //   sizes= JSON.parse(sizes)
-//       // }
-// //       let updateResult=await update(sizes, quantity, productData);
-// //       if(updateResult){
-// // return response.commonErrorResponse(
-// //   res,
-// //   ErrorCode.NOT_FOUND,
-// //   {},
-// //   "product Out of Stocks"
-// // );
-// //       }
-
-//       let createdOrder = await orderModel.create(finalData);
-//       if (!createdOrder) {
-//         createdOrder = await orderModel.create(finalData);
-
-//         if (!createdOrder) {
-//           return response.commonErrorResponse(
-//             res,
-//             ErrorCode.WENT_WRONG,
-//             {},
-//             ErrorMessage.SOMETHING_WRONG
-//           );
-//         }
-//       } else {
-//         return response.commonResponse(
-//           res,
-//           SuccessCode.SUCCESSFULLY_CREATED,
-//           createdOrder,
-//           SuccessMessage.DATA_SAVED
-//         );
+//        return true
+//         // response.commonErrorResponse(
+//         //   res,
+//         //   ErrorCode.BAD_REQUEST,
+//         //   {},
+//         //   "this size is not available"
+//         // );
 //       }
 //     }
-//   } catch (error) {
-//     return response.commonErrorResponse(
-//       res,
-//       ErrorCode.INTERNAL_ERROR,
-//       {},
-//       error.message
-//     );
 //   }
-// };
-// =======================
-// exports.newOrder = async function (req, res) {
-//   try {
-//     let user_id = req.user_id;
-//     let data = req.body;
-//     let {
-//       address_id,
-//       shippingInfo,
-//       quantity,
-//       product_id,
-//       paymentInfo,
-//       deliveredAt,
-//       shippedAt,
-//       sizes,
-//     } = data;
+//   productData.stocks = productData.stocks - Number(quantity) || 1;
 
-//     //  this function for update stokes and count of all product
+//   if (productData.stocks < -1) {
 
+//     return true
+//     // response.commonErrorResponse(
+//     //   res,
+//     //   ErrorCode.NOT_FOUND,
+//     //   {},
+//     //   "product Out of Stocks"
+//     // );
+//   }
 
+//   let updateProduct = await productModel.findByIdAndUpdate(
+//     productData._id,
+//     { $set: productData },
+//     { new: true }
+//   );
+
+// }
 
 //     // ===========================
 //     paymentInfo = JSON.parse(paymentInfo);
@@ -288,7 +101,7 @@ const orderModel = require("../models/orders/orderModels");
 //       }
 
 //       let products = await productModel.find({ _id: { $in: productIdes } });
-      
+
 //       let orderItems = [];
 
 //       for (let i = 0; i < products.length; i++) {
@@ -344,11 +157,13 @@ const orderModel = require("../models/orders/orderModels");
 //       // products.map( async (product) =>{
 //       //   let sizes= cart_items.items.filter(
 //       //     (data) => data.product_id.toString() == product._id.toString()
-//       //   )[0]["sizes"]
+//       //   )[0]["sizes"][0]
 //       //   let  quantity= cart_items.items.filter(
 //       //     (data) => data.product_id.toString() == product._id.toString()
 //       //   )[0]["quantity"]
-//       //   let updateD=await update(sizes ,quantity,product )
+//       //   console.log(sizes, "===============================",quantity,"==========================",product)
+//       //   let updateD=await updateProductDetails(sizes ,quantity,product )
+
 //       //   if(updateD){
 //       //     return response.commonErrorResponse(
 //       //       res,
@@ -356,8 +171,39 @@ const orderModel = require("../models/orders/orderModels");
 //       //       {},
 //       //       "product Out of Stocks"
 //       //     );
+
 //       //   }
+
 //       // })
+//       // ============================================this new
+//       // Create a mapping of product_id to cart item
+// let cartItemMap = new Map(cart_items.items.map(item => [item.product_id.toString(), item]));
+
+// // Iterate over products using for loop
+// for (let i = 0; i < products.length; i++) {
+//     let product = products[i];
+//     let cartItem = cartItemMap.get(product._id.toString()); // Retrieve cart item from the mapping
+
+//     if (!cartItem) {
+//         continue; // Skip to the next iteration if cart item not found
+//     }
+
+//     let sizes = cartItem.sizes[0];
+//     let quantity = cartItem.quantity;
+
+//     let updateD = await updateProductDetails(sizes, quantity, product);
+
+//     if (updateD) {
+//         return response.commonErrorResponse(
+//             res,
+//             ErrorCode.NOT_FOUND,
+//             {},
+//             "product Out of Stocks"
+//         );
+//     }
+// }
+
+//       // =================
 
 //       let createdOrder = await orderModel.create(finalData);
 //       if (!createdOrder) {
@@ -421,7 +267,6 @@ const orderModel = require("../models/orders/orderModels");
 //       sizes = {};
 //       for (let sizeNumber in size) {
 //         for (let i = 0; i < productData?.variations?.sizes?.length; i++) {
-          
 
 //           if (productData?.variations.sizes[i].hasOwnProperty(sizeNumber)) {
 
@@ -497,7 +342,7 @@ const orderModel = require("../models/orders/orderModels");
 //     );
 //   }
 // };
-// ===========================
+// ============= working order API
 exports.newOrder = async function (req, res) {
   try {
     let user_id = req.user_id;
@@ -505,73 +350,33 @@ exports.newOrder = async function (req, res) {
     let {
       address_id,
       shippingInfo,
-      quantity,
-      product_id,
+    
       paymentInfo,
       deliveredAt,
       shippedAt,
-      sizes,
     } = data;
 
     //  this function for update stokes and count of all product
 
-async function updateProductDetails(size,quantity,productData){
+    async function updateProductDetails(quantity, productData) {
+      productData.stocks = productData.stocks - Number(quantity) || 1;
 
-
-  sizes = {};
-  for (let sizeNumber in size) {
-    for (let i = 0; i < productData?.variations?.sizes?.length; i++) {
-      
-
-      if (productData?.variations.sizes[i].hasOwnProperty(sizeNumber)) {
-
-        let s = JSON.parse(JSON.stringify(productData?.variations.sizes));
-        let count = JSON.parse(JSON.stringify(s[0]));
-        sizes[sizeNumber] = count[sizeNumber] - size[sizeNumber];
-
-        if (sizes[sizeNumber] < -1) {
-          
-        return true
-        //  response.commonErrorResponse(
-        //     res,
-        //     ErrorCode.NOT_FOUND,
-        //     {},
-        //     "product Out of Stocks"
-        //   );
-        }
-        productData.variations.sizes = sizes;
-      } else {
-       return true
+      if (productData.stocks < -1) {
+        return true;
         // response.commonErrorResponse(
         //   res,
-        //   ErrorCode.BAD_REQUEST,
+        //   ErrorCode.NOT_FOUND,
         //   {},
-        //   "this size is not available"
+        //   "product Out of Stocks"
         // );
       }
+
+      let updateProduct = await productModel.findByIdAndUpdate(
+        productData._id,
+        { $set: productData },
+        { new: true }
+      );
     }
-  }
-  productData.stocks = productData.stocks - Number(quantity) || 1;
-
-  if (productData.stocks < -1) {
- 
-    return true
-    // response.commonErrorResponse(
-    //   res,
-    //   ErrorCode.NOT_FOUND,
-    //   {},
-    //   "product Out of Stocks"
-    // );
-  }
-
-  let updateProduct = await productModel.findByIdAndUpdate(
-    productData._id,
-    { $set: productData },
-    { new: true }
-  );
-
-
-}
 
     // ===========================
     paymentInfo = JSON.parse(paymentInfo);
@@ -593,7 +398,7 @@ async function updateProductDetails(size,quantity,productData){
       }
 
       let products = await productModel.find({ _id: { $in: productIdes } });
-      
+
       let orderItems = [];
 
       for (let i = 0; i < products.length; i++) {
@@ -613,9 +418,6 @@ async function updateProductDetails(size,quantity,productData){
           color: cart_items.items.filter(
             (data) => data.product_id.toString() == products[i]._id.toString()
           )[0]["color"],
-          sizes: cart_items.items.filter(
-            (data) => data.product_id.toString() == products[i]._id.toString()
-          )[0]["sizes"],
         };
 
         orderItems.push(orderItem);
@@ -646,60 +448,33 @@ async function updateProductDetails(size,quantity,productData){
         deliveredAt, //ok
         shippedAt, //ok
       };
-      // products.map( async (product) =>{
-      //   let sizes= cart_items.items.filter(
-      //     (data) => data.product_id.toString() == product._id.toString()
-      //   )[0]["sizes"][0]
-      //   let  quantity= cart_items.items.filter(
-      //     (data) => data.product_id.toString() == product._id.toString()
-      //   )[0]["quantity"]
-      //   console.log(sizes, "===============================",quantity,"==========================",product)
-      //   let updateD=await updateProductDetails(sizes ,quantity,product )
-        
-      //   if(updateD){
-      //     return response.commonErrorResponse(
-      //       res,
-      //       ErrorCode.NOT_FOUND,
-      //       {},
-      //       "product Out of Stocks"
-      //     );
-           
-      //   }
-       
 
-      // })
-      // ============================================this new
-      // Create a mapping of product_id to cart item
-let cartItemMap = new Map(cart_items.items.map(item => [item.product_id.toString(), item]));
+      let cartItemMap = new Map(
+        cart_items.items.map((item) => [item.product_id.toString(), item])
+      );
 
-// Iterate over products using for loop
-for (let i = 0; i < products.length; i++) {
-    let product = products[i];
-    let cartItem = cartItemMap.get(product._id.toString()); // Retrieve cart item from the mapping
+      // Iterate over products using for loop
+      for (let i = 0; i < products.length; i++) {
+        let product = products[i];
+        let cartItem = cartItemMap.get(product._id.toString()); // Retrieve cart item from the mapping
 
-    if (!cartItem) {
-        continue; // Skip to the next iteration if cart item not found
-    }
+        if (!cartItem) {
+          continue; // Skip to the next iteration if cart item not found
+        }
 
-    let sizes = cartItem.sizes[0];
-    let quantity = cartItem.quantity;
+        let quantity = cartItem.quantity;
 
+        let updateD = await updateProductDetails(quantity, product);
 
-    let updateD = await updateProductDetails(sizes, quantity, product);
-
-    if (updateD) {
-        return response.commonErrorResponse(
+        if (updateD) {
+          return response.commonErrorResponse(
             res,
             ErrorCode.NOT_FOUND,
             {},
             "product Out of Stocks"
-        );
-    }
-}
-
-      // =================
-      
-
+          );
+        }
+      }
 
       let createdOrder = await orderModel.create(finalData);
       if (!createdOrder) {
@@ -721,115 +496,14 @@ for (let i = 0; i < products.length; i++) {
           SuccessMessage.DATA_SAVED
         );
       }
-    } else {
-      let productData = await productModel.findById(product_id);
-      if (!productData) {
-        return response.commonErrorResponse(
-          res,
-          ErrorCode.BAD_REQUEST,
-          {},
-          ErrorMessage.NOT_FOUND
-        );
-      }
-
-      let finalData = {
-        totalQuantity: quantity,
-        totalPrice: productData?.price * quantity,
-        user_id: user_id,
-        shippingInfo: shippingInfo,
-        address_id: address_id,
-        orderItems: [
-          {
-            product_name: productData.name,
-            price: productData.price,
-            sizes: JSON.parse(sizes),
-            color:
-              data.color?.length > 0
-                ? data.color
-                : productData?.variations?.color,
-            product_id: productData._id,
-            quantity: quantity,
-          },
-        ],
-        totalItems: 1,
-        paymentInfo: paymentInfo,
-        deliveredAt: deliveredAt,
-        shippedAt: shippedAt,
-      };
-
-      // this is for update count in seller product(stocks)
-
-      let size = JSON.parse(sizes);
-      sizes = {};
-      for (let sizeNumber in size) {
-        for (let i = 0; i < productData?.variations?.sizes?.length; i++) {
-          
-
-          if (productData?.variations.sizes[i].hasOwnProperty(sizeNumber)) {
-
-            let s = JSON.parse(JSON.stringify(productData?.variations.sizes));
-            let count = JSON.parse(JSON.stringify(s[0]));
-            sizes[sizeNumber] = count[sizeNumber] - size[sizeNumber];
-
-            if (sizes[sizeNumber] < -1) {
-              return response.commonErrorResponse(
-                res,
-                ErrorCode.NOT_FOUND,
-                {},
-                "product Out of Stocks"
-              );
-            }
-            productData.variations.sizes = sizes;
-          } else {
-            return response.commonErrorResponse(
-              res,
-              ErrorCode.BAD_REQUEST,
-              {},
-              "this size is not available"
-            );
-          }
-        }
-      }
-      productData.stocks = productData.stocks - Number(quantity) || 1;
-
-      if (productData.stocks < -1) {
-        return response.commonErrorResponse(
-          res,
-          ErrorCode.NOT_FOUND,
-          {},
-          "product Out of Stocks"
-        );
-      }
-      
-
-      let updateProduct = await productModel.findByIdAndUpdate(
-        product_id,
-        { $set: productData },
-        { new: true }
+    }
+    else{
+      return response.commonErrorResponse(
+        res,
+        ErrorCode.NOT_FOUND,
+        {},
+        "for Order Cart_id And Card Data is required"
       );
-
-      // ==================
-
-      let createdOrder = await orderModel.create(finalData);
-      if (!createdOrder) {
-        createdOrder = await orderModel.create(finalData);
-
-        if (!createdOrder) {
-          return response.commonErrorResponse(
-            res,
-            ErrorCode.WENT_WRONG,
-            {},
-            ErrorMessage.SOMETHING_WRONG
-          );
-        }
-      } else {
-        return response.commonResponse(
-          res,
-          SuccessCode.SUCCESSFULLY_CREATED,
-          createdOrder,
-          SuccessMessage.DATA_SAVED
-        );
-      }
     }
   } catch (error) {
     return response.commonErrorResponse(
@@ -840,7 +514,8 @@ for (let i = 0; i < products.length; i++) {
     );
   }
 };
-// =============
+
+// ===========
 
 (exports.getSingleOrderDetails = async (req, res) => {
   try {
