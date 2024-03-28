@@ -12,13 +12,20 @@ module.exports = {
   AddProduct: async function (req, res) {
     try {
       let data = req.body;
+
+      // console.log(data.category)
+      // console.log("data.category")
+      // category is not coming from frontend
+      // stocks changed to  stock
+      // color changed to colors
+
       // Validate required fields
       if (
         !data.name ||
         !data.description ||
         !data.price ||
-        !data.stocks ||
-        !data.category
+        !data.stock
+        // ||!data.category
       ) {
         return response.commonErrorResponse(
           res,
@@ -29,13 +36,14 @@ module.exports = {
       }
       // Convert string numbers to number type
       data.price = parseFloat(data.price);
-      data.stocks = parseInt(data.stocks);
-      if(data.tags && typeof data.tags=="string"){
-      data.tags=JSON.parse(data.tags)
 
+      data.stock = parseInt(data.stock);
+
+      if (data.tags && typeof data.tags == "string") {
+        data.tags = JSON.parse(data.tags);
       }
       // Handle edge cases for numeric fields
-      if (isNaN(data.price) || isNaN(data.stocks)) {
+      if (isNaN(data.price) || isNaN(data.stock)) {
         return response.commonErrorResponse(
           res,
           ErrorCode.INVALID_DATA,
@@ -43,6 +51,7 @@ module.exports = {
           "Price and stocks must be numeric."
         );
       }
+
       // Parse variations if provided
       if (data.variations && typeof data.variations === "string") {
         data.variations = JSON.parse(data.variations);
@@ -473,7 +482,7 @@ module.exports = {
                 count: "$count",
                 description: "$description",
                 brand: "$brand",
-                
+
                 style: "$style",
                 price: "$price",
                 discount: "$discount",
