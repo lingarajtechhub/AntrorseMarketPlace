@@ -37,9 +37,7 @@ app.use("/app/admin",adminRoute)
 app.use("/app/order",orderRouter)
 app.use("/app/checkout/",checkoutRouter)  
 app.use("/api", phonepeRoute);
-app.use("/app/invoice/",invoiceRouter)
-// temperary=
-// app.use('/', imageRouter);
+app.use("/app",invoiceRouter)
 
 
 app.listen(process.env.PORT_NUMBER||3687, function(){
