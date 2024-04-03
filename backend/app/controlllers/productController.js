@@ -13,13 +13,7 @@ module.exports = {
     try {
       let data = req.body;
 
-      // console.log(data.category)
-      // console.log("data.category")
-      // category is not coming from frontend
-      // stocks changed to  stock
-      // color changed to colors
-
-      // Validate required fields
+      console.log(data,"addproduct")
       if (
         !data.name ||
         !data.description ||
@@ -175,12 +169,12 @@ module.exports = {
         {
           $match: condition,
         },
-        {
-          $skip: skip,
-        },
-        {
-          $limit: limit,
-        },
+        // {
+        //   $skip: skip,
+        // },
+        // {
+        //   $limit: limit,
+        // },
         {
           $lookup: {
             from: "productReviews",

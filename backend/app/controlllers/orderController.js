@@ -350,7 +350,7 @@ exports.newOrder = async function (req, res) {
     let {
       address_id,
       shippingInfo,
-    
+
       paymentInfo,
       deliveredAt,
       shippedAt,
@@ -496,8 +496,7 @@ exports.newOrder = async function (req, res) {
           SuccessMessage.DATA_SAVED
         );
       }
-    }
-    else{
+    } else {
       return response.commonErrorResponse(
         res,
         ErrorCode.NOT_FOUND,
@@ -539,8 +538,6 @@ exports.newOrder = async function (req, res) {
       );
     }
   } catch (error) {
-    console.log(error);
-
     return response.commonErrorResponse(
       res,
       ErrorCode.INTERNAL_ERROR,
@@ -572,7 +569,6 @@ exports.newOrder = async function (req, res) {
         );
       }
     } catch (error) {
-      console.log(error);
       return response.commonErrorResponse(
         res,
         ErrorCode.INTERNAL_ERROR,
@@ -607,8 +603,6 @@ exports.newOrder = async function (req, res) {
         totalAmount,
       });
     } catch (error) {
-      console.log(error);
-
       return response.commonErrorResponse(
         res,
         ErrorCode.INTERNAL_ERROR,
@@ -654,8 +648,6 @@ exports.updateOrder = async (req, res) => {
       success: true,
     });
   } catch (error) {
-    console.log(error);
-
     return response.commonErrorResponse(
       res,
       ErrorCode.INTERNAL_ERROR,
@@ -704,8 +696,6 @@ exports.getOrderBySellerId = async function (req, res) {
       },
     ]);
   } catch (error) {
-    console.log(error);
-
     return response.commonErrorResponse(
       res,
       ErrorCode.INTERNAL_ERROR,

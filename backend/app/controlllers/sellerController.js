@@ -230,7 +230,7 @@ module.exports = {
         );
       }
       let OTP = commonFunction.generateOTP();
-      console.log(OTP);
+
       // here function for send  the otp on number
       return response.commonResponse(
         res,
@@ -250,7 +250,7 @@ module.exports = {
   forgetPassword: async function (req, res) {
     try {
       let data = req.body;
-      console.log(data);
+
       if (
         !data.mobile_number ||
         !validation.isValidMobileNumber(data.mobile_number)
@@ -325,11 +325,10 @@ module.exports = {
         account_details: {
           account_Number: data.account_Number,
           account_holder_name: data.account_holder_name,
-          IFC_code:data.IFC_code,
-          
+          IFC_code: data.IFC_code,
         },
-        security_questions:data.security_questions,
-        secret_answers:data.secret_answers
+        security_questions: data.security_questions,
+        secret_answers: data.secret_answers,
       };
 
       let updated = await sellerModel.findOneAndUpdate(
@@ -369,14 +368,10 @@ module.exports = {
       let files = req.files;
       let seller_id = req.seller_id;
       if (files?.length > 0) {
-        
-          let img = await uploadFile(files[0]);
-          data.aadhar_image=img
-        }
-      
+        let img = await uploadFile(files[0]);
+        data.aadhar_image = img;
+      }
 
-
-      
       if (
         !data.aadhar_number ||
         !validation.isValidAadharNumber(data.aadhar_number)
@@ -462,8 +457,7 @@ module.exports = {
           updatedKYC,
           SuccessMessage.PROFILE_DETAILS
         );
-      } 
-      else {
+      } else {
         return response.commonErrorResponse(
           res,
           ErrorCode.WENT_WRONG,
@@ -477,7 +471,7 @@ module.exports = {
         ErrorCode.INTERNAL_ERROR,
         {},
         err.message
-   );
-}
-},
+      );
+    }
+  },
 };

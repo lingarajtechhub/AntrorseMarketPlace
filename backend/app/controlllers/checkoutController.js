@@ -233,9 +233,7 @@ exports.checkout = async (req, res) => {
           totalPrice += totalPriceForItem;
           totalPriceArray.push(totalPrice);
 
-          const size = item.sizes
-            ? Object.keys(item.sizes)[0]
-            : "";
+          const size = item.sizes ? Object.keys(item.sizes)[0] : "";
 
           const orderItem = {
             productName: productDetail.name,

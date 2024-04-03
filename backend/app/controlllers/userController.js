@@ -1,13 +1,13 @@
-require("dotenv").config()
+require("dotenv").config();
 const userModel = require("../models/user/userModel");
-const userAddressModel=require("../models/user/userAddressModel")
-const jwt= require("jsonwebtoken")
+const userAddressModel = require("../models/user/userAddressModel");
+const jwt = require("jsonwebtoken");
 const response = require("../helper/commonResponse");
 const { SuccessMessage, ErrorMessage } = require("../helper/message");
 const { ErrorCode, SuccessCode } = require("../helper/statusCode");
 const commonFunction = require("../helper/commonFunction");
 const validation = require("../helper/validation");
-const bcrypt= require("bcrypt")
+const bcrypt = require("bcrypt");
 
 module.exports = {
   register: async function (req, res) {
@@ -21,7 +21,10 @@ module.exports = {
           ErrorMessage.NAME_EMPTY
         );
       }
-      if (!data.mobile_number||!validation.isValidMobileNumber(data.mobile_number)) {
+      if (
+        !data.mobile_number ||
+        !validation.isValidMobileNumber(data.mobile_number)
+      ) {
         return response.commonErrorResponse(
           res,
           ErrorCode.BAD_REQUEST,
@@ -38,9 +41,9 @@ module.exports = {
           ErrorMessage.INVALID_EMAIL
         );
       }
-      if(data.email){
-        let checkEmailUnique= await userModel.findOne({email:data.email})
-        if(checkEmailUnique){
+      if (data.email) {
+        let checkEmailUnique = await userModel.findOne({ email: data.email });
+        if (checkEmailUnique) {
           return response.commonErrorResponse(
             res,
             ErrorCode.ALREADY_EXIST,
@@ -61,7 +64,11 @@ module.exports = {
         );
       }
 
-      let registerData = await userModel.create({user_name:data.user_name,mobile_number:data.mobile_number,email:data.email});
+      let registerData = await userModel.create({
+        user_name: data.user_name,
+        mobile_number: data.mobile_number,
+        email: data.email,
+      });
 
       if (registerData) {
         return response.commonResponse(
@@ -83,14 +90,17 @@ module.exports = {
   sendOtpForRegistration: async function (req, res) {
     try {
       let data = req.body;
-      
-        if ( !data.mobile_number||!validation.isValidMobileNumber(data.mobile_number)) {
-          return response.commonErrorResponse(
-            res,
-            ErrorCode.BAD_REQUEST,
-            {},
-            ErrorMessage.PHONE_EMPTY
-          );
+
+      if (
+        !data.mobile_number ||
+        !validation.isValidMobileNumber(data.mobile_number)
+      ) {
+        return response.commonErrorResponse(
+          res,
+          ErrorCode.BAD_REQUEST,
+          {},
+          ErrorMessage.PHONE_EMPTY
+        );
       }
       let checkNumber = await userModel.findOne({
         mobile_number: data.mobile_number,
@@ -107,7 +117,7 @@ module.exports = {
       let otp = commonFunction.generateOTP();
       console.log(otp);
       //  here function for send otp on mobile number
-      
+
       return response.commonResponse(
         res,
         SuccessCode.SUCCESSFULLY_CREATED,
@@ -127,14 +137,18 @@ module.exports = {
     try {
       let data = req.body;
       let userData;
-      if(!data.password){
+      if (!data.password) {
         return response.commonErrorResponse(
           res,
           ErrorCode.BAD_REQUEST,
           {},
-          ErrorMessage.PASSWORD_REQUIRED)
+          ErrorMessage.PASSWORD_REQUIRED
+        );
       }
-      if (!data.mobile_number||!validation.isValidMobileNumber(data.mobile_number)) {
+      if (
+        !data.mobile_number ||
+        !validation.isValidMobileNumber(data.mobile_number)
+      ) {
         return response.commonErrorResponse(
           res,
           ErrorCode.BAD_REQUEST,
@@ -143,9 +157,10 @@ module.exports = {
         );
       }
       if (data.mobile_number) {
-         userData = await userModel.findOne({ mobile_number:data.mobile_number });
+        userData = await userModel.findOne({
+          mobile_number: data.mobile_number,
+        });
       } else {
-      
         return response.commonErrorResponse(
           res,
           ErrorCode.BAD_REQUEST,
@@ -196,12 +211,15 @@ module.exports = {
       );
     }
   },
-  loginWithOTP:async function (req, res) {
+  loginWithOTP: async function (req, res) {
     try {
       let data = req.body;
       let userData;
-     
-      if (!data.mobile_number||!validation.isValidMobileNumber(data.mobile_number)) {
+
+      if (
+        !data.mobile_number ||
+        !validation.isValidMobileNumber(data.mobile_number)
+      ) {
         return response.commonErrorResponse(
           res,
           ErrorCode.BAD_REQUEST,
@@ -210,9 +228,10 @@ module.exports = {
         );
       }
       if (data.mobile_number) {
-         userData = await userModel.findOne({ mobile_number:data.mobile_number });
+        userData = await userModel.findOne({
+          mobile_number: data.mobile_number,
+        });
       } else {
-      
         return response.commonErrorResponse(
           res,
           ErrorCode.BAD_REQUEST,
@@ -228,7 +247,7 @@ module.exports = {
           {},
           ErrorMessage.USER_NOT_FOUND
         );
-      }  
+      }
 
       let payLoad = {
         user_id: userData._id.toString(),
@@ -253,16 +272,20 @@ module.exports = {
       );
     }
   },
-  
+
   updateProfile: async function (req, res) {
     try {
-      let user_id=req.user_id
+      let user_id = req.user_id;
       let data = req.body;
       let files = req.files;
 
-      if(!data && !files){
-
-        return response.commonErrorResponse(res,ErrorCode.BAD_REQUEST ,"", "some data need for update")
+      if (!data && !files) {
+        return response.commonErrorResponse(
+          res,
+          ErrorCode.BAD_REQUEST,
+          "",
+          "some data need for update"
+        );
       }
       let updateData = {};
       if (data.password) {
@@ -270,23 +293,22 @@ module.exports = {
         const hash = await bcrypt.hash(data.password, saltRounds);
         updateData.password = hash;
       }
-      if ( files?.length > 0) {
-        console.log(files)
+      if (files?.length > 0) {
         updateData.user_image = files[0].originalname;
       }
-      if(data.DOB){
-        updateData.DOB=data.DOB
+      if (data.DOB) {
+        updateData.DOB = data.DOB;
       }
-      if(data.Security_questions){
-        updateData.Security_questions=data.Security_questions
+      if (data.Security_questions) {
+        updateData.Security_questions = data.Security_questions;
       }
-      if(data.Secret_answers){
-        updateData.Secret_answers=data.Secret_answers
+      if (data.Secret_answers) {
+        updateData.Secret_answers = data.Secret_answers;
       }
-      
+
       let updated = await userModel.findOneAndUpdate(
         { _id: req.user_id },
-       
+
         { $set: updateData },
         { new: true }
       );
@@ -318,7 +340,7 @@ module.exports = {
   createOTPForForgetPassword: async function (req, res) {
     try {
       let mobile_number = req.body.mobile_number;
-      if (!mobile_number||!validation.isValidMobileNumber(mobile_number)) {
+      if (!mobile_number || !validation.isValidMobileNumber(mobile_number)) {
         return response.commonErrorResponse(
           res,
           ErrorCode.BAD_REQUEST,
@@ -326,8 +348,8 @@ module.exports = {
           ErrorMessage.PHONE_EMPTY
         );
       }
-      
-      let userData = await userModel.findOne({ mobile_number:mobile_number });
+
+      let userData = await userModel.findOne({ mobile_number: mobile_number });
       if (!userData) {
         return response.commonErrorResponse(
           res,
@@ -335,17 +357,16 @@ module.exports = {
           {},
           ErrorMessage.USER_NOT_FOUND
         );
-        }
-        let OTP = commonFunction.generateOTP();
-        console.log(OTP)
-// here function for send  the otp on number
-        return response.commonResponse(
-          res,
-          SuccessCode.SUCCESS,
-          OTP,
-          SuccessMessage.OTP_SEND
-        );
-      
+      }
+      let OTP = commonFunction.generateOTP();
+
+      // here function for send  the otp on number
+      return response.commonResponse(
+        res,
+        SuccessCode.SUCCESS,
+        OTP,
+        SuccessMessage.OTP_SEND
+      );
     } catch (err) {
       return response.commonErrorResponse(
         res,
@@ -358,8 +379,11 @@ module.exports = {
   forgetPassword: async function (req, res) {
     try {
       let data = req.body;
-      console.log(data)
-      if (!data.mobile_number||!validation.isValidMobileNumber(data.mobile_number)) {
+
+      if (
+        !data.mobile_number ||
+        !validation.isValidMobileNumber(data.mobile_number)
+      ) {
         return response.commonErrorResponse(
           res,
           ErrorCode.BAD_REQUEST,
@@ -384,8 +408,62 @@ module.exports = {
           updatePassword.password,
           SuccessMessage.UPDATE_SUCCESS
         );
+      } else {
+        return response.commonErrorResponse(
+          res,
+          ErrorCode.NOT_FOUND,
+          {},
+          ErrorMessage.USER_NOT_FOUND
+        );
       }
-      else {
+    } catch (err) {
+      return response.commonErrorResponse(
+        res,
+        ErrorCode.INTERNAL_ERROR,
+        {},
+        err.message
+      );
+    }
+  },
+  getUser: async function (req, res) {
+    try {
+      let user_id = req.user_id;
+
+      let getData = await userModel.findById(user_id);
+      if (!getData) {
+        getData = await userModel.findById(user_id);
+        if (!getData) {
+          return response.commonErrorResponse(
+            res,
+            ErrorCode.NOT_FOUND,
+            {},
+            ErrorMessage.NOT_FOUND
+          );
+        }
+      }
+      return response.commonResponse(
+        res,
+        SuccessCode.SUCCESS,
+        getData,
+        SuccessMessage.DATA_FOUND
+      );
+    } catch (err) {
+      return response.commonErrorResponse(
+        res,
+        ErrorCode.INTERNAL_ERROR,
+        {},
+        err.message
+      );
+    }
+  },
+  userDeleteProfile: async function (req, res) {
+    try {
+      let user_id = req.user_id;
+
+      // Check if the user with the given ID exists
+      const existingUser = await userModel.findById(user_id);
+
+      if (!existingUser) {
         return response.commonErrorResponse(
           res,
           ErrorCode.NOT_FOUND,
@@ -394,84 +472,25 @@ module.exports = {
         );
       }
 
-    } catch (err) {
-      return response.commonErrorResponse(
-        res,
-        ErrorCode.INTERNAL_ERROR,
-        {},
-        err.message
-      );
-    }
-  },
-  getUser:async function(req,res){
-    try{
-let user_id= req.user_id;
-
-let getData= await userModel.findById(user_id)
-if(!getData){
-  getData= await userModel.findById(user_id)
-  if(!getData){
-    return response.commonErrorResponse(res,ErrorCode.NOT_FOUND,{},ErrorMessage.NOT_FOUND)
-  }
-}
-return response.commonResponse(res,SuccessCode.SUCCESS,getData,SuccessMessage.DATA_FOUND)
-    }
-    catch (err) {
-      return response.commonErrorResponse(
-        res,
-        ErrorCode.INTERNAL_ERROR,
-        {},
-        err.message
-      );
-    }
-
-  }
-  ,
-  userDeleteProfile: async function(req, res) {
-    try {
-      let user_id = req.user_id;
-  
-      // Check if the user with the given ID exists
-      const existingUser = await userModel.findById(user_id);
-  
-      if (!existingUser) {
-        return response.commonErrorResponse(res, ErrorCode.NOT_FOUND, {}, ErrorMessage.USER_NOT_FOUND);
-      }
-  
       // User exists, proceed with deletion
-      let deletedUser = await userModel.findByIdAndDelete({user_id});
-  
+      let deletedUser = await userModel.findByIdAndDelete({ user_id });
+
       if (deletedUser) {
-        return response.commonResponse(res, SuccessCode.SUCCESS, deletedUser, SuccessMessage.DELETE_SUCCESS);
+        return response.commonResponse(
+          res,
+          SuccessCode.SUCCESS,
+          deletedUser,
+          SuccessMessage.DELETE_SUCCESS
+        );
       } else {
-        return response.commonErrorResponse(res, ErrorCode.WENT_WRONG, {}, ErrorMessage.SOMETHING_WRONG);
+        return response.commonErrorResponse(
+          res,
+          ErrorCode.WENT_WRONG,
+          {},
+          ErrorMessage.SOMETHING_WRONG
+        );
       }
     } catch (err) {
-      return response.commonErrorResponse(res, ErrorCode.INTERNAL_ERROR, {}, err.message);
-    }
-  }
-  
-  // ============= userDress=================
-  ,
-  createAddress: async function(req,res){
-    try{
-      
-let data= req.body
-data.user_id=req.user_id
-let createdData= await userAddressModel.create(data)
-if(createdData){
-  return response.commonResponse(res,SuccessCode.SUCCESSFULLY_CREATED,createdData,SuccessMessage.DATA_SAVED)
-}
-else{
-  return response.commonErrorResponse(
-    res,
-    ErrorCode.SOMETHING_WRONG,
-    {},
-    ErrorMessage.WENT_WRONG
-  );
-}
-    }
-    catch (err) {
       return response.commonErrorResponse(
         res,
         ErrorCode.INTERNAL_ERROR,
@@ -480,44 +499,73 @@ else{
       );
     }
   },
-//================getUserAdress======================
 
-getAddress: async function(req, res) {
-  try {
-    // Ensure user is authenticated
-    if (!req.user_id) {
+  // ============= userDress=================
+  createAddress: async function (req, res) {
+    try {
+      let data = req.body;
+      data.user_id = req.user_id;
+      let createdData = await userAddressModel.create(data);
+      if (createdData) {
+        return response.commonResponse(
+          res,
+          SuccessCode.SUCCESSFULLY_CREATED,
+          createdData,
+          SuccessMessage.DATA_SAVED
+        );
+      } else {
+        return response.commonErrorResponse(
+          res,
+          ErrorCode.SOMETHING_WRONG,
+          {},
+          ErrorMessage.WENT_WRONG
+        );
+      }
+    } catch (err) {
       return response.commonErrorResponse(
         res,
-        ErrorCode.INVALID_CREDENTIAL,
+        ErrorCode.INTERNAL_ERROR,
         {},
-        ErrorMessage.INVALID_CREDENTIAL
+        err.message
       );
     }
-    let data = await userAddressModel.find({ user_id: req.user_id });
-    if (data.length>0) {
-      return response.commonResponse(
-        res,
-        SuccessCode.SUCCESSFULLY_FETCHED,
-        data,
-        SuccessMessage.DATA_FETCHED
-      );
-    } else {
+  },
+  //================getUserAdress======================
+
+  getAddress: async function (req, res) {
+    try {
+      // Ensure user is authenticated
+      if (!req.user_id) {
+        return response.commonErrorResponse(
+          res,
+          ErrorCode.INVALID_CREDENTIAL,
+          {},
+          ErrorMessage.INVALID_CREDENTIAL
+        );
+      }
+      let data = await userAddressModel.find({ user_id: req.user_id });
+      if (data.length > 0) {
+        return response.commonResponse(
+          res,
+          SuccessCode.SUCCESSFULLY_FETCHED,
+          data,
+          SuccessMessage.DATA_FETCHED
+        );
+      } else {
+        return response.commonErrorResponse(
+          res,
+          ErrorCode.SOMETHING_WRONG,
+          {},
+          ErrorMessage.WENT_WRONG
+        );
+      }
+    } catch (err) {
       return response.commonErrorResponse(
         res,
-        ErrorCode.SOMETHING_WRONG,
+        ErrorCode.INTERNAL_ERROR,
         {},
-        ErrorMessage.WENT_WRONG
+        err.message
       );
     }
-  } catch (err) {
-    return response.commonErrorResponse(
-      res,
-      ErrorCode.INTERNAL_ERROR,
-      {},
-      err.message
-    );
-  }
-}
-
-
+  },
 };
