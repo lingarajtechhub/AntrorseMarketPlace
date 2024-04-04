@@ -43,21 +43,10 @@ const orderSchema = new mongoose.Schema(
     totalPrice: { type: Number, required: true, default: 0 },
     totalItems: { type: Number, required: true },
     totalQuantity: { type: Number, required: true },
-    paymentInfo: {
-      merchantId: String,
-  merchantTransactionId: String,
+    
   transactionId: String,
-  amount: Number,
-  responseCode: String,
- 
-  paymentInstrument: {
-    type: String,
-    cardType: String,
-    pgTransactionId: String,
-    arn: String,
-    brn: String
-  }
-    },
+  
+  
     paidAt: {
       type: Date,
     },
