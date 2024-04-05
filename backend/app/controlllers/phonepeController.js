@@ -3,7 +3,10 @@ const axios = require("axios");
 require("dotenv").config();
 const sha256 = require("sha256");
 
+let orderDetails = "";
+
 const createNewPayment = async (req, res) => {
+  orderDetails = req.body.message;
   const data = {
     merchantId: process.env.MERCHANT_ID,
     merchantUserId: req.body.merchantUserId,
@@ -17,8 +20,6 @@ const createNewPayment = async (req, res) => {
       type: "PAY_PAGE",
     },
   };
-
-  
 
   let bufferObj = Buffer.from(JSON.stringify(data), "utf8");
   let payload = bufferObj.toString("base64");
@@ -44,7 +45,8 @@ const createNewPayment = async (req, res) => {
       headers: options.headers,
     });
 
-    console.log(response.data);
+    console.log(response.data, "response.data in create new payment");
+    console.log(orderDetails,"orderDetailsinCreate")
     const data = response.data.data.instrumentResponse.redirectInfo.url;
 
     return res.json({ statusCode: 200, redirectURL: data, message: "success" });
@@ -77,9 +79,9 @@ const checkStatus = async (req, res) => {
     })
     .then(function (response) {
       if (response.data && response.data.code === "PAYMENT_SUCCESS") {
-        // console.log(response.data)
+        
+         console.log(response.data, "response.data in status");
         res.send(response.data);
-
       } else {
         res.send(response);
       }
